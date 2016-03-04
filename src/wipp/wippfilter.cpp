@@ -1,4 +1,4 @@
-#include <wipp/wippfft.h>
+#include <wipp/wippfilter.h>
 
 #ifdef IPP_FOUND
 #include "ipp/ippfilter.inl"

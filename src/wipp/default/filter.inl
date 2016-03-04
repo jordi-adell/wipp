@@ -66,5 +66,62 @@ int wipp_fir_coefs(double fmax, double fmin, double *coefs, size_t length, wipp_
 }
 
 
+struct wipp_fir_filter_t_ {
+	double *buffer;
+	size_t occupancy;
+	size_t position;
+	size_t order;
+	double *coefs; // should it be const?
+};
+
+void wipp_init_fir(wipp_fir_filter_t *fir, const double *coefs, size_t length)
+{
+    fir = new wipp_fir_filter_t_();
+    fir->order = length;
+    fir->buffer = new double[fir->order];
+    memset(fir->buffer,0,length*sizeof(double));
+    fir->occupancy = fir->position = 0;
+    fir->coefs = new double[fir->order];
+    memcpy(fir->coefs, coefs, fir->order*sizeof(double));
+}
+
+void wipp_delete_fir(wipp_fir_filter_t *fir)
+{
+    delete[] fir->buffer;
+    delete[] fir->coefs;
+    delete fir;
+    fir = NULL;
+}
+
+void wipp_fir_filter(wipp_fir_filter_t *fir, double *signal, size_t length)
+{
+    double result;
+    for (size_t i = 0; i < length; ++i)
+    {
+	result = 0;
+	for (size_t j = 0,k = fir->position; j < fir->order; ++j, k = (k+1)%fir->order)
+	{
+	    result += fir->buffer[k] * fir->coefs[j];
+	}
+	fir->buffer[fir->position] = signal[i];
+	signal[i] = result;
+	fir->position = (fir->position + 1) % fir->order;
+    }
+}
+
+void wipp_fir_filter(wipp_fir_filter_t *fir, const double *signal_in, double *signal_out, size_t length)
+{
+    for (size_t i = 0; i < length; ++i)
+    {
+	signal_out[i] = 0;
+	for (size_t j = 0,k = fir->position; j < fir->order; ++j, k = (k+1)%fir->order)
+	{
+	    signal_out[i] = fir->buffer[k] * fir->coefs[j];
+	}
+	fir->buffer[fir->position] = signal_in[0];
+	fir->position = (fir->position + 1) % fir->order;
+    }
+}
+
 
 }

@@ -32,6 +32,12 @@
 namespace wipp
 {
 
+
+// Definitions
+
+struct wipp_fir_filter_t_;
+typedef wipp_fir_filter_t_ wipp_fir_filter_t;
+
 typedef enum
 {
     wippRECTANGULAR = 0,
@@ -39,8 +45,19 @@ typedef enum
     wippHANN,
 } wipp_window_t;
 
+
+// WINDOWING
 void wipp_window(double *frame, size_t length, wipp_window_t window_type);
+
+// FIR filters
 int wipp_fir_coefs(double fmax, double fmin, double *coefs, size_t length, wipp_window_t window_type);
+void wipp_init_fir(wipp_fir_filter_t *fir, double *coefs, size_t length);
+void wipp_delete_fir(wipp_fir_filter_t *fir);
+void wipp_fir_filter(wipp_fir_filter_t *fir, double *signal, size_t length);
+void wipp_fir_filter(wipp_fir_filter_t *fir, const double *signal_in, double *singal_out, size_t length);
+
+
+
 
 }
 
