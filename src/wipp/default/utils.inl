@@ -401,5 +401,29 @@ namespace wipp{
   }
 
 
+  void conj(const wipp_complex_t *complex_in, wipp_complex_t *complex_out, size_t length)
+  {
+      for (size_t i = 0; i < length; ++i)
+      {
+	  complex_out[i].im = -complex_in[i].im;
+	  complex_out[i].re =  complex_in[i].re;
+      }
+  }
+
+  void conj(wipp_complex_t *complex, size_t length)
+  {
+      for (size_t i = 0; i < length; ++i)
+	  complex[i].im = -complex[i].im;
+  }
+
+  void conjFlip(const wipp_complex_t *complex_in, wipp_complex_t *complex_out, size_t length)
+  {
+      for (size_t i = 0; i < length; ++i)
+      {
+	  complex_out[i].re =   complex_in[length-i-1].re;
+	  complex_out[i].im = - complex_in[length-i-1].im;
+      }
+  }
+
 }
 

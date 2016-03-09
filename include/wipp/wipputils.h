@@ -171,6 +171,9 @@ namespace wipp{
   void real2complex(const double *real, const double *imag, wipp_complex_t *complex, size_t length);
   void real(const wipp_complex_t *complex, double *real, size_t length);
   void imag(const wipp_complex_t *complex, double *imag, size_t length);
+  void conj(wipp_complex_t *complex, size_t length);
+  void conj(const wipp_complex_t *complex_in, wipp_complex_t *complex_out, size_t length);
+  void conjFlip(const wipp_complex_t *complex_in, wipp_complex_t *complex_out, size_t length);
 
   /** Check if status indicates an error or not and the generates and exception if
    * throwException is true in case of error. Also handle spectia errror such as
