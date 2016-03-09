@@ -4,6 +4,31 @@
 namespace wipp
 {
 
+
+void power_spectrum(const wipp_complex_t *spectrum, double *power, size_t length)
+{
+    for (size_t i = 0; i < length; ++i)
+    {
+	power[i] = spectrum[i].re * spectrum[i].re + spectrum[i].im * spectrum[i].im;
+    }
+
+}
+
+void magnitude(const wipp_complex_t *buffer, double *magnitude, size_t length)
+{
+    for (size_t i = 0; i < length; ++i)
+	magnitude[i] = sqrt(buffer[i].re*buffer[i].re + buffer[i].im*buffer[i].im);
+}
+
+
+void ramp(double *buffer, size_t length, double offset, double slope)
+{
+    for (size_t i = 0; i < length; ++i)
+    {
+	buffer[i] = slope*i + offset;
+    }
+}
+
 void triangle(double *buffer, size_t length)
 {
 

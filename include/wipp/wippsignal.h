@@ -33,8 +33,13 @@
 namespace wipp
 {
 
-void triangle(double *buffer, size_t length);
 void power_spectrum(const wipp_complex_t *spectrum, double *power, size_t length);
+void magnitude(const wipp_complex_t* buffer, double *magnitude, size_t length);
+
+void ramp(double *buffer, size_t length, double offset, double slope);
+void triangle(double *buffer, size_t length);
+
+
 
 void linear2mel(const double *linear, double *mel, size_t length);
 void linear2mel(const double *linear, double *mel, size_t length, const double* mult, const double *div );
