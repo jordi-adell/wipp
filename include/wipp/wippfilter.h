@@ -54,11 +54,13 @@ typedef enum
 void wipp_window(double *frame, size_t length, wipp_window_t window_type);
 
 // FIR filters
-int wipp_fir_coefs(double fmax, double fmin, double *coefs, size_t length, wipp_window_t window_type);
-void wipp_init_fir(wipp_fir_filter_t *fir, double *coefs, size_t length);
-void wipp_delete_fir(wipp_fir_filter_t *fir);
-void wipp_fir_filter(wipp_fir_filter_t *fir, double *signal, size_t length);
-void wipp_fir_filter(wipp_fir_filter_t *fir, const double *signal_in, double *singal_out, size_t length);
+int fir_coefs(double fmax, double fmin, double *coefs, size_t length, wipp_window_t window_type);
+void init_fir(wipp_fir_filter_t *fir, const double *coefs, size_t length);
+void init_fir(wipp_fir_filter_t *fir, const double *coefs, size_t length, const double *pastValues);
+void delete_fir(wipp_fir_filter_t *fir);
+void fir_filter(wipp_fir_filter_t *fir, double *signal, size_t length);
+void fir_filter(wipp_fir_filter_t *fir, const double *signal_in, double *signal_out, size_t length);
+
 
 // IIR filter
 void init_iir(wipp_iir_filter_t *iir, const double *a_coefs, size_t a_length, const double *b_coefs, size_t b_length);

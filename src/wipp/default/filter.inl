@@ -74,7 +74,7 @@ struct wipp_fir_filter_t_ {
 	double *coefs; // should it be const?
 };
 
-void wipp_init_fir(wipp_fir_filter_t *fir, const double *coefs, size_t length)
+void init_fir(wipp_fir_filter_t *fir, const double *coefs, size_t length)
 {
     fir = new wipp_fir_filter_t_();
     fir->order = length;
@@ -85,7 +85,14 @@ void wipp_init_fir(wipp_fir_filter_t *fir, const double *coefs, size_t length)
     memcpy(fir->coefs, coefs, fir->order*sizeof(double));
 }
 
-void wipp_delete_fir(wipp_fir_filter_t *fir)
+void init_fir(wipp_fir_filter_t *fir, const double *coefs, size_t length, const double *pastValues)
+{
+    init_fir(fir, coefs, length);
+    memcpy(fir->buffer, pastValues, length);
+}
+
+
+void delete_fir(wipp_fir_filter_t *fir)
 {
     delete[] fir->buffer;
     delete[] fir->coefs;
@@ -93,7 +100,7 @@ void wipp_delete_fir(wipp_fir_filter_t *fir)
     fir = NULL;
 }
 
-void wipp_fir_filter(wipp_fir_filter_t *fir, double *signal, size_t length)
+void fir_filter(wipp_fir_filter_t *fir, double *signal, size_t length)
 {
     double result;
     for (size_t i = 0; i < length; ++i)
@@ -109,7 +116,7 @@ void wipp_fir_filter(wipp_fir_filter_t *fir, double *signal, size_t length)
     }
 }
 
-void wipp_fir_filter(wipp_fir_filter_t *fir, const double *signal_in, double *signal_out, size_t length)
+void fir_filter(wipp_fir_filter_t *fir, const double *signal_in, double *signal_out, size_t length)
 {
     for (size_t i = 0; i < length; ++i)
     {
