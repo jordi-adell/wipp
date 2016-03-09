@@ -425,5 +425,14 @@ namespace wipp{
       }
   }
 
+  void polar2cart(const double *module, const double *phase, wipp_complex_t *cart, size_t length)
+  {
+      for (size_t i = 0; i < length; ++i)
+      {
+	  cart[i].re = module[i]*cos(phase[i]);
+	  cart[i].im = module[i]*sin(phase[i]);
+      }
+  }
+
 }
 

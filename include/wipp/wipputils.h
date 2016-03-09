@@ -175,6 +175,9 @@ namespace wipp{
   void conj(const wipp_complex_t *complex_in, wipp_complex_t *complex_out, size_t length);
   void conjFlip(const wipp_complex_t *complex_in, wipp_complex_t *complex_out, size_t length);
 
+  void polar2cart(const double *module, const double *phase, wipp_complex_t *cart, size_t length);
+
+
   /** Check if status indicates an error or not and the generates and exception if
    * throwException is true in case of error. Also handle spectia errror such as
    * Waterfall
