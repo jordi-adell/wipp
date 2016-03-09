@@ -109,6 +109,22 @@ namespace wipp{
   }
 
 
+  template<typename T>
+  void set_core(T val, T *buffer, size_t length)
+  {
+      for (size_t i = 0; i < length; ++i)
+	  buffer[i] = val;
+  }
+
+  void set(double val, double *buffer, size_t length) { set_core(val, buffer, length); }
+  void set(float val, float *buffer, size_t length) { set_core(val, buffer, length); }
+  void set(int16_t val, int16_t *buffer, size_t length) { set_core(val, buffer, length); }
+  void set(int32_t val, int32_t *buffer, size_t length) { set_core(val, buffer, length); }
+  void set(uint32_t val, uint32_t *buffer, size_t length) { set_core(val, buffer, length); }
+  void set(uint16_t val, uint16_t *buffer, size_t length) { set_core(val, buffer, length); }
+  void set(wipp_complex_t val, wipp_complex_t * buffer, size_t length) { set_core(val, buffer, length); }
+
+
   void sesetZeros(double *buffer, size_t length)
   {
       memset(buffer, 0.0F, length*sizeof(double));

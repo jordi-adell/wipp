@@ -62,6 +62,14 @@ namespace wipp{
   void subBuffer_I(const float *inbuffer, float *outbuffer, size_t length);
   void subBuffer_I(const double *inbuffer, double *outbuffer, size_t length);
 
+  void set(double val, double *buffer, size_t length);
+  void set(float val, float *buffer, size_t length);
+  void set(int16_t val, int16_t *buffer, size_t length);
+  void set(int32_t val, int32_t *buffer, size_t length);
+  void set(uint32_t val, uint32_t *buffer, size_t length);
+  void set(uint16_t val, uint16_t *buffer, size_t length);
+  void set(wipp_complex_t val, wipp_complex_t * bufer, size_t length);
+
   void setZeros(double *buffer, size_t length);
   void setZeros(float *buffer, size_t length);
   void setZeros(int16_t *buffer, size_t length);
