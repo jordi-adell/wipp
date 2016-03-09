@@ -151,6 +151,127 @@ void threshold_get(const int32_t *buffer_in, int32_t *buffer_out, size_t length,
 void threshold_get(const uint16_t *buffer_in, uint16_t *buffer_out, size_t length, uint16_t threshold, uint16_t value) { threshold_get(buffer_in, buffer_out, length, threshold, value); }
 void threshold_get(const uint32_t *buffer_in, uint32_t *buffer_out, size_t length, uint32_t threshold, uint32_t value) { threshold_get(buffer_in, buffer_out, length, threshold, value); }
 
+template<typename T>
+struct wipp_circular_buffer_template_t_
+{
+	T *buffer;
+	size_t size;
+	size_t occupancy;
+	size_t position;
+};
+
+struct wipp_circular_buffer_t_
+{
+	void *buffer;
+	size_t size;
+	size_t occupancy;
+	size_t position;
+};
+
+typedef wipp_circular_buffer_template_t_<double> wipp_circular_buffer_double_t_;
+typedef wipp_circular_buffer_template_t_<float> wipp_circular_buffer_float_t_;
+typedef wipp_circular_buffer_template_t_<int16_t> wipp_circular_buffer_int16_t_t_;
+typedef wipp_circular_buffer_template_t_<int32_t> wipp_circular_buffer_int32_t_t_;
+typedef wipp_circular_buffer_template_t_<uint16_t> wipp_circular_buffer_uint16_t_t_;
+typedef wipp_circular_buffer_template_t_<uint32_t> wipp_circular_buffer_uint32_t_t_;
+
+template <typename T>
+void init_cirular_buffer_core(wipp_circular_buffer_template_t_<T> *cb, size_t size, T *init_values, size_t length)
+{
+    cb = new wipp_circular_buffer_template_t_<T>();
+    cb->size = size;
+    cb->occupancy = 0;
+    cb->position = 0;
+    cb->buffer = new T[cb->size];
+}
+
+void init_cirular_buffer(wipp_circular_buffer_t *buffer, size_t size, double   *init_values, size_t length)
+{ init_cirular_buffer_core(reinterpret_cast<wipp_circular_buffer_double_t_*>(buffer), size, init_values, length); }
+void init_cirular_buffer(wipp_circular_buffer_t *buffer, size_t size, float    *init_values, size_t length)
+{ init_cirular_buffer_core(reinterpret_cast<wipp_circular_buffer_float_t_*>(buffer), size, init_values, length); }
+void init_cirular_buffer(wipp_circular_buffer_t *buffer, size_t size, int16_t  *init_values, size_t length)
+{ init_cirular_buffer_core(reinterpret_cast<wipp_circular_buffer_int16_t_t_*>(buffer), size, init_values, length); }
+void init_cirular_buffer(wipp_circular_buffer_t *buffer, size_t size, int32_t  *init_values, size_t length)
+{ init_cirular_buffer_core(reinterpret_cast<wipp_circular_buffer_int32_t_t_*>(buffer), size, init_values, length); }
+void init_cirular_buffer(wipp_circular_buffer_t *buffer, size_t size, uint16_t *init_values, size_t length)
+{ init_cirular_buffer_core(reinterpret_cast<wipp_circular_buffer_uint16_t_t_*>(buffer), size, init_values, length); }
+void init_cirular_buffer(wipp_circular_buffer_t *buffer, size_t size, uint32_t *init_values, size_t length)
+{ init_cirular_buffer_core(reinterpret_cast<wipp_circular_buffer_uint32_t_t_*>(buffer), size, init_values, length); }
+
+
+template<typename T>
+void cf_read_core(wipp_circular_buffer_template_t_<T> *cb, T *buffer, size_t length, size_t *stored)
+{
+    size_t i = 0;
+    for (;
+	 i < length && cb->occupancy > 0;
+	 ++i, cb->position=(cb->position+1)%cb->size, --cb->occupancy)
+    {
+	buffer[i] = cb->buffer[cb->position];
+    }
+    *stored = i;
+}
+
+void cf_read(wipp_circular_buffer_t *cb, double   *buffer, size_t length, size_t *stored)
+{ cf_read_core(reinterpret_cast<wipp_circular_buffer_double_t_*>(cb), buffer, length, stored); }
+void cf_read(wipp_circular_buffer_t *cb, float    *buffer, size_t length, size_t *stored)
+{ cf_read_core(reinterpret_cast<wipp_circular_buffer_float_t_*>(cb), buffer, length, stored); }
+void cf_read(wipp_circular_buffer_t *cb, int16_t  *buffer, size_t length, size_t *stored)
+{ cf_read_core(reinterpret_cast<wipp_circular_buffer_int16_t_t_*>(cb), buffer, length, stored); }
+void cf_read(wipp_circular_buffer_t *cb, int32_t  *buffer, size_t length, size_t *stored)
+{ cf_read_core(reinterpret_cast<wipp_circular_buffer_int32_t_t_*>(cb), buffer, length, stored); }
+void cf_read(wipp_circular_buffer_t *cb, uint16_t *buffer, size_t length, size_t *stored)
+{ cf_read_core(reinterpret_cast<wipp_circular_buffer_uint16_t_t_*>(cb), buffer, length, stored); }
+void cf_read(wipp_circular_buffer_t *cb, uint32_t *buffer, size_t length, size_t *stored)
+{ cf_read_core(reinterpret_cast<wipp_circular_buffer_uint32_t_t_*>(cb), buffer, length, stored); }
+
+
+template<typename T>
+void cf_write_core(wipp_circular_buffer_template_t_<T> *cb, T *buffer, size_t length, size_t *stored)
+{
+    size_t i = 0;
+    for (size_t k = (cb->position + cb->occupancy)%cb->size;
+	 i < length && cb->occupancy < cb->size;
+	 ++i, k=(k+1)%cb->size, ++cb->occupancy)
+    {
+	cb->buffer[k] = buffer[i];
+    }
+    *stored = i;
+}
+
+void cf_write(wipp_circular_buffer_t *cb, double   *buffer, size_t length, size_t *stored)
+{ cf_write_core(reinterpret_cast<wipp_circular_buffer_double_t_*>(cb), buffer, length, stored); }
+void cf_write(wipp_circular_buffer_t *cb, float    *buffer, size_t length, size_t *stored)
+{ cf_write_core(reinterpret_cast<wipp_circular_buffer_float_t_*>(cb), buffer, length, stored); }
+void cf_write(wipp_circular_buffer_t *cb, int16_t  *buffer, size_t length, size_t *stored)
+{ cf_write_core(reinterpret_cast<wipp_circular_buffer_int16_t_t_*>(cb), buffer, length, stored); }
+void cf_write(wipp_circular_buffer_t *cb, int32_t  *buffer, size_t length, size_t *stored)
+{ cf_write_core(reinterpret_cast<wipp_circular_buffer_int32_t_t_*>(cb), buffer, length, stored); }
+void cf_write(wipp_circular_buffer_t *cb, uint16_t *buffer, size_t length, size_t *stored)
+{ cf_write_core(reinterpret_cast<wipp_circular_buffer_uint16_t_t_*>(cb), buffer, length, stored); }
+void cf_write(wipp_circular_buffer_t *cb, uint32_t *buffer, size_t length, size_t *stored)
+{ cf_write_core(reinterpret_cast<wipp_circular_buffer_uint32_t_t_*>(cb), buffer, length, stored); }
+
+
+void cf_size(wipp_circular_buffer_t *cb, size_t *size)
+{
+    *size = cb->size;
+}
+
+void cf_occupancy(wipp_circular_buffer_t *cb, size_t *occupancy)
+{
+    *occupancy = cb->occupancy;
+}
+
+void cf_skip(wipp_circular_buffer_t *cb, size_t length, size_t *skipped)
+{
+    if (length > cb->occupancy) length = cb->occupancy;
+    cb->position = (cb->position + length)%cb->size;
+    cb->occupancy -= length;
+    *skipped = length;
+}
+
+
 // Mel-scale frequency mapping
 //
 // Parameters are taken from the HTK book.

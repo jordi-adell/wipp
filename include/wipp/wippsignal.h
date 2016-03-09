@@ -93,6 +93,35 @@ void threshold_get(const int32_t *buffer_in, int32_t *buffer_out, size_t length,
 void threshold_get(const uint16_t *buffer_in, uint16_t *buffer_out, size_t length, uint16_t threshold, uint16_t value);
 void threshold_get(const uint32_t *buffer_in, uint32_t *buffer_out, size_t length, uint32_t threshold, uint32_t value);
 
+struct wipp_circular_buffer_t_;
+typedef wipp_circular_buffer_t_ wipp_circular_buffer_t;
+
+void init_cirular_buffer(wipp_circular_buffer_t *buffer, size_t size, double   *init_values, size_t length);
+void init_cirular_buffer(wipp_circular_buffer_t *buffer, size_t size, float    *init_values, size_t length);
+void init_cirular_buffer(wipp_circular_buffer_t *buffer, size_t size, int16_t  *init_values, size_t length);
+void init_cirular_buffer(wipp_circular_buffer_t *buffer, size_t size, int32_t  *init_values, size_t length);
+void init_cirular_buffer(wipp_circular_buffer_t *buffer, size_t size, uint16_t *init_values, size_t length);
+void init_cirular_buffer(wipp_circular_buffer_t *buffer, size_t size, uint32_t *init_values, size_t length);
+
+void cf_read(wipp_circular_buffer_t *cb, double   *buffer, size_t length, size_t *stored);
+void cf_read(wipp_circular_buffer_t *cb, float    *buffer, size_t length, size_t *stored);
+void cf_read(wipp_circular_buffer_t *cb, int16_t  *buffer, size_t length, size_t *stored);
+void cf_read(wipp_circular_buffer_t *cb, int32_t  *buffer, size_t length, size_t *stored);
+void cf_read(wipp_circular_buffer_t *cb, uint16_t *buffer, size_t length, size_t *stored);
+void cf_read(wipp_circular_buffer_t *cb, uint32_t *buffer, size_t length, size_t *stored);
+
+void cf_write(wipp_circular_buffer_t *cb, double   *buffer, size_t length, size_t *stored);
+void cf_write(wipp_circular_buffer_t *cb, float    *buffer, size_t length, size_t *stored);
+void cf_write(wipp_circular_buffer_t *cb, int16_t  *buffer, size_t length, size_t *stored);
+void cf_write(wipp_circular_buffer_t *cb, int32_t  *buffer, size_t length, size_t *stored);
+void cf_write(wipp_circular_buffer_t *cb, uint16_t *buffer, size_t length, size_t *stored);
+void cf_write(wipp_circular_buffer_t *cb, uint32_t *buffer, size_t length, size_t *stored);
+
+void cf_skip(wipp_circular_buffer_t *cb, size_t length, size_t *skipped);
+void cf_size(wipp_circular_buffer_t *cb, size_t *size);
+void cf_occupancy(wipp_circular_buffer_t *cb, size_t *occupancy);
+
+
 void linear2mel(const double *linear, double *mel, size_t length);
 void linear2mel(const double *linear, double *mel, size_t length, const double* mult, const double *div );
 void linear2mel(const float *linear, float *mel, size_t length);
