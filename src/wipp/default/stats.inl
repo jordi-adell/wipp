@@ -31,12 +31,12 @@ void mean(const wipp_complex_t *buffer, size_t length, wipp_complex_t *mean)
     mean->im /= length;
 }
 
-void sum(const double *buffer, size_t length, double *mean){ mean_core(buffer, length, mean); }
-void sum(const float *buffer, size_t length, float *mean){ mean_core(buffer, length, mean); }
-void sum(const int16_t *buffer, size_t length, int16_t *mean){ mean_core(buffer, length, mean); }
-void sum(const int32_t *buffer, size_t length, int32_t *mean){ mean_core(buffer, length, mean); }
-void sum(const uint16_t *buffer, size_t length, uint16_t *mean){ mean_core(buffer, length, mean); }
-void sum(const uint32_t *buffer, size_t length, uint32_t *mean){ mean_core(buffer, length, mean); }
 
+void sum(const double *buffer, size_t length, double *sum){ sum_core(buffer, length, sum); }
+void sum(const float *buffer, size_t length, float *sum){ sum_core(buffer, length, sum); }
+void sum(const int16_t *buffer, size_t length, int16_t *sum){ sum_core(buffer, length, sum); }
+void sum(const int32_t *buffer, size_t length, int32_t *sum){ sum_core(buffer, length, sum); }
+void sum(const uint16_t *buffer, size_t length, uint16_t *sum){ sum_core(buffer, length, sum); }
+void sum(const uint32_t *buffer, size_t length, uint32_t *sum){ sum_core(buffer, length, sum); }
 
 }
