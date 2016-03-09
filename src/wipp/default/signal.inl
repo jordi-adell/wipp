@@ -43,15 +43,6 @@ void triangle(double *buffer, size_t length)
     }
 }
 
-void power_spectrum(const wipp_complex_t *spectrum, double *power, size_t length)
-{
-    for (size_t i = 0; i < length; ++i)
-    {
-	power[i] = spectrum[i].re * spectrum[i].re + spectrum[i].im * spectrum[i].im;
-    }
-
-}
-
 
 // Mel-scale frequency mapping
 //
