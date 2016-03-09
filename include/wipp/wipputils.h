@@ -96,6 +96,22 @@ namespace wipp{
   void mult(const wipp_complex_t *buffer_a, const wipp_complex_t *buffer_b, wipp_complex_t *buffer, size_t length);
 
 
+  void div(const double *buffer_a, const double *buffer_b, double *buffer, size_t length);
+  void div(const float *buffer_a, const float *buffer_b, float *buffer, size_t length);
+  void div(const int16_t *buffer_a, const int16_t *buffer_b, int16_t *buffer, size_t length);
+  void div(const int32_t *buffer_a, const int32_t *buffer_b, int32_t *buffer, size_t length);
+  void div(const uint16_t *buffer_a, const uint16_t *buffer_b, uint16_t *buffer, size_t length);
+  void div(const uint32_t *buffer_a, const uint32_t *buffer_b, uint32_t *buffer, size_t length);
+  void div(const double *buffer_a, double *buffer_b, size_t length);
+  void div(const float *buffer_a, float *buffer_b, size_t length);
+  void div(const int16_t *buffer_a, int16_t *buffer_b, size_t length);
+  void div(const int32_t *buffer_a, int32_t *buffer_b, size_t length);
+  void div(const uint16_t *buffer_a, uint16_t *buffer_b, size_t length);
+  void div(const uint32_t *buffer_a, uint32_t *buffer_b, size_t length);
+  void div(const wipp_complex_t *buffer_a, const wipp_complex_t *buffer_b, wipp_complex_t *buffer, size_t length);
+  void div(const wipp_complex_t *buffer_a, wipp_complex_t *buffer_b, size_t length);
+
+
   void divC(double C, const double *buffer_in, double *buffer_out, size_t length);
   void divC(float C, const float *buffer_in, float *buffer_out, size_t length);
   void divC(int16_t C, const int16_t *buffer_in, int16_t *buffer_out, size_t length);
