@@ -41,6 +41,58 @@ void triangle(double *buffer, size_t length);
 
 
 
+void threshold_lt(double *buffer, size_t length, double threshold, double value);
+void threshold_lt(float *buffer, size_t length, float threshold, float value);
+void threshold_lt(int16_t *buffer, size_t length, int16_t threshold, int16_t value);
+void threshold_lt(int32_t *buffer, size_t length, int32_t threshold, int32_t value);
+void threshold_lt(uint16_t *buffer, size_t length, uint16_t threshold, uint16_t value);
+void threshold_lt(uint32_t *buffer, size_t length, uint32_t threshold, uint32_t value);
+void threshold_lt(const double *buffer_in, double *buffer_out, size_t length, double threshold, double value);
+void threshold_lt(const float *buffer_in, float *buffer_out, size_t length, float threshold, float value);
+void threshold_lt(const int16_t *buffer_in, int16_t *buffer_out, size_t length, int16_t threshold, int16_t value);
+void threshold_lt(const int32_t *buffer_in, int32_t *buffer_out, size_t length, int32_t threshold, int32_t value);
+void threshold_lt(const uint16_t *buffer_in, uint16_t *buffer_out, size_t length, uint16_t threshold, uint16_t value);
+void threshold_lt(const uint32_t *buffer_in, uint32_t *buffer_out, size_t length, uint32_t threshold, uint32_t value);
+
+void threshold_gt(double *buffer, size_t length, double threshold, double value);
+void threshold_gt(float *buffer, size_t length, float threshold, float value);
+void threshold_gt(int16_t *buffer, size_t length, int16_t threshold, int16_t value);
+void threshold_gt(int32_t *buffer, size_t length, int32_t threshold, int32_t value);
+void threshold_gt(uint16_t *buffer, size_t length, uint16_t threshold, uint16_t value);
+void threshold_gt(uint32_t *buffer, size_t length, uint32_t threshold, uint32_t value);
+void threshold_gt(const double *buffer_in, double *buffer_out, size_t length, double threshold, double value);
+void threshold_gt(const float *buffer_in, float *buffer_out, size_t length, float threshold, float value);
+void threshold_gt(const int16_t *buffer_in, int16_t *buffer_out, size_t length, int16_t threshold, int16_t value);
+void threshold_gt(const int32_t *buffer_in, int32_t *buffer_out, size_t length, int32_t threshold, int32_t value);
+void threshold_gt(const uint16_t *buffer_in, uint16_t *buffer_out, size_t length, uint16_t threshold, uint16_t value);
+void threshold_gt(const uint32_t *buffer_in, uint32_t *buffer_out, size_t length, uint32_t threshold, uint32_t value);
+
+void threshold_let(double *buffer, size_t length, double threshold, double value);
+void threshold_let(float *buffer, size_t length, float threshold, float value);
+void threshold_let(int16_t *buffer, size_t length, int16_t threshold, int16_t value);
+void threshold_let(int32_t *buffer, size_t length, int32_t threshold, int32_t value);
+void threshold_let(uint16_t *buffer, size_t length, uint16_t threshold, uint16_t value);
+void threshold_let(uint32_t *buffer, size_t length, uint32_t threshold, uint32_t value);
+void threshold_let(const double *buffer_in, double *buffer_out, size_t length, double threshold, double value);
+void threshold_let(const float *buffer_in, float *buffer_out, size_t length, float threshold, float value);
+void threshold_let(const int16_t *buffer_in, int16_t *buffer_out, size_t length, int16_t threshold, int16_t value);
+void threshold_let(const int32_t *buffer_in, int32_t *buffer_out, size_t length, int32_t threshold, int32_t value);
+void threshold_let(const uint16_t *buffer_in, uint16_t *buffer_out, size_t length, uint16_t threshold, uint16_t value);
+void threshold_let(const uint32_t *buffer_in, uint32_t *buffer_out, size_t length, uint32_t threshold, uint32_t value);
+
+void threshold_get(double *buffer, size_t length, double threshold, double value);
+void threshold_get(float *buffer, size_t length, float threshold, float value);
+void threshold_get(int16_t *buffer, size_t length, int16_t threshold, int16_t value);
+void threshold_get(int32_t *buffer, size_t length, int32_t threshold, int32_t value);
+void threshold_get(uint16_t *buffer, size_t length, uint16_t threshold, uint16_t value);
+void threshold_get(uint32_t *buffer, size_t length, uint32_t threshold, uint32_t value);
+void threshold_get(const double *buffer_in, double *buffer_out, size_t length, double threshold, double value);
+void threshold_get(const float *buffer_in, float *buffer_out, size_t length, float threshold, float value);
+void threshold_get(const int16_t *buffer_in, int16_t *buffer_out, size_t length, int16_t threshold, int16_t value);
+void threshold_get(const int32_t *buffer_in, int32_t *buffer_out, size_t length, int32_t threshold, int32_t value);
+void threshold_get(const uint16_t *buffer_in, uint16_t *buffer_out, size_t length, uint16_t threshold, uint16_t value);
+void threshold_get(const uint32_t *buffer_in, uint32_t *buffer_out, size_t length, uint32_t threshold, uint32_t value);
+
 void linear2mel(const double *linear, double *mel, size_t length);
 void linear2mel(const double *linear, double *mel, size_t length, const double* mult, const double *div );
 void linear2mel(const float *linear, float *mel, size_t length);
