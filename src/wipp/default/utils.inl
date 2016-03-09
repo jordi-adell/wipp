@@ -196,6 +196,28 @@ namespace wipp{
       }
   }
 
+  void mult(const wipp_complex_t *buffer_a, wipp_complex_t *buffer_b, size_t length)
+  {
+      // (a + ib)* (c + id) = ac + iad + ibc - bd = (ac - db) +i(ad + bc)
+      wipp_complex_t aux;
+      for (size_t i = 0; i < length; ++i)
+      {
+	  aux = buffer_b[i];
+	  buffer_b[i].re = buffer_a[i].re*aux.re - buffer_a[i].im*aux.im;
+	  buffer_b[i].im = buffer_a[i].re*aux.im + buffer_a[i].im*aux.re;
+      }
+  }
+
+  void mult(const wipp_complex_t *buffer_a, const wipp_complex_t *buffer_b, wipp_complex_t *buffer, size_t length)
+  {
+      // (a + ib)* (c + id) = ac + iad + ibc - bd = (ac - db) +i(ad + bc)
+      for (size_t i = 0; i < length; ++i)
+      {
+	  buffer[i].re = buffer_a[i].re*buffer_b[i].re - buffer_a[i].im*buffer_b[i].im;
+	  buffer[i].im = buffer_a[i].re*buffer_b[i].im + buffer_a[i].im*buffer_b[i].re;
+      }
+  }
+
   template<typename T>
   void divC_core(T C,T *buffer, size_t length)
   {
