@@ -69,7 +69,6 @@ int wipp_fir_coefs(double fmax, double fmin, double *coefs, size_t length, wipp_
 
 struct wipp_fir_filter_t_ {
 	double *buffer;
-	size_t occupancy;
 	size_t position;
 	size_t order;
 	double *coefs; // should it be const?
@@ -81,7 +80,7 @@ void init_fir(wipp_fir_filter_t *fir, const double *coefs, size_t length)
     fir->order = length;
     fir->buffer = new double[fir->order];
     memset(fir->buffer,0,length*sizeof(double));
-    fir->occupancy = fir->position = 0;
+    fir->position = 0;
     fir->coefs = new double[fir->order];
     memcpy(fir->coefs, coefs, fir->order*sizeof(double));
 }
