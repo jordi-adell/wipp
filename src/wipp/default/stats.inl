@@ -24,6 +24,12 @@ void mean(const int16_t *buffer, size_t length, int16_t *mean){ mean_core(buffer
 void mean(const int32_t *buffer, size_t length, int32_t *mean){ mean_core(buffer, length, mean); }
 void mean(const uint16_t *buffer, size_t length, uint16_t *mean){ mean_core(buffer, length, mean); }
 void mean(const uint32_t *buffer, size_t length, uint32_t *mean){ mean_core(buffer, length, mean); }
+void mean(const wipp_complex_t *buffer, size_t length, wipp_complex_t *mean)
+{
+    sum(buffer, length, mean);
+    mean->re /= length;
+    mean->im /= length;
+}
 
 void sum(const double *buffer, size_t length, double *mean){ mean_core(buffer, length, mean); }
 void sum(const float *buffer, size_t length, float *mean){ mean_core(buffer, length, mean); }
