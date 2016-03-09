@@ -52,6 +52,7 @@ namespace wipp{
   void copyBuffer(const double *inbuffer, uint16_t *outbuffer, size_t length);
   void copyBuffer(const float *inbuffer, int16_t *outbuffer, size_t length);
   void copyBuffer(const float *inbuffer, uint16_t *outbuffer, size_t length);
+  void copyBuffer(const wipp_complex_t *inbuffer, wipp_complex_t *outbuffer, size_t length);
 
 
   /** Functions to substract a buffer from another one. The _I suffix stands for inplace operation,
@@ -68,6 +69,7 @@ namespace wipp{
   void setZeros(uint32_t *buffer, size_t length);
   void setZeros(uint16_t *buffer, size_t length);
   void setZeros(wipp_complex_t * bufer, size_t length);
+
 
   void mult(const double *buffer_a, const double *buffer_b, double *buffer, size_t length);
   void mult(const float *buffer_a, const float *buffer_b, float *buffer, size_t length);

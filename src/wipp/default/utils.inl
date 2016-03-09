@@ -84,6 +84,12 @@ namespace wipp{
       outbuffer[i] = static_cast<unsigned short>(inbuffer[i]);
   }
 
+  void copyBuffer(const wipp_complex_t *inbuffer, wipp_complex_t *outbuffer, size_t length)
+  {
+      memcpy(outbuffer, inbuffer, length);
+  }
+
+
   void subBuffer_I(const short *inbuffer, short *outbuffer, size_t length)
   {
     for (size_t i = 0; i < length; ++i)
