@@ -381,10 +381,33 @@ namespace wipp{
 
   void real2complex(const double *real, const double *imag, wipp_complex_t *complex, size_t length)
   {
-      for (size_t i = 0; i < length; ++i)
+      if (real == NULL)
+	  if (imag == NULL)
+	      for (size_t i = 0; i < length; ++i)
+	      {
+		  complex[i].im = 0;
+		  complex[i].re = 0;
+	      }
+	  else
+	      for (size_t i = 0; i < length; ++i)
+	      {
+		  complex[i].im = imag[i];
+		  complex[i].re = 0;
+	      }
+      else
       {
-	  complex[i].im = imag[i];
-	  complex[i].re = real[i];
+	  if (imag == NULL)
+	      for (size_t i = 0; i < length; ++i)
+	      {
+		  complex[i].im = 0;
+		  complex[i].re = real[i];
+	      }
+	  else
+	      for (size_t i = 0; i < length; ++i)
+	      {
+		  complex[i].im = imag[i];
+		  complex[i].re = real[i];
+	      }
       }
   }
 
