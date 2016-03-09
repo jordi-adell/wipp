@@ -1,5 +1,6 @@
 #include <wipp/wippfilter.h>
 
+#include <cstring>
 #include <math.h>
 
 namespace wipp
