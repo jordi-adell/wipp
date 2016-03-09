@@ -7,6 +7,9 @@ set(PROJECT_VERSION_PATCH 1)
 
 SET(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
+# add -O3 and -sse here
+SET(CMAKE_CXX_FLAGS "-O3 -msse4")
+
 find_package(IPP)
 find_package(FFTW)
 
