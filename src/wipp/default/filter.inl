@@ -123,5 +123,108 @@ void wipp_fir_filter(wipp_fir_filter_t *fir, const double *signal_in, double *si
     }
 }
 
+struct wipp_iir_filter_t_
+{
+	size_t a_order;
+	size_t b_order;
+	double *a_coefs;
+	double *b_coefs;
+	size_t x_position;
+	size_t y_position;
+	double *x_buffer;
+	double *y_buffer;
+};
+
+
+void init_iir(wipp_iir_filter_t *iir, const double *a_coefs, size_t a_length, const double *b_coefs, size_t b_length)
+{
+    iir = new wipp_iir_filter_t();
+    iir->a_order = a_length;
+    iir->b_order = b_length;
+    iir->a_coefs = new double[iir->a_order];
+    iir->b_coefs = new double[iir->b_order];
+    iir->x_position = 0;
+    iir->y_position = 0;
+    iir->x_buffer = new double[iir->b_order];
+    iir->y_buffer = new double[iir->a_order];
+
+    memcpy(iir->a_coefs, a_coefs, a_length*sizeof(double));
+    memcpy(iir->b_coefs, b_coefs, b_length*sizeof(double));
+
+}
+
+void init_iir(wipp_iir_filter_t *iir,
+	      const double *a_coefs, size_t a_length,
+	      const double *b_coefs, size_t b_length,
+	      const double *x_pastValues, const double *y_pastValues)
+{
+    init_iir(iir, a_coefs, a_length, b_coefs, b_length);
+    memcpy(iir->x_buffer, x_pastValues, b_length*sizeof(double));
+    memcpy(iir->y_buffer, y_pastValues, a_length*sizeof(double));
+}
+
+
+void delete_iir(wipp_iir_filter_t *iir)
+{
+    delete[] iir->x_buffer;
+    delete[] iir->y_buffer;
+    delete[] iir->a_coefs;
+    delete[] iir->b_coefs;
+    delete iir;
+}
+
+void iir_filter(wipp_iir_filter_t *iir, const double *signal_in, double *signal_out, size_t length)
+{
+    //
+    //   y(n) = gain * (sum_i a_i*x(n-i) + sum_j b_j*x(n-j) )
+    //
+
+    for (size_t i = 0; i < length; ++i)
+    {
+	signal_out[i] = 0;
+	//	for (size_t a = 0; a < iir->a_order; ++a)
+	for (size_t a = 0,k = iir->y_position; a < iir->a_order; ++a, k = (k+1)%iir->a_order)
+	{
+	    signal_out[i] -= iir->a_coefs[a] * iir->y_buffer[k];
+	}
+	for (size_t b = 0,k = iir->x_position; b < iir->b_order; ++b, k = (k+1)%iir->b_order)
+	{
+	    signal_out[i] += iir->b_coefs[b] * iir->x_buffer[k];
+	}
+
+	iir->x_buffer[iir->x_position] = signal_in[i];
+	iir->y_buffer[iir->y_position] = signal_out[i];
+
+	iir->x_position = (iir->x_position + 1) % iir->b_order;
+	iir->y_position = (iir->y_position + 1) % iir->a_order;
+
+    }
+
+}
+
+
+void iir_filter(wipp_iir_filter_t *iir, double *signal, size_t length)
+{
+    double result;
+    for (size_t i = 0; i < length; ++i)
+    {
+	result = 0;
+	for (size_t a = 0,k = iir->y_position; a < iir->a_order; ++a, k = (k+1)%iir->a_order)
+	{
+	    result -= iir->a_coefs[a] * iir->y_buffer[k];
+	}
+	for (size_t b = 0,k = iir->x_position; b < iir->b_order; ++b, k = (k+1)%iir->b_order)
+	{
+	    result += iir->b_coefs[b] * iir->x_buffer[k];
+	}
+
+	iir->x_buffer[iir->x_position] = signal[i];
+	iir->y_buffer[iir->y_position] = result;
+	signal[i] = result;
+
+	iir->x_position = (iir->x_position + 1) % iir->b_order;
+	iir->y_position = (iir->y_position + 1) % iir->a_order;
+    }
+}
 
 }

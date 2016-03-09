@@ -38,6 +38,10 @@ namespace wipp
 struct wipp_fir_filter_t_;
 typedef wipp_fir_filter_t_ wipp_fir_filter_t;
 
+struct wipp_iir_filter_t_;
+typedef wipp_iir_filter_t_ wipp_iir_filter_t;
+
+
 typedef enum
 {
     wippRECTANGULAR = 0,
@@ -56,6 +60,14 @@ void wipp_delete_fir(wipp_fir_filter_t *fir);
 void wipp_fir_filter(wipp_fir_filter_t *fir, double *signal, size_t length);
 void wipp_fir_filter(wipp_fir_filter_t *fir, const double *signal_in, double *singal_out, size_t length);
 
+// IIR filter
+void init_iir(wipp_iir_filter_t *iir, const double *a_coefs, size_t a_length, const double *b_coefs, size_t b_length);
+void init_iir(wipp_iir_filter_t *iir,
+	      const double *a_coefs, size_t a_length, const double *b_coefs, size_t b_length,
+	      const double *x_pastValues, const double *y_pastValues);
+void delete_iir(wipp_iir_filter_t *iir);
+void iir_filter(wipp_iir_filter_t *iir, double *signal, size_t length);
+void iir_filter(wipp_iir_filter_t *iir, const double *signal_in, double *signal_out, size_t length);
 
 
 
