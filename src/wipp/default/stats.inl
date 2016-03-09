@@ -38,5 +38,14 @@ void sum(const int16_t *buffer, size_t length, int16_t *sum){ sum_core(buffer, l
 void sum(const int32_t *buffer, size_t length, int32_t *sum){ sum_core(buffer, length, sum); }
 void sum(const uint16_t *buffer, size_t length, uint16_t *sum){ sum_core(buffer, length, sum); }
 void sum(const uint32_t *buffer, size_t length, uint32_t *sum){ sum_core(buffer, length, sum); }
+void sum(const wipp_complex_t *buffer, size_t length, wipp_complex_t *sum)
+{
+    sum->re = sum->im = 0;
+    for (size_t i = 0; i < length; ++i)
+    {
+	sum->re = buffer[i].re;
+	sum->im = buffer[i].im;
+    }
+}
 
 }
