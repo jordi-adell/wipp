@@ -112,6 +112,20 @@ namespace wipp{
   void div(const wipp_complex_t *buffer_a, wipp_complex_t *buffer_b, size_t length);
 
 
+  void addC(double C, const double *buffer_in, double *buffer_out, size_t length);
+  void addC(float C, const float *buffer_in, float *buffer_out, size_t length);
+  void addC(int16_t C, const int16_t *buffer_in, int16_t *buffer_out, size_t length);
+  void addC(int32_t C, const int32_t *buffer_in, int32_t *buffer_out, size_t length);
+  void addC(uint16_t C, const uint16_t *buffer_in, uint16_t *buffer_out, size_t length);
+  void addC(uint32_t C, const uint32_t *buffer_in, uint32_t *buffer_out, size_t length);
+  void addC(double C, double *buffer, size_t length);
+  void addC(float C, float *buffer, size_t length);
+  void addC(int16_t C, int16_t *buffer, size_t length);
+  void addC(int32_t C, int32_t *buffer, size_t length);
+  void addC(uint16_t C, uint16_t *buffer, size_t length);
+  void addC(uint32_t C, uint32_t *buffer, size_t length);
+
+
   void divC(double C, const double *buffer_in, double *buffer_out, size_t length);
   void divC(float C, const float *buffer_in, float *buffer_out, size_t length);
   void divC(int16_t C, const int16_t *buffer_in, int16_t *buffer_out, size_t length);
