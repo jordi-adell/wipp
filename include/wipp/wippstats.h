@@ -67,6 +67,15 @@ void max(const uint32_t *buffer, size_t length, uint32_t *max);
 void max(const wipp_complex_t *buffer, size_t length, wipp_complex_t *max);
 
 
+void minmax(const double *buffer, size_t length, double *min, double *max);
+void minmax(const float *buffer, size_t length, float *min, float *max);
+void minmax(const int16_t *buffer, size_t length, int16_t *min, int16_t *max);
+void minmax(const int32_t *buffer, size_t length, int32_t *min, int32_t *max);
+void minmax(const uint16_t *buffer, size_t length, uint16_t *min, uint16_t *max);
+void minmax(const uint32_t *buffer, size_t length, uint32_t *min, uint32_t *max);
+void minmax(const wipp_complex_t *buffer, size_t length, wipp_complex_t *min, wipp_complex_t *max);
+
+
 
 }
 

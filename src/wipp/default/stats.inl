@@ -118,6 +118,44 @@ void max(const wipp_complex_t *buffer, size_t length, wipp_complex_t *max)
 }
 
 
+template<typename T>
+void minmax_core(const T *buffer, size_t length, T *min, T *max)
+{
+    *max = std::numeric_limits<T>::min();
+    *min = std::numeric_limits<T>::max();
+    for (size_t i = 0; i < length; ++i)
+    {
+	*max = (buffer[i] > *max) ? buffer[i] : *max;
+	*min = (buffer[i] < *min) ? buffer[i] : *min;
+    }
+}
+
+void minmax(const double *buffer, size_t length, double *min, double *max) { minmax_core(buffer, length, min, max); }
+void minmax(const float *buffer, size_t length, float *min, float *max) { minmax_core(buffer, length, min, max); }
+void minmax(const int16_t *buffer, size_t length, int16_t *min, int16_t *max) { minmax_core(buffer, length, min, max); }
+void minmax(const int32_t *buffer, size_t length, int32_t *min, int32_t *max) { minmax_core(buffer, length, min, max); }
+void minmax(const uint16_t *buffer, size_t length, uint16_t *min, uint16_t *max) { minmax_core(buffer, length, min, max); }
+void minmax(const uint32_t *buffer, size_t length, uint32_t *min, uint32_t *max) { minmax_core(buffer, length, min, max); }
+void minmax(const wipp_complex_t *buffer, size_t length, wipp_complex_t *min, wipp_complex_t *max)
+{
+    double maxmagn = std::numeric_limits<double>::min();
+    double minmagn = std::numeric_limits<double>::max();
+    double magn;
+    for (size_t i = 0;i < length; ++i)
+    {
+	magn = sqrt(buffer[i].re*buffer[i].re + buffer[i].im*buffer[i].im);
+	if (magn > maxmagn)
+	{
+	    maxmagn = magn;
+	    *max = buffer[i];
+	}
+	if (magn < minmagn)
+	{
+	    minmagn = magn;
+	    *min = buffer[i];
+	}
+    }
+}
 
 
 
