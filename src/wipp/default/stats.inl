@@ -1,4 +1,5 @@
 #include <wipp/wippstats.h>
+#include <wipp/wipputils.h>
 
 #include <limits>
 #include <math.h>
@@ -52,6 +53,47 @@ void mean(const wipp_complex_t *buffer, size_t length, wipp_complex_t *mean)
     mean->im /= length;
 }
 
+
+
+
+template<typename T>
+void var_core(const T *buffer, size_t length, T* var)
+{
+    // var(c) = E[x^2] - E^2[x]
+    T mean_value;
+    double mean2 = 0;
+    mean(buffer, length, &mean_value);
+    for (size_t i = 0; i < length; ++i)
+    {
+	mean2 += static_cast<double>(buffer[i])*static_cast<double>(buffer[i]);
+    }
+    mean2 /= length;
+
+    *var = mean2 - pow(static_cast<double>(mean_value),2);
+}
+
+void var(const double *buffer, size_t length, double *var){ var_core(buffer, length, var); }
+void var(const float *buffer, size_t length, float *var){ var_core(buffer, length, var); }
+void var(const int16_t *buffer, size_t length, int16_t *var){ var_core(buffer, length, var); }
+void var(const int32_t *buffer, size_t length, int32_t *var){ var_core(buffer, length, var); }
+void var(const uint16_t *buffer, size_t length, uint16_t *var){ var_core(buffer, length, var); }
+void var(const uint32_t *buffer, size_t length, uint32_t *var){ var_core(buffer, length, var); }
+void var(const wipp_complex_t *buffer, size_t length, wipp_complex_t *var)
+{
+    // var(c) = E[x^2] - E^2[x]
+    wipp_complex_t mean_value;
+    wipp_complex_t mean2;
+    wipp_complex_t meanp2;
+    wipp_complex_t prod[length];
+
+    mean(buffer, length, &mean_value);
+    mult(&mean_value, &mean_value, &meanp2, 1);
+    mult(buffer, buffer, prod, length);
+    mean(prod, length, &mean2);
+
+    var->re = mean2.re - meanp2.re;
+    var->im = mean2.im - meanp2.im;
+}
 
 
 

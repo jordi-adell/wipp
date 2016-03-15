@@ -41,6 +41,15 @@ void mean(const uint32_t *buffer, size_t length, double *mean);
 void mean(const wipp_complex_t *buffer, size_t length, wipp_complex_t *mean);
 
 
+void var(const double *buffer, size_t length, double *var);
+void var(const float *buffer, size_t length, double *var);
+void var(const int16_t *buffer, size_t length, double *var);
+void var(const int32_t *buffer, size_t length, double *var);
+void var(const uint16_t *buffer, size_t length, double *var);
+void var(const uint32_t *buffer, size_t length, double *var);
+void var(const wipp_complex_t *buffer, size_t length, wipp_complex_t *var);
+
+
 void sum(const double *buffer, size_t length, double *sum);
 void sum(const float *buffer, size_t length, float *sum);
 void sum(const int16_t *buffer, size_t length, int16_t*sum);
