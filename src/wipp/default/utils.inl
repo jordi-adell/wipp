@@ -421,6 +421,36 @@ namespace wipp{
 
 
 
+
+  template<typename T>
+  void multC_core(T C, T *buffer, size_t length)
+  {
+      for (size_t i = 0; i < length; ++i)
+	  buffer[i] *= C;
+  }
+
+  template<typename T>
+  void multC_core(T C, const T *buffer_in, T *buffer_out, size_t length)
+  {
+      for (size_t i = 0; i < length; ++i)
+	  buffer_out[i] = buffer_in[i] * C;
+  }
+
+  void multC(double C, const double *buffer_in, double *buffer_out, size_t length) { multC_core(C, buffer_in, buffer_out, length); }
+  void multC(float C, const float *buffer_in, float *buffer_out, size_t length) { multC_core(C, buffer_in, buffer_out, length); }
+  void multC(int16_t C, const int16_t *buffer_in, int16_t *buffer_out, size_t length) { multC_core(C, buffer_in, buffer_out, length); }
+  void multC(int32_t C, const int32_t *buffer_in, int32_t *buffer_out, size_t length) { multC_core(C, buffer_in, buffer_out, length); }
+  void multC(uint16_t C, const uint16_t *buffer_in, uint16_t *buffer_out, size_t length) { multC_core(C, buffer_in, buffer_out, length); }
+  void multC(uint32_t C, const uint32_t *buffer_in, uint32_t *buffer_out, size_t length) { multC_core(C, buffer_in, buffer_out, length); }
+  void multC(double C, double *buffer, size_t length) { multC_core(C, buffer, length); }
+  void multC(float C, float *buffer, size_t length) { multC_core(C, buffer, length); }
+  void multC(int16_t C, int16_t *buffer, size_t length) { multC_core(C, buffer, length); }
+  void multC(int32_t C, int32_t *buffer, size_t length) { multC_core(C, buffer, length); }
+  void multC(uint16_t C, uint16_t *buffer, size_t length) { multC_core(C, buffer, length); }
+  void multC(uint32_t C, uint32_t *buffer, size_t length) { multC_core(C, buffer, length); }
+
+
+
   template<typename T>
   void divC_core(T C,T *buffer, size_t length)
   {
