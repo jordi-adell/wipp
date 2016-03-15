@@ -51,7 +51,14 @@ typedef enum
 
 
 // WINDOWING
-void wipp_window(double *frame, size_t length, wipp_window_t window_type);
+void window(double *frame, size_t length, wipp_window_t window_type);
+void window(float *frame, size_t length, wipp_window_t window_type);
+void window(int16_t *frame, size_t length, wipp_window_t window_type);
+void window(int32_t *frame, size_t length, wipp_window_t window_type);
+void window(uint16_t *frame, size_t length, wipp_window_t window_type);
+void window(uint32_t *frame, size_t length, wipp_window_t window_type);
+
+
 
 // FIR filters
 int fir_coefs(double fmax, double fmin, double *coefs, size_t length, wipp_window_t window_type);

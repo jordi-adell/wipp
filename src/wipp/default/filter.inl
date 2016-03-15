@@ -6,19 +6,20 @@
 namespace wipp
 {
 
-
-void wipp_hamming(double *frame, size_t length)
+template <typename T>
+void wipp_hamming(T *frame, size_t length)
 {
     static double alpha = 0.53836;
     static double beta  = 0.46164;
 
     for (size_t i  = 0; i < length; ++i)
     {
-	frame[i] = alpha - beta*cos(2*M_PI*i/(length-1));
+	frame[i] *= (alpha - beta*cos(2*M_PI*i/(length-1)));
     }
 }
 
-void wipp_hann(double *frame, size_t length)
+template<typename T>
+void wipp_hann(T *frame, size_t length)
 {
     for (size_t i = 0; i < length; ++i)
     {
@@ -43,7 +44,10 @@ void wipp_sinc(double fmax, double fmin, double *sinc, size_t length)
     }
 }
 
-void wipp_window(double *frame, size_t length, wipp_window_t window_type)
+
+
+template<typename T>
+void window_core(T *frame, size_t length, wipp_window_t window_type)
 {
     switch(window_type)
     {
@@ -59,10 +63,22 @@ void wipp_window(double *frame, size_t length, wipp_window_t window_type)
     }
 }
 
+void window(double *frame, size_t length, wipp_window_t window_type) { window_core(frame, length, window_type); }
+void window(float *frame, size_t length, wipp_window_t window_type) { window_core(frame, length, window_type); }
+void window(int16_t *frame, size_t length, wipp_window_t window_type) { window_core(frame, length, window_type); }
+void window(int32_t *frame, size_t length, wipp_window_t window_type) { window_core(frame, length, window_type); }
+void window(uint16_t *frame, size_t length, wipp_window_t window_type) { window_core(frame, length, window_type); }
+void window(uint32_t *frame, size_t length, wipp_window_t window_type) { window_core(frame, length, window_type); }
+
+
+
+
+
+
 int wipp_fir_coefs(double fmax, double fmin, double *coefs, size_t length, wipp_window_t window_type)
 {
     wipp_sinc(fmax, fmin, coefs, length);
-    wipp_window(coefs, length, window_type);
+    window(coefs, length, window_type);
     return 0;
 }
 
