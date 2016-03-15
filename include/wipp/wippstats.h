@@ -50,6 +50,22 @@ void sum(const uint32_t *buffer, size_t length, double *sum);
 void sum(const wipp_complex_t *buffer, size_t length, wipp_complex_t *sum);
 
 
+void min(const double *buffer, size_t length, double *min);
+void min(const float *buffer, size_t length, float *min);
+void min(const int16_t *buffer, size_t length, int16_t *min);
+void min(const int32_t *buffer, size_t length, int32_t *min);
+void min(const uint16_t *buffer, size_t length, uint16_t *min);
+void min(const uint32_t *buffer, size_t length, uint32_t *min);
+void min(const wipp_complex_t *buffer, size_t length, wipp_complex_t *min);
+
+void max(const double *buffer, size_t length, double *max);
+void max(const float *buffer, size_t length, float *max);
+void max(const int16_t *buffer, size_t length, int16_t *max);
+void max(const int32_t *buffer, size_t length, int32_t *max);
+void max(const uint16_t *buffer, size_t length, uint16_t *max);
+void max(const uint32_t *buffer, size_t length, uint32_t *max);
+void max(const wipp_complex_t *buffer, size_t length, wipp_complex_t *max);
+
 
 
 }
