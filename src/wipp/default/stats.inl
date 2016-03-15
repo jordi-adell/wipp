@@ -99,6 +99,23 @@ void var(const wipp_complex_t *buffer, size_t length, wipp_complex_t *var)
 
 
 template<typename T>
+void stddev_core(const T *buffer, size_t length, T* stddev)
+{
+    var(buffer, length, stddev);
+    *stddev = std::sqrt(*stddev);
+}
+
+void stddev(const double *buffer, size_t length, double *stddev){ stddev_core(buffer, length, stddev); }
+void stddev(const float *buffer, size_t length, float *stddev){ stddev_core(buffer, length, stddev); }
+void stddev(const int16_t *buffer, size_t length, int16_t *stddev){ stddev_core(buffer, length, stddev); }
+void stddev(const int32_t *buffer, size_t length, int32_t *stddev){ stddev_core(buffer, length, stddev); }
+void stddev(const uint16_t *buffer, size_t length, uint16_t *stddev){ stddev_core(buffer, length, stddev); }
+void stddev(const uint32_t *buffer, size_t length, uint32_t *stddev){ stddev_core(buffer, length, stddev); }
+
+
+
+
+template<typename T>
 void min_core(const T *buffer, size_t length, T *min)
 {
     *min = std::numeric_limits<T>::max();

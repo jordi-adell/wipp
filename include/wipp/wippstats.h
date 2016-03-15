@@ -50,6 +50,14 @@ void var(const uint32_t *buffer, size_t length, double *var);
 void var(const wipp_complex_t *buffer, size_t length, wipp_complex_t *var);
 
 
+void stddev(const double *buffer, size_t length, double *stddev);
+void stddev(const float *buffer, size_t length, double *stddev);
+void stddev(const int16_t *buffer, size_t length, double *stddev);
+void stddev(const int32_t *buffer, size_t length, double *stddev);
+void stddev(const uint16_t *buffer, size_t length, double *stddev);
+void stddev(const uint32_t *buffer, size_t length, double *stddev);
+
+
 void sum(const double *buffer, size_t length, double *sum);
 void sum(const float *buffer, size_t length, float *sum);
 void sum(const int16_t *buffer, size_t length, int16_t*sum);
