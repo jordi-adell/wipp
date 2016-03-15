@@ -204,6 +204,53 @@ namespace wipp{
   }
 
 
+
+  template<typename T>
+  void sub_core(const T *buffer_a, T* buffer_b, size_t length)
+  {
+      for (size_t i = 0; i < length; ++i)
+	  buffer_b[i] -= buffer_a[i];
+  }
+  template<typename T>
+  void sub_core(const T* buffer_a, const T* buffer_b, T* buffer, size_t length)
+  {
+      for (size_t i = 0; i < length; ++i)
+	  buffer[i] = buffer_a[i] - buffer_b[i];
+  }
+
+  void sub(const double *buffer_a, double* buffer_b, size_t length) { sub_core(buffer_a, buffer_b, length); }
+  void sub(const float *buffer_a, float* buffer_b, size_t length) { sub_core(buffer_a, buffer_b, length); }
+  void sub(const int16_t *buffer_a, int16_t* buffer_b, size_t length) { sub_core(buffer_a, buffer_b, length); }
+  void sub(const int32_t *buffer_a, int32_t* buffer_b, size_t length) { sub_core(buffer_a, buffer_b, length); }
+  void sub(const uint16_t *buffer_a, uint16_t* buffer_b, size_t length) { sub_core(buffer_a, buffer_b, length); }
+  void sub(const uint32_t *buffer_a, uint32_t* buffer_b, size_t length) { sub_core(buffer_a, buffer_b, length); }
+  void sub(const wipp::wipp_complex_t *buffer_a, wipp::wipp_complex_t* buffer_b, size_t length)
+  {
+      for (size_t i = 0; i < length; ++i)
+      {
+	  buffer_b[i].re -= buffer_a[i].re;
+	  buffer_b[i].im -= buffer_a[i].im;
+      }
+  }
+
+  void sub(const double *buffer_a, const double* buffer_b, double * buffer, size_t length) { sub_core(buffer_a, buffer_b, buffer, length); }
+  void sub(const float *buffer_a, const float* buffer_b, float * buffer, size_t length) { sub_core(buffer_a, buffer_b, buffer, length); }
+  void sub(const int16_t *buffer_a, const int16_t* buffer_b, int16_t * buffer, size_t length) { sub_core(buffer_a, buffer_b, buffer, length); }
+  void sub(const int32_t *buffer_a, const int32_t* buffer_b, int32_t * buffer, size_t length) { sub_core(buffer_a, buffer_b, buffer, length); }
+  void sub(const uint16_t *buffer_a, const uint16_t* buffer_b, uint16_t * buffer, size_t length) { sub_core(buffer_a, buffer_b, buffer, length); }
+  void sub(const uint32_t *buffer_a, const uint32_t* buffer_b, uint32_t * buffer, size_t length) { sub_core(buffer_a, buffer_b, buffer, length); }
+  void sub(const wipp::wipp_complex_t *buffer_a, const wipp::wipp_complex_t* buffer_b, wipp::wipp_complex_t * buffer, size_t length)
+  {
+      for (size_t i = 0; i < length; ++i)
+      {
+	  buffer[i].re = buffer_b[i].re - buffer_a[i].re;
+	  buffer[i].im = buffer_b[i].im - buffer_a[i].im;
+      }
+  }
+
+
+
+
   template<typename T>
   void mult_core(const T *buffer_a, const T *buffer_b, T* buffer, size_t length)
   {
