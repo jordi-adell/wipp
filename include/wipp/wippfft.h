@@ -54,16 +54,12 @@ void delete_wipp_fft(wipp_fft_t *wipp_fft);
  * @param wipp_fft   pointer to an initialise wipp_fft structure.
  * @return wipp_fft or null if something went wrong
  */
-wipp_fft_t* fft(const double *signal, int signallength,
-		wipp_complex_t *spectrum, int speclength,
-		wipp_fft_t* wipp_fft);
+wipp_fft_t* fft(const double *signal, double *spectrum, wipp_fft_t* wipp_fft);
 /**
  * @brief ifft  Does the inverse FFT
  * @return wipp_fft or null if something went wrong
  */
-wipp_fft_t* ifft(const wipp_complex_t*spectrum, int speclength,
-		 const double  *signal, int signallength,
-		 wipp_fft_t* wipp_fft);
+wipp_fft_t* ifft(const double *spectrum, double *signal, wipp_fft_t* wipp_fft);
 
 int get_fft_length(wipp_fft_t* wipp_fft);
 }
