@@ -390,6 +390,37 @@ namespace wipp{
   void addC(uint32_t C, uint32_t *buffer, size_t length) { addC_core(C, buffer, length); }
 
 
+
+  template<typename T>
+  void subC_core(T C, T *buffer, size_t length)
+  {
+      for (size_t i = 0; i < length; ++i)
+	  buffer[i] -= C;
+  }
+
+  template<typename T>
+  void subC_core(T C, const T *buffer_in, T *buffer_out, size_t length)
+  {
+      for (size_t i = 0; i < length; ++i)
+	  buffer_out[i] = buffer_in[i] - C;
+  }
+
+  void subC(double C, const double *buffer_in, double *buffer_out, size_t length) { subC_core(C, buffer_in, buffer_out, length); }
+  void subC(float C, const float *buffer_in, float *buffer_out, size_t length) { subC_core(C, buffer_in, buffer_out, length); }
+  void subC(int16_t C, const int16_t *buffer_in, int16_t *buffer_out, size_t length) { subC_core(C, buffer_in, buffer_out, length); }
+  void subC(int32_t C, const int32_t *buffer_in, int32_t *buffer_out, size_t length) { subC_core(C, buffer_in, buffer_out, length); }
+  void subC(uint16_t C, const uint16_t *buffer_in, uint16_t *buffer_out, size_t length) { subC_core(C, buffer_in, buffer_out, length); }
+  void subC(uint32_t C, const uint32_t *buffer_in, uint32_t *buffer_out, size_t length) { subC_core(C, buffer_in, buffer_out, length); }
+  void subC(double C, double *buffer, size_t length) { subC_core(C, buffer, length); }
+  void subC(float C, float *buffer, size_t length) { subC_core(C, buffer, length); }
+  void subC(int16_t C, int16_t *buffer, size_t length) { subC_core(C, buffer, length); }
+  void subC(int32_t C, int32_t *buffer, size_t length) { subC_core(C, buffer, length); }
+  void subC(uint16_t C, uint16_t *buffer, size_t length) { subC_core(C, buffer, length); }
+  void subC(uint32_t C, uint32_t *buffer, size_t length) { subC_core(C, buffer, length); }
+
+
+
+
   template<typename T>
   void divC_core(T C,T *buffer, size_t length)
   {
