@@ -116,20 +116,25 @@ void stddev(const uint32_t *buffer, size_t length, uint32_t *stddev){ stddev_cor
 
 
 template<typename T>
-void min_core(const T *buffer, size_t length, T *min)
+void min_core(const T *buffer, size_t length, T *min, size_t *idx)
 {
     *min = std::numeric_limits<T>::max();
+    *idx = 0;
     for (size_t i = 0; i < length; ++i)
+    {
 	*min = (buffer[i] < *min) ? buffer[i] : *min;
+	*idx = i;
+    }
 }
 
-void min(const double *buffer, size_t length, double *min) { min_core(buffer, length, min); }
-void min(const float *buffer, size_t length, float *min) { min_core(buffer, length, min); }
-void min(const int16_t *buffer, size_t length, int16_t *min) { min_core(buffer, length, min); }
-void min(const int32_t *buffer, size_t length, int32_t *min) { min_core(buffer, length, min); }
-void min(const uint16_t *buffer, size_t length, uint16_t *min) { min_core(buffer, length, min); }
-void min(const uint32_t *buffer, size_t length, uint32_t *min) { min_core(buffer, length, min); }
-void min(const wipp_complex_t *buffer, size_t length, wipp_complex_t *min)
+void min(const double *buffer, size_t length, double *min) { size_t idx; min_core(buffer, length, min, &idx); }
+void min(const float *buffer, size_t length, float *min) { size_t idx; min_core(buffer, length, min, &idx); }
+void min(const int16_t *buffer, size_t length, int16_t *min) { size_t idx; min_core(buffer, length, min, &idx); }
+void min(const int32_t *buffer, size_t length, int32_t *min) { size_t idx; min_core(buffer, length, min, &idx); }
+void min(const uint16_t *buffer, size_t length, uint16_t *min) { size_t idx; min_core(buffer, length, min, &idx); }
+void min(const uint32_t *buffer, size_t length, uint32_t *min) { size_t idx; min_core(buffer, length, min, &idx); }
+
+void min(const wipp_complex_t *buffer, size_t length, wipp_complex_t *min, size_t *idx)
 {
     double minmagn = std::numeric_limits<double>::max();
     double magn;
@@ -140,28 +145,34 @@ void min(const wipp_complex_t *buffer, size_t length, wipp_complex_t *min)
 	{
 	    minmagn = magn;
 	    *min = buffer[i];
+	    *idx = i;
 	}
     }
 }
-
+void min(const wipp_complex_t *buffer, size_t length, wipp_complex_t *min)
+{ size_t idx; wipp::min(buffer, length, min, &idx); }
 
 
 
 template<typename T>
-void max_core(const T *buffer, size_t length, T *max)
+void max_core(const T *buffer, size_t length, T *max, size_t *idx)
 {
     *max = std::numeric_limits<T>::min();
     for (size_t i = 0; i < length; ++i)
+    {
 	*max = (buffer[i] > *max) ? buffer[i] : *max;
+	*idx = i;
+    }
 }
 
-void max(const double *buffer, size_t length, double *max) { max_core(buffer, length, max); }
-void max(const float *buffer, size_t length, float *max) { max_core(buffer, length, max); }
-void max(const int16_t *buffer, size_t length, int16_t *max) { max_core(buffer, length, max); }
-void max(const int32_t *buffer, size_t length, int32_t *max) { max_core(buffer, length, max); }
-void max(const uint16_t *buffer, size_t length, uint16_t *max) { max_core(buffer, length, max); }
-void max(const uint32_t *buffer, size_t length, uint32_t *max) { max_core(buffer, length, max); }
-void max(const wipp_complex_t *buffer, size_t length, wipp_complex_t *max)
+void max(const double *buffer, size_t length, double *max) { size_t idx; max_core(buffer, length, max, &idx); }
+void max(const float *buffer, size_t length, float *max) { size_t idx; max_core(buffer, length, max, &idx); }
+void max(const int16_t *buffer, size_t length, int16_t *max) { size_t idx; max_core(buffer, length, max, &idx); }
+void max(const int32_t *buffer, size_t length, int32_t *max) { size_t idx; max_core(buffer, length, max, &idx); }
+void max(const uint16_t *buffer, size_t length, uint16_t *max) { size_t idx; max_core(buffer, length, max, &idx); }
+void max(const uint32_t *buffer, size_t length, uint32_t *max) { size_t idx; max_core(buffer, length, max, &idx); }
+
+void max(const wipp_complex_t *buffer, size_t length, wipp_complex_t *max, size_t *idx)
 {
     double maxmagn = std::numeric_limits<double>::min();
     double magn;
@@ -172,9 +183,33 @@ void max(const wipp_complex_t *buffer, size_t length, wipp_complex_t *max)
 	{
 	    maxmagn = magn;
 	    *max = buffer[i];
+	    *idx = i;
 	}
     }
 }
+void max(const wipp_complex_t *buffer, size_t length, wipp_complex_t *max)
+{ size_t idx; wipp::max(buffer, length, max, &idx); }
+
+
+
+void minidx(const double *buffer, size_t length, double *min, size_t *idx) { min_core(buffer, length, min, idx); }
+void minidx(const float *buffer, size_t length, float *min, size_t *idx) { min_core(buffer, length, min, idx); }
+void minidx(const int16_t *buffer, size_t length, int16_t *min, size_t *idx) { min_core(buffer, length, min, idx); }
+void minidx(const int32_t *buffer, size_t length, int32_t *min, size_t *idx) { min_core(buffer, length, min, idx); }
+void minidx(const uint16_t *buffer, size_t length, uint16_t *min, size_t *idx) { min_core(buffer, length, min, idx); }
+void minidx(const uint32_t *buffer, size_t length, uint32_t *min, size_t *idx) { min_core(buffer, length, min, idx); }
+void minidx(const wipp_complex_t *buffer, size_t length, wipp_complex_t *min, size_t *idx) { wipp::min(buffer, length, min, idx); }
+
+
+void maxidx(const double *buffer, size_t length, double *max, size_t *idx) { max_core(buffer, length, max, idx); }
+void maxidx(const float *buffer, size_t length, float *max, size_t *idx) { max_core(buffer, length, max, idx); }
+void maxidx(const int16_t *buffer, size_t length, int16_t *max, size_t *idx) { max_core(buffer, length, max, idx); }
+void maxidx(const int32_t *buffer, size_t length, int32_t *max, size_t *idx) { max_core(buffer, length, max, idx); }
+void maxidx(const uint16_t *buffer, size_t length, uint16_t *max, size_t *idx) { max_core(buffer, length, max, idx); }
+void maxidx(const uint32_t *buffer, size_t length, uint32_t *max, size_t *idx) { max_core(buffer, length, max, idx); }
+void maxidx(const wipp_complex_t *buffer, size_t length, wipp_complex_t *max, size_t *idx) { wipp::max(buffer, length, max, idx); }
+
+
 
 
 template<typename T>

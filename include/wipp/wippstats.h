@@ -84,6 +84,24 @@ void max(const uint32_t *buffer, size_t length, uint32_t *max);
 void max(const wipp_complex_t *buffer, size_t length, wipp_complex_t *max);
 
 
+void minidx(const double *buffer, size_t length, double *min, size_t *idx);
+void minidx(const float *buffer, size_t length, float *min, size_t *idx);
+void minidx(const int16_t *buffer, size_t length, int16_t *min, size_t *idx);
+void minidx(const int32_t *buffer, size_t length, int32_t *min, size_t *idx);
+void minidx(const uint16_t *buffer, size_t length, uint16_t *min, size_t *idx);
+void minidx(const uint32_t *buffer, size_t length, uint32_t *min, size_t *idx);
+void minidx(const wipp_complex_t *buffer, size_t length, wipp_complex_t *min, size_t *idx);
+
+
+void maxidx(const double *buffer, size_t length, double *max, size_t *idx);
+void maxidx(const float *buffer, size_t length, float *max, size_t *idx);
+void maxidx(const int16_t *buffer, size_t length, int16_t *max, size_t *idx);
+void maxidx(const int32_t *buffer, size_t length, int32_t *max, size_t *idx);
+void maxidx(const uint16_t *buffer, size_t length, uint16_t *max, size_t *idx);
+void maxidx(const uint32_t *buffer, size_t length, uint32_t *max, size_t *idx);
+void maxidx(const wipp_complex_t *buffer, size_t length, wipp_complex_t *max, size_t *idx);
+
+
 void minmax(const double *buffer, size_t length, double *min, double *max);
 void minmax(const float *buffer, size_t length, float *min, float *max);
 void minmax(const int16_t *buffer, size_t length, int16_t *min, int16_t *max);
