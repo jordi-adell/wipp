@@ -76,7 +76,7 @@ void min(const wipp_complex_t *buffer, size_t length, wipp_complex_t *min)
     double magn;
     for (size_t i = 0;i < length; ++i)
     {
-	magn = sqrt(buffer[i].re*buffer[i].re + buffer[i].im*buffer[i].im);
+	magn = std::sqrt(buffer[i].re*buffer[i].re + buffer[i].im*buffer[i].im);
 	if (magn < minmagn)
 	{
 	    minmagn = magn;
@@ -108,7 +108,7 @@ void max(const wipp_complex_t *buffer, size_t length, wipp_complex_t *max)
     double magn;
     for (size_t i = 0;i < length; ++i)
     {
-	magn = sqrt(buffer[i].re*buffer[i].re + buffer[i].im*buffer[i].im);
+	magn = std::sqrt(buffer[i].re*buffer[i].re + buffer[i].im*buffer[i].im);
 	if (magn > maxmagn)
 	{
 	    maxmagn = magn;
@@ -143,7 +143,7 @@ void minmax(const wipp_complex_t *buffer, size_t length, wipp_complex_t *min, wi
     double magn;
     for (size_t i = 0;i < length; ++i)
     {
-	magn = sqrt(buffer[i].re*buffer[i].re + buffer[i].im*buffer[i].im);
+	magn = std::sqrt(buffer[i].re*buffer[i].re + buffer[i].im*buffer[i].im);
 	if (magn > maxmagn)
 	{
 	    maxmagn = magn;
@@ -156,7 +156,6 @@ void minmax(const wipp_complex_t *buffer, size_t length, wipp_complex_t *min, wi
 	}
     }
 }
-
 
 
 
