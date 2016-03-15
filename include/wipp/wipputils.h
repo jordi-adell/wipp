@@ -204,6 +204,22 @@ namespace wipp{
   void divC(uint16_t C, uint16_t *buffer, size_t length);
   void divC(uint32_t C, uint32_t *buffer, size_t length);
 
+
+  void abs(double *buffer,size_t length);
+  void abs(float *buffer, size_t length);
+  void abs(int16_t *buffer,size_t length);
+  void abs(int32_t *buffer, size_t length);
+  void abs(uint32_t *buffer, size_t length);
+  void abs(uint16_t *buffer, size_t length);
+
+  void abs(const double *buffer_in, double *buffer_out, size_t length);
+  void abs(const float *buffer_in, float *buffer_out, size_t length);
+  void abs(const int16_t *buffer_in, int16_t *buffer_out, size_t length);
+  void abs(const int32_t *buffer_in, int32_t *buffer_out, size_t length);
+  void abs(const uint16_t *buffer_in, uint16_t *buffer_out, size_t length);
+  void abs(const uint32_t *buffer_in, uint32_t *buffer_out, size_t length);
+
+
   void sqrt(double *buffer,size_t length);
   void sqrt(float *buffer, size_t length);
   void sqrt(int16_t *buffer,size_t length);

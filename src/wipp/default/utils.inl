@@ -505,6 +505,38 @@ namespace wipp{
   void sqrt(const uint16_t *buffer_in, uint16_t *buffer_out, size_t length){ sqrt_core(buffer_in, buffer_out, length);}
   void sqrt(const uint32_t *buffer_in, uint32_t *buffer_out, size_t length){ sqrt_core(buffer_in, buffer_out, length);}
 
+
+
+  template<typename T>
+  void abs_core(T *buffer, size_t length)
+  {
+      for (size_t i = 0; i < length; ++i)
+	  buffer[i] = fabs(buffer[i]);
+  }
+
+  template<typename T>
+  void abs_core(const T *buffer_in, T* buffer_out, size_t length)
+  {
+      for (size_t i = 0; i < length; ++i)
+	  buffer_out[i] = fabs(buffer_in[i]);
+  }
+
+  void abs(double *buffer, size_t length){ abs_core(buffer, length);}
+  void abs(float *buffer, size_t length){ abs_core(buffer, length);}
+  void abs(int16_t *buffer, size_t length){ abs_core(buffer, length);}
+  void abs(int32_t *buffer, size_t length){ abs_core(buffer, length);}
+  void abs(uint16_t *buffer, size_t length){ abs_core(buffer, length);}
+  void abs(uint32_t *buffer, size_t length){ abs_core(buffer, length);}
+
+  void abs(const double *buffer_in, double *buffer_out, size_t length){ abs_core(buffer_in, buffer_out, length);}
+  void abs(const float *buffer_in, float *buffer_out, size_t length){ abs_core(buffer_in, buffer_out, length);}
+  void abs(const int16_t *buffer_in, int16_t *buffer_out, size_t length){ abs_core(buffer_in, buffer_out, length);}
+  void abs(const int32_t *buffer_in, int32_t *buffer_out, size_t length){ abs_core(buffer_in, buffer_out, length);}
+  void abs(const uint16_t *buffer_in, uint16_t *buffer_out, size_t length){ abs_core(buffer_in, buffer_out, length);}
+  void abs(const uint32_t *buffer_in, uint32_t *buffer_out, size_t length){ abs_core(buffer_in, buffer_out, length);}
+
+
+
   template<typename T>
   void logn_core(const T *buffer_in, T *buffer_out, size_t length)
   {
