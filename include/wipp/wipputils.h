@@ -55,13 +55,6 @@ namespace wipp{
   void copyBuffer(const wipp_complex_t *inbuffer, wipp_complex_t *outbuffer, size_t length);
 
 
-  /** Functions to substract a buffer from another one. The _I suffix stands for inplace operation,
-   * thus the second buffer is used as input as well as outpuf buffer: outbuffer = outbuffer - inbuffer
-   **/
-  void subBuffer_I(const int16_t *inbuffer, int16_t *outbuffer, size_t length);
-  void subBuffer_I(const float *inbuffer, float *outbuffer, size_t length);
-  void subBuffer_I(const double *inbuffer, double *outbuffer, size_t length);
-
   void set(double val, double *buffer, size_t length);
   void set(float val, float *buffer, size_t length);
   void set(int16_t val, int16_t *buffer, size_t length);
@@ -77,6 +70,17 @@ namespace wipp{
   void setZeros(uint32_t *buffer, size_t length);
   void setZeros(uint16_t *buffer, size_t length);
   void setZeros(wipp_complex_t * bufer, size_t length);
+
+
+  /** Functions to substract a buffer from another one. The _I suffix stands for inplace operation,
+   * thus the second buffer is used as input as well as outpuf buffer: outbuffer = outbuffer - inbuffer
+   **/
+
+  // --> subBuffer_I is deprecated, used wipp::sub instead
+  void subBuffer_I(const int16_t *inbuffer, int16_t *outbuffer, size_t length);
+  void subBuffer_I(const float *inbuffer, float *outbuffer, size_t length);
+  void subBuffer_I(const double *inbuffer, double *outbuffer, size_t length);
+  // <--
 
 
   void mult(const double *buffer_a, const double *buffer_b, double *buffer, size_t length);
