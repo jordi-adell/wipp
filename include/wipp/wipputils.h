@@ -72,6 +72,23 @@ namespace wipp{
   void setZeros(wipp_complex_t * bufer, size_t length);
 
 
+  void add(const double *buffer_a, double* buffer_b, size_t length);
+  void add(const float *buffer_a, float* buffer_b, size_t length);
+  void add(const int16_t *buffer_a, int16_t* buffer_b, size_t length);
+  void add(const int32_t *buffer_a, int32_t* buffer_b, size_t length);
+  void add(const uint16_t *buffer_a, uint16_t* buffer_b, size_t length);
+  void add(const uint32_t *buffer_a, uint32_t* buffer_b, size_t length);
+  void add(const wipp::wipp_complex_t *buffer_a, wipp::wipp_complex_t* buffer_b, size_t length);
+
+  void add(const double *buffer_a, const double* buffer_b, double * buffer, size_t length);
+  void add(const float *buffer_a, const float* buffer_b, float * buffer, size_t length);
+  void add(const int16_t *buffer_a, const int16_t* buffer_b, int16_t * buffer, size_t length);
+  void add(const int32_t *buffer_a, const int32_t* buffer_b, int32_t * buffer, size_t length);
+  void add(const uint16_t *buffer_a, const uint16_t* buffer_b, uint16_t * buffer, size_t length);
+  void add(const uint32_t *buffer_a, const uint32_t* buffer_b, uint32_t * buffer, size_t length);
+  void add(const wipp::wipp_complex_t *buffer_a, const wipp::wipp_complex_t* buffer_b, wipp::wipp_complex_t * buffer, size_t length);
+
+
   /** Functions to substract a buffer from another one. The _I suffix stands for inplace operation,
    * thus the second buffer is used as input as well as outpuf buffer: outbuffer = outbuffer - inbuffer
    **/
