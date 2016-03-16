@@ -5,10 +5,10 @@ set(PROJECT_VERSION_MAJOR 2)
 set(PROJECT_VERSION_MINOR 0)
 set(PROJECT_VERSION_PATCH 1)
 
-SET(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
-# add -O3 and -sse here
-SET(CMAKE_CXX_FLAGS "-O3 -msse4 -std=c++11")
+# add C++11 -O3 and -sse here
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -O3 -msse4")
 
 find_package(IPP)
 find_package(FFTW)
@@ -54,10 +54,9 @@ target_link_libraries(wipp
 ## Install ##
 #############
 
-set (LIB_DESTINATION "lib")
-set (BIN_DESTINATION "bin")
-set (INCLUDE_DESTINATION "include/${PROJECT_NAME}")
-
+set(LIB_DESTINATION "lib")
+set(BIN_DESTINATION "bin")
+set(INCLUDE_DESTINATION "include/${PROJECT_NAME}")
 
 ## Mark executables and/or libraries for installation
 install(TARGETS wipp
@@ -96,4 +95,5 @@ if (test)
 
     add_test(NAME ${PROJECT_NAME}-test COMMAND ${PROJECT_NAME}-test)
 endif()
+
 
