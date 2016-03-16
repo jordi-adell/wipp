@@ -2,6 +2,8 @@
 #include <wipp/wipputils.h>
 
 #include <limits>
+#include <random>
+#include <typeinfo>
 #include <math.h>
 
 namespace wipp
@@ -251,6 +253,144 @@ void minmax(const wipp_complex_t *buffer, size_t length, wipp_complex_t *min, wi
     }
 }
 
+
+typedef enum{
+    WIPP_GAUSS
+}wipp_rand_dist_t;
+
+
+template<typename _RealType, class _DistributionType>
+struct wipp_rand_t_tmpl_t_
+{
+	wipp::wipp_rand_dist_t _distr_type;
+	size_t _data_type;
+	std::random_device _rdevice;
+	std::mt19937 *_generator;
+	_DistributionType *_distribution;
+};
+
+
+struct wipp_rand_t_
+{
+	wipp::wipp_rand_dist_t _distr_type;
+	size_t _data_type;
+	std::random_device _rdevice;
+	std::mt19937 *_generator;
+	void *_distribution;
+};
+
+
+typedef wipp_rand_t_tmpl_t_<double, std::normal_distribution<double> > wipp_rand_t_gaussian_double_t_;
+typedef wipp_rand_t_tmpl_t_<float, std::normal_distribution<float> > wipp_rand_t_gaussian_float_t_;
+
+
+template<typename T>
+void init_rand_gaussian_core(wipp_rand_t_tmpl_t_<T, std::normal_distribution<T> > *rand, T mean, T stddev)
+{
+    rand = new wipp_rand_t_tmpl_t_<T, std::normal_distribution<T> >();
+    rand->_distr_type = WIPP_GAUSS;
+    rand->_distribution = new std::normal_distribution<T>(mean, stddev);
+    rand->_generator = new std::mt19937(rand->_rdevice());
+    rand->_data_type = typeid(T).hash_code();
+}
+
+
+template<typename T>
+void delete_rand_core(wipp_rand_t_ *rand)
+{
+    if (rand)
+    {
+	switch(rand->_distr_type)
+	{
+	    case WIPP_GAUSS:
+		delete reinterpret_cast<std::normal_distribution<T>*>(rand->_distribution);
+		rand->_distribution = NULL;
+		delete rand;
+		rand = NULL;
+	    break;
+	    default:
+	    break;
+	}
+    }
+}
+
+
+template<typename T, typename D>
+void rand_core_gaussian_data(wipp_rand_t_ *rand, T *buffer, size_t length)
+{
+    for (size_t i = 0; i < length; ++i)
+	buffer[i] =
+		(*reinterpret_cast<wipp_rand_t_tmpl_t_<D, std::normal_distribution<D> > *>(rand)
+		 ->_distribution)(*rand->_generator);
+}
+
+
+template<typename T>
+void rand_core_gaussian(wipp_rand_t_ *rand, T *buffer, size_t length)
+{
+    if (rand->_data_type == typeid(double).hash_code())
+    {
+	rand_core_gaussian_data<T,double>(rand, buffer, length);
+    }
+    else if (rand->_data_type == typeid(float).hash_code())
+    {
+	rand_core_gaussian_data<T,float>(rand, buffer, length);
+    }
+}
+
+
+
+template<typename T>
+void rand_core(wipp_rand_t_ *rand, T *buffer, size_t length)
+{
+    switch(rand->_distr_type)
+    {
+	case WIPP_GAUSS:
+	    rand_core_gaussian(rand, buffer, length);
+	break;
+	default:
+	break;
+    }
+}
+
+
+
+void init_rand_gaussian(wipp_rand_t *rand, double mean, double stddev)
+{ init_rand_gaussian_core(reinterpret_cast<wipp_rand_t_gaussian_double_t_*>(rand), mean, stddev); }
+void init_rand_gaussian(wipp_rand_t *rand, float mean, float stddev)
+{ init_rand_gaussian_core(reinterpret_cast<wipp_rand_t_gaussian_float_t_*>(rand), mean, stddev); }
+void init_rand_gaussian(wipp_rand_t *rand, int mean, int stddev)
+{ init_rand_gaussian_core(reinterpret_cast<wipp_rand_t_gaussian_float_t_*>(rand),static_cast<float>(mean), static_cast<float>(stddev)); }
+
+
+void rand(wipp_rand_t_ *rand, double *buffer, size_t length) { rand_core(rand, buffer, length); }
+void rand(wipp_rand_t_ *rand, float *buffer, size_t length) { rand_core(rand, buffer, length); }
+void rand(wipp_rand_t_ *rand, int *buffer, size_t length) { rand_core(rand, buffer, length); }
+
+
+void delete_rand(wipp_rand_t_ *rand)
+{
+    switch(rand->_distr_type)
+    {
+	case WIPP_GAUSS:
+	    if (typeid(double).hash_code() == rand->_data_type)
+	    {
+		delete reinterpret_cast<wipp_rand_t_gaussian_double_t_*>(rand)->_distribution;
+		delete rand->_generator;
+		delete reinterpret_cast<wipp_rand_t_gaussian_double_t_*>(rand);
+	    }
+	    else if(typeid(float).hash_code() == rand->_data_type)
+	    {
+
+		delete reinterpret_cast<wipp_rand_t_gaussian_float_t_*>(rand)->_distribution;
+		delete rand->_generator;
+		delete reinterpret_cast<wipp_rand_t_gaussian_float_t_*>(rand);
+	    }
+	break;
+	default:
+	break;
+    }
+}
 
 
 }
