@@ -40,7 +40,7 @@ typedef wipp_fft_t_ wipp_fft_t;
  * @param length  of the FFT and must be 128,256,512, ...
  * @return
  */
-void init_wipp_fft(wipp_fft_t* fft, unsigned short length);
+void init_wipp_fft(wipp_fft_t* fft, size_t length);
 
 void delete_wipp_fft(wipp_fft_t *wipp_fft);
 
