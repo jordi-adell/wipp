@@ -7,6 +7,10 @@
 
 #include <gtest/gtest.h>
 #include <wipp/wipputils.h>
+#include <wipp/wippfilter.h>
+#include <wipp/wippsignal.h>
+#include <wipp/wippfft.h>
+#include <wipp/wippstats.h>
 
 #ifndef DEBUG_STREAM
 #define DEBUG_STREAM(x)
@@ -19,7 +23,7 @@ namespace test
 {
 
 
-TEST(ippTest, ippsCopyTest)
+TEST(wippTest, wippCopyTest)
 {
     const int len = 4;
     double dmin = std::numeric_limits<double>::min();
@@ -85,6 +89,43 @@ TEST(ippTest, ippsCopyTest)
 	DEBUG_STREAM("I: " << inIbuffer[i] << " D: " << oDbuffer[i]);
 	EXPECT_EQ(inIbuffer[i], oDbuffer[i]);
     }
+}
+
+
+TEST(iirTest, init_delete)
+{
+
+  wipp::wipp_iir_filter_t *iir;
+  static const int n = 6;
+  double b_coefs[n]={2, -2, 1, 1 , -2, 2};
+  double a_coefs[n]={1, 1, 1, 1 , 1, 1};
+
+  wipp::init_iir(&iir, a_coefs, n, b_coefs, n);
+
+  EXPECT_FALSE(iir == NULL);
+
+  wipp::delete_iir(&iir);
+
+  EXPECT_TRUE(iir == NULL);
+
+  wipp::delete_iir(&iir);
+
+}
+
+
+TEST(circularBufferTest, init_delete)
+{
+  wipp::wipp_circular_buffer_t *cf;
+  wipp::init_cirular_buffer<double>(&cf, 1024);
+
+  EXPECT_FALSE(cf == NULL);
+
+  wipp::delete_circular_buffer(&cf);
+
+  EXPECT_TRUE(cf == NULL);
+
+  wipp::delete_circular_buffer(&cf);
+
 }
 
 }
