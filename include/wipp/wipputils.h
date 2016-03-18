@@ -72,7 +72,7 @@ namespace wipp{
   void setZeros(wipp_complex_t * bufer, size_t length);
 
 
-  void add(const double *buffer_a, double* buffer_b, size_t length);
+  void add(const double *buffer_a, double *buffer_b, size_t length);
   void add(const float *buffer_a, float* buffer_b, size_t length);
   void add(const int16_t *buffer_a, int16_t* buffer_b, size_t length);
   void add(const int32_t *buffer_a, int32_t* buffer_b, size_t length);

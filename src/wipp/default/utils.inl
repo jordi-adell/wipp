@@ -182,7 +182,7 @@ namespace wipp{
 
 
   template<typename T>
-  void add_core(const T *buffer_a, T* buffer_b, size_t length)
+  void add_core(const T *buffer_a, T *buffer_b, size_t length)
   {
       for (size_t i = 0; i < length; ++i)
 	  buffer_b[i] += buffer_a[i];
@@ -194,7 +194,7 @@ namespace wipp{
 	  buffer[i] = buffer_a[i] + buffer_b[i];
   }
 
-  void add(const double *buffer_a, double* buffer_b, size_t length) { add_core(buffer_a, buffer_b, length); }
+  void add(const double *buffer_a, double *buffer_b, size_t length) { add_core(buffer_a, buffer_b, length); }
   void add(const float *buffer_a, float* buffer_b, size_t length) { add_core(buffer_a, buffer_b, length); }
   void add(const int16_t *buffer_a, int16_t* buffer_b, size_t length) { add_core(buffer_a, buffer_b, length); }
   void add(const int32_t *buffer_a, int32_t* buffer_b, size_t length) { add_core(buffer_a, buffer_b, length); }
