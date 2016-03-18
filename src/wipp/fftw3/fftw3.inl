@@ -42,26 +42,33 @@ struct wipp_fft_t_
 
 
 
-void init_wipp_fft(wipp_fft_t* fft, size_t length)
+void init_wipp_fft(wipp_fft_t **fft, size_t length)
 {
-    fft = new wipp_fft_t_();
-    fft->length = length;
-    fft->forward_in  = fftw_alloc_real(fft->length);
-    fft->forward_out = fftw_alloc_real(fft->length);
-    fft->backward_in  = fftw_alloc_real(fft->length);
-    fft->backward_out = fftw_alloc_real(fft->length);
-    fft->forward_plan = fftw_plan_r2r_1d(fft->length, fft->forward_in, fft->forward_out, FFTW_R2HC, FFTW_ESTIMATE);
-    fft->backward_plan = fftw_plan_r2r_1d(fft->length, fft->backward_in, fft->backward_out, FFTW_HC2R, FFTW_ESTIMATE);
+    if(fft != NULL)
+    {
+	(*fft) = new wipp_fft_t_();
+	(*fft)->length = length;
+	(*fft)->forward_in  = fftw_alloc_real((*fft)->length);
+	(*fft)->forward_out = fftw_alloc_real((*fft)->length);
+	(*fft)->backward_in  = fftw_alloc_real((*fft)->length);
+	(*fft)->backward_out = fftw_alloc_real((*fft)->length);
+	(*fft)->forward_plan = fftw_plan_r2r_1d((*fft)->length, (*fft)->forward_in, (*fft)->forward_out, FFTW_R2HC, FFTW_ESTIMATE);
+	(*fft)->backward_plan = fftw_plan_r2r_1d((*fft)->length, (*fft)->backward_in, (*fft)->backward_out, FFTW_HC2R, FFTW_ESTIMATE);
+    }
 }
 
-void delete_wipp_fft(wipp_fft_t *wipp_fft)
+void delete_wipp_fft(wipp_fft_t **fft)
 {
-    fftw_free(wipp_fft->forward_in);
-    fftw_free(wipp_fft->forward_out);
-    fftw_free(wipp_fft->backward_in);
-    fftw_free(wipp_fft->backward_out);
-    fftw_destroy_plan(wipp_fft->forward_plan);
-    fftw_destroy_plan(wipp_fft->backward_plan);
+    if (fft != NULL && *fft != NULL)
+    {
+	fftw_free((*fft)->forward_in);
+	fftw_free((*fft)->forward_out);
+	fftw_free((*fft)->backward_in);
+	fftw_free((*fft)->backward_out);
+	fftw_destroy_plan((*fft)->forward_plan);
+	fftw_destroy_plan((*fft)->backward_plan);
+	*fft = NULL;
+    }
 }
 
 wipp_fft_t* fft(const double *signal, double *spectrum, wipp_fft_t* wipp_fft)

@@ -128,6 +128,24 @@ TEST(circularBufferTest, init_delete)
 
 }
 
+
+
+TEST(fftTest, init_delete)
+{
+  wipp::wipp_fft_t *fft;
+  wipp::init_wipp_fft(&fft, 512);
+
+  EXPECT_FALSE(fft == NULL);
+
+  wipp::delete_wipp_fft(&fft);
+
+  EXPECT_TRUE(fft == NULL);
+
+  wipp::delete_wipp_fft(&fft);
+
+}
+
+
 }
 }
 
