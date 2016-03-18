@@ -21,6 +21,7 @@
 */
 #include <wipp/wippsignal.h>
 
+#include <typeinfo>
 
 namespace wipp
 {
@@ -176,6 +177,7 @@ template<typename T>
 struct wipp_circular_buffer_template_t_
 {
 	T *buffer;
+	size_t data_type;
 	size_t size;
 	size_t occupancy;
 	size_t position;
@@ -184,6 +186,7 @@ struct wipp_circular_buffer_template_t_
 struct wipp_circular_buffer_t_
 {
 	void *buffer;
+	size_t data_type;
 	size_t size;
 	size_t occupancy;
 	size_t position;
@@ -197,27 +200,60 @@ typedef wipp_circular_buffer_template_t_<uint16_t> wipp_circular_buffer_uint16_t
 typedef wipp_circular_buffer_template_t_<uint32_t> wipp_circular_buffer_uint32_t_t_;
 
 template <typename T>
-void init_cirular_buffer_core(wipp_circular_buffer_template_t_<T> *cb, size_t size, T *init_values, size_t length)
+void init_cirular_buffer_core(wipp_circular_buffer_template_t_<T> **cb, size_t size, T *init_values, size_t length)
 {
-    cb = new wipp_circular_buffer_template_t_<T>();
-    cb->size = size;
-    cb->occupancy = 0;
-    cb->position = 0;
-    cb->buffer = new T[cb->size];
+    *cb = new wipp_circular_buffer_template_t_<T>();
+    (*cb)->size = size;
+    (*cb)->occupancy = 0;
+    (*cb)->position = 0;
+    (*cb)->buffer = new T[(*cb)->size];
+    (*cb)->data_type = typeid(double).hash_code();
 }
 
-void init_cirular_buffer(wipp_circular_buffer_t *buffer, size_t size, double   *init_values, size_t length)
-{ init_cirular_buffer_core(reinterpret_cast<wipp_circular_buffer_double_t_*>(buffer), size, init_values, length); }
-void init_cirular_buffer(wipp_circular_buffer_t *buffer, size_t size, float    *init_values, size_t length)
-{ init_cirular_buffer_core(reinterpret_cast<wipp_circular_buffer_float_t_*>(buffer), size, init_values, length); }
-void init_cirular_buffer(wipp_circular_buffer_t *buffer, size_t size, int16_t  *init_values, size_t length)
-{ init_cirular_buffer_core(reinterpret_cast<wipp_circular_buffer_int16_t_t_*>(buffer), size, init_values, length); }
-void init_cirular_buffer(wipp_circular_buffer_t *buffer, size_t size, int32_t  *init_values, size_t length)
-{ init_cirular_buffer_core(reinterpret_cast<wipp_circular_buffer_int32_t_t_*>(buffer), size, init_values, length); }
-void init_cirular_buffer(wipp_circular_buffer_t *buffer, size_t size, uint16_t *init_values, size_t length)
-{ init_cirular_buffer_core(reinterpret_cast<wipp_circular_buffer_uint16_t_t_*>(buffer), size, init_values, length); }
-void init_cirular_buffer(wipp_circular_buffer_t *buffer, size_t size, uint32_t *init_values, size_t length)
-{ init_cirular_buffer_core(reinterpret_cast<wipp_circular_buffer_uint32_t_t_*>(buffer), size, init_values, length); }
+void init_cirular_buffer(wipp_circular_buffer_t **buffer, size_t size, double   *init_values, size_t length)
+{ init_cirular_buffer_core(reinterpret_cast<wipp_circular_buffer_double_t_**>(buffer), size, init_values, length); }
+void init_cirular_buffer(wipp_circular_buffer_t **buffer, size_t size, float    *init_values, size_t length)
+{ init_cirular_buffer_core(reinterpret_cast<wipp_circular_buffer_float_t_**>(buffer), size, init_values, length); }
+void init_cirular_buffer(wipp_circular_buffer_t **buffer, size_t size, int16_t  *init_values, size_t length)
+{ init_cirular_buffer_core(reinterpret_cast<wipp_circular_buffer_int16_t_t_**>(buffer), size, init_values, length); }
+void init_cirular_buffer(wipp_circular_buffer_t **buffer, size_t size, int32_t  *init_values, size_t length)
+{ init_cirular_buffer_core(reinterpret_cast<wipp_circular_buffer_int32_t_t_**>(buffer), size, init_values, length); }
+void init_cirular_buffer(wipp_circular_buffer_t **buffer, size_t size, uint16_t *init_values, size_t length)
+{ init_cirular_buffer_core(reinterpret_cast<wipp_circular_buffer_uint16_t_t_**>(buffer), size, init_values, length); }
+void init_cirular_buffer(wipp_circular_buffer_t **buffer, size_t size, uint32_t *init_values, size_t length)
+{ init_cirular_buffer_core(reinterpret_cast<wipp_circular_buffer_uint32_t_t_**>(buffer), size, init_values, length); }
+
+void init_cirular_buffer(wipp_circular_buffer_t **buffer, size_t size);
+
+
+
+template <typename T>
+void delete_circular_buffer_core(wipp_circular_buffer_t_ **buffer)
+{
+    delete[] reinterpret_cast<T*>((*buffer)->buffer);
+    delete *buffer;
+    *buffer = NULL;
+}
+
+void delete_circular_buffer(wipp_circular_buffer_t **buffer)
+{
+    if (buffer != NULL && *buffer != NULL)
+    {
+	if (typeid(double).hash_code() == (*buffer)->data_type)
+	    delete_circular_buffer_core<double>(buffer);
+	else if (typeid(float).hash_code() == (*buffer)->data_type)
+	    delete_circular_buffer_core<float>(buffer);
+	else if (typeid(int16_t).hash_code() == (*buffer)->data_type)
+	    delete_circular_buffer_core<int16_t>(buffer);
+	else if (typeid(int32_t).hash_code() == (*buffer)->data_type)
+	    delete_circular_buffer_core<int32_t>(buffer);
+	else if (typeid(uint16_t).hash_code() == (*buffer)->data_type)
+	    delete_circular_buffer_core<uint16_t>(buffer);
+	else if (typeid(uint32_t).hash_code() == (*buffer)->data_type)
+	    delete_circular_buffer_core<uint32_t>(buffer);
+	*buffer = NULL;
+    }
+}
 
 
 template<typename T>

@@ -62,19 +62,19 @@ void window(uint32_t *frame, size_t length, wipp_window_t window_type);
 
 // FIR filters
 int fir_coefs(double fmax, double fmin, double *coefs, size_t length, wipp_window_t window_type);
-void init_fir(wipp_fir_filter_t *fir, const double *coefs, size_t length);
-void init_fir(wipp_fir_filter_t *fir, const double *coefs, size_t length, const double *pastValues);
-void delete_fir(wipp_fir_filter_t *fir);
+void init_fir(wipp_fir_filter_t **fir, const double *coefs, size_t length);
+void init_fir(wipp_fir_filter_t **fir, const double *coefs, size_t length, const double *pastValues);
+void delete_fir(wipp_fir_filter_t **fir);
 void fir_filter(wipp_fir_filter_t *fir, double *signal, size_t length);
 void fir_filter(wipp_fir_filter_t *fir, const double *signal_in, double *signal_out, size_t length);
 
 
 // IIR filter
-void init_iir(wipp_iir_filter_t *iir, const double *a_coefs, size_t a_length, const double *b_coefs, size_t b_length);
-void init_iir(wipp_iir_filter_t *iir,
+void init_iir(wipp_iir_filter_t **iir, const double *a_coefs, size_t a_length, const double *b_coefs, size_t b_length);
+void init_iir(wipp_iir_filter_t **iir,
 	      const double *a_coefs, size_t a_length, const double *b_coefs, size_t b_length,
 	      const double *x_pastValues, const double *y_pastValues);
-void delete_iir(wipp_iir_filter_t *iir);
+void delete_iir(wipp_iir_filter_t **iir);
 void iir_filter(wipp_iir_filter_t *iir, double *signal, size_t length);
 void iir_filter(wipp_iir_filter_t *iir, const double *signal_in, double *signal_out, size_t length);
 

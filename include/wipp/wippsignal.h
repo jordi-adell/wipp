@@ -96,12 +96,18 @@ void threshold_get(const uint32_t *buffer_in, uint32_t *buffer_out, size_t lengt
 struct wipp_circular_buffer_t_;
 typedef wipp_circular_buffer_t_ wipp_circular_buffer_t;
 
-void init_cirular_buffer(wipp_circular_buffer_t *buffer, size_t size, double   *init_values, size_t length);
-void init_cirular_buffer(wipp_circular_buffer_t *buffer, size_t size, float    *init_values, size_t length);
-void init_cirular_buffer(wipp_circular_buffer_t *buffer, size_t size, int16_t  *init_values, size_t length);
-void init_cirular_buffer(wipp_circular_buffer_t *buffer, size_t size, int32_t  *init_values, size_t length);
-void init_cirular_buffer(wipp_circular_buffer_t *buffer, size_t size, uint16_t *init_values, size_t length);
-void init_cirular_buffer(wipp_circular_buffer_t *buffer, size_t size, uint32_t *init_values, size_t length);
+void init_cirular_buffer(wipp_circular_buffer_t **buffer, size_t size, double   *init_values, size_t length);
+void init_cirular_buffer(wipp_circular_buffer_t **buffer, size_t size, float    *init_values, size_t length);
+void init_cirular_buffer(wipp_circular_buffer_t **buffer, size_t size, int16_t  *init_values, size_t length);
+void init_cirular_buffer(wipp_circular_buffer_t **buffer, size_t size, int32_t  *init_values, size_t length);
+void init_cirular_buffer(wipp_circular_buffer_t **buffer, size_t size, uint16_t *init_values, size_t length);
+void init_cirular_buffer(wipp_circular_buffer_t **buffer, size_t size, uint32_t *init_values, size_t length);
+
+template<typename T>
+void init_cirular_buffer(wipp_circular_buffer_t **buffer, size_t size)
+{ init_cirular_buffer(buffer, size, (T*) NULL, 0); }
+
+void delete_circular_buffer(wipp_circular_buffer_t **buffer);
 
 void cf_read(wipp_circular_buffer_t *cb, double   *buffer, size_t length, size_t *stored);
 void cf_read(wipp_circular_buffer_t *cb, float    *buffer, size_t length, size_t *stored);

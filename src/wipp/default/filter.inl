@@ -23,6 +23,7 @@
 
 #include <cstring>
 #include <math.h>
+#include <memory>
 
 namespace wipp
 {
@@ -111,30 +112,34 @@ struct wipp_fir_filter_t_ {
 	double *coefs; // should it be const?
 };
 
-void init_fir(wipp_fir_filter_t *fir, const double *coefs, size_t length)
+void init_fir(wipp_fir_filter_t **fir, const double *coefs, size_t length)
 {
-    fir = new wipp_fir_filter_t_();
-    fir->order = length;
-    fir->buffer = new double[fir->order];
-    memset(fir->buffer,0,length*sizeof(double));
-    fir->position = 0;
-    fir->coefs = new double[fir->order];
-    memcpy(fir->coefs, coefs, fir->order*sizeof(double));
+    if (fir != NULL)
+    {
+	*fir = new wipp_fir_filter_t_();
+	(*fir)->order = length;
+	(*fir)->buffer = new double[(*fir)->order];
+	memset((*fir)->buffer,0,length*sizeof(double));
+	(*fir)->position = 0;
+	(*fir)->coefs = new double[(*fir)->order];
+	memcpy((*fir)->coefs, coefs, (*fir)->order*sizeof(double));
+    }
 }
 
-void init_fir(wipp_fir_filter_t *fir, const double *coefs, size_t length, const double *pastValues)
+void init_fir(wipp_fir_filter_t **fir, const double *coefs, size_t length, const double *pastValues)
 {
     init_fir(fir, coefs, length);
-    memcpy(fir->buffer, pastValues, length);
+    if (fir != NULL && *fir != NULL && (*fir)->buffer != NULL)
+	memcpy((*fir)->buffer, pastValues, length);
 }
 
 
-void delete_fir(wipp_fir_filter_t *fir)
+void delete_fir(wipp_fir_filter_t **fir)
 {
-    delete[] fir->buffer;
-    delete[] fir->coefs;
-    delete fir;
-    fir = NULL;
+    delete[] (*fir)->buffer;
+    delete[] (*fir)->coefs;
+    delete *fir;
+    *fir = NULL;
 }
 
 void fir_filter(wipp_fir_filter_t *fir, double *signal, size_t length)
@@ -180,41 +185,47 @@ struct wipp_iir_filter_t_
 };
 
 
-void init_iir(wipp_iir_filter_t *iir, const double *a_coefs, size_t a_length, const double *b_coefs, size_t b_length)
+void init_iir(wipp_iir_filter_t **iir, const double *a_coefs, size_t a_length, const double *b_coefs, size_t b_length)
 {
-    iir = new wipp_iir_filter_t();
-    iir->a_order = a_length;
-    iir->b_order = b_length;
-    iir->a_coefs = new double[iir->a_order];
-    iir->b_coefs = new double[iir->b_order];
-    iir->x_position = 0;
-    iir->y_position = 0;
-    iir->x_buffer = new double[iir->b_order];
-    iir->y_buffer = new double[iir->a_order];
+    *iir = new wipp_iir_filter_t_;
 
-    memcpy(iir->a_coefs, a_coefs, a_length*sizeof(double));
-    memcpy(iir->b_coefs, b_coefs, b_length*sizeof(double));
+    (*iir)->a_order = a_length;
+    (*iir)->b_order = b_length;
+    (*iir)->a_coefs = new double[(*iir)->a_order];
+    (*iir)->b_coefs = new double[(*iir)->b_order];
+    (*iir)->x_position = 0;
+    (*iir)->y_position = 0;
+    (*iir)->x_buffer = new double[(*iir)->b_order];
+    (*iir)->y_buffer = new double[(*iir)->a_order];
 
+    memcpy((*iir)->a_coefs, a_coefs, a_length*sizeof(double));
+    memcpy((*iir)->b_coefs, b_coefs, b_length*sizeof(double));
 }
 
-void init_iir(wipp_iir_filter_t *iir,
+void init_iir(wipp_iir_filter_t **iir,
 	      const double *a_coefs, size_t a_length,
 	      const double *b_coefs, size_t b_length,
 	      const double *x_pastValues, const double *y_pastValues)
 {
     init_iir(iir, a_coefs, a_length, b_coefs, b_length);
-    memcpy(iir->x_buffer, x_pastValues, b_length*sizeof(double));
-    memcpy(iir->y_buffer, y_pastValues, a_length*sizeof(double));
+    if (x_pastValues != NULL)
+	memcpy((*iir)->x_buffer, x_pastValues, b_length*sizeof(double));
+    if (y_pastValues != NULL)
+	memcpy((*iir)->y_buffer, y_pastValues, a_length*sizeof(double));
 }
 
 
-void delete_iir(wipp_iir_filter_t *iir)
+void delete_iir(wipp_iir_filter_t **iir)
 {
-    delete[] iir->x_buffer;
-    delete[] iir->y_buffer;
-    delete[] iir->a_coefs;
-    delete[] iir->b_coefs;
-    delete iir;
+    if (iir != NULL && *iir != NULL)
+    {
+	delete[] (*iir)->x_buffer;
+	delete[] (*iir)->y_buffer;
+	delete[] (*iir)->a_coefs;
+	delete[] (*iir)->b_coefs;
+	delete (*iir);
+	*iir = NULL;
+    }
 }
 
 void iir_filter(wipp_iir_filter_t *iir, const double *signal_in, double *signal_out, size_t length)
