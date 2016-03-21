@@ -132,16 +132,38 @@ TEST(circularBufferTest, init_delete)
 
 TEST(fftTest, init_delete)
 {
-  wipp::wipp_fft_t *fft;
-  wipp::init_wipp_fft(&fft, 512);
 
-  EXPECT_FALSE(fft == NULL);
+  for (int i = 0; i < 15; ++i)
+  {
+    std::cout << "order: " << (1 << i) << std::endl;
+    wipp::wipp_fft_t *fft;
+    wipp::init_wipp_fft(&fft, 1 << i);
 
-  wipp::delete_wipp_fft(&fft);
+    EXPECT_FALSE(fft == NULL);
 
-  EXPECT_TRUE(fft == NULL);
+    wipp::delete_wipp_fft(&fft);
 
-  wipp::delete_wipp_fft(&fft);
+    EXPECT_TRUE(fft == NULL);
+
+    wipp::delete_wipp_fft(&fft);
+  }
+
+
+  for (int i = 1; i < 512; ++i)
+  {
+    if (i % 100 == 0)
+      std::cout << "up to order: " << i << std::endl;
+    wipp::wipp_fft_t *fft;
+    wipp::init_wipp_fft(&fft, i);
+
+    EXPECT_FALSE(fft == NULL);
+
+    wipp::delete_wipp_fft(&fft);
+
+    EXPECT_TRUE(fft == NULL);
+
+    wipp::delete_wipp_fft(&fft);
+  }
 
 }
 
