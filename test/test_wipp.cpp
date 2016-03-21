@@ -112,6 +112,35 @@ TEST(iirTest, init_delete)
 
 }
 
+TEST(firTest, init_delete)
+{
+
+  for (float N = 1; N < 100000; N = N*1.05)
+  {
+    size_t n = N;
+    std::cout << "order: " << n << std::endl;
+
+    wipp::wipp_fir_filter_t *fir;
+    double coefs[n];
+
+    for (size_t c = 0; c < n; ++c)
+    {
+      coefs[c] = std::rand();
+    }
+
+    wipp::init_fir(&fir, coefs, n);
+
+    EXPECT_FALSE(fir == NULL);
+
+    wipp::delete_fir(&fir);
+
+    EXPECT_TRUE(fir == NULL);
+
+    wipp::delete_fir(&fir);
+  }
+}
+
+
 
 TEST(circularBufferTest, init_delete)
 {
