@@ -46,7 +46,7 @@ void init_wipp_fft(wipp_fft_t **fft, size_t length)
 {
     if(fft != NULL)
     {
-	(*fft) = new wipp_fft_t_();
+	(*fft) = new wipp_fft_t_;
 	(*fft)->length = length;
 	(*fft)->forward_in  = fftw_alloc_real((*fft)->length);
 	(*fft)->forward_out = fftw_alloc_real((*fft)->length);
