@@ -306,13 +306,16 @@ typedef wipp_rand_t_tmpl_t_<float, std::normal_distribution<float> > wipp_rand_t
 
 
 template<typename T>
-void init_rand_gaussian_core(wipp_rand_t_tmpl_t_<T, std::normal_distribution<T> > *rand, T mean, T stddev)
+void init_rand_gaussian_core(wipp_rand_t_tmpl_t_<T, std::normal_distribution<T> > **rand, T mean, T stddev)
 {
-    rand = new wipp_rand_t_tmpl_t_<T, std::normal_distribution<T> >();
-    rand->_distr_type = WIPP_GAUSS;
-    rand->_distribution = new std::normal_distribution<T>(mean, stddev);
-    rand->_generator = new std::mt19937(rand->_rdevice());
-    rand->_data_type = typeid(T).hash_code();
+    if (rand != NULL)
+    {
+	    (*rand) = new wipp_rand_t_tmpl_t_<T, std::normal_distribution<T> >();
+	    (*rand)->_distr_type = WIPP_GAUSS;
+	    (*rand)->_distribution = new std::normal_distribution<T>(mean, stddev);
+	    (*rand)->_generator = new std::mt19937((*rand)->_rdevice());
+	    (*rand)->_data_type = typeid(T).hash_code();
+    }
 }
 
 
@@ -376,12 +379,12 @@ void rand_core(wipp_rand_t_ *rand, T *buffer, size_t length)
 
 
 
-void init_rand_gaussian(wipp_rand_t *rand, double mean, double stddev)
-{ init_rand_gaussian_core(reinterpret_cast<wipp_rand_t_gaussian_double_t_*>(rand), mean, stddev); }
-void init_rand_gaussian(wipp_rand_t *rand, float mean, float stddev)
-{ init_rand_gaussian_core(reinterpret_cast<wipp_rand_t_gaussian_float_t_*>(rand), mean, stddev); }
-void init_rand_gaussian(wipp_rand_t *rand, int mean, int stddev)
-{ init_rand_gaussian_core(reinterpret_cast<wipp_rand_t_gaussian_float_t_*>(rand),static_cast<float>(mean), static_cast<float>(stddev)); }
+void init_rand_gaussian(wipp_rand_t **rand, double mean, double stddev)
+{ init_rand_gaussian_core(reinterpret_cast<wipp_rand_t_gaussian_double_t_**>(rand), mean, stddev); }
+void init_rand_gaussian(wipp_rand_t **rand, float mean, float stddev)
+{ init_rand_gaussian_core(reinterpret_cast<wipp_rand_t_gaussian_float_t_**>(rand), mean, stddev); }
+void init_rand_gaussian(wipp_rand_t **rand, int mean, int stddev)
+{ init_rand_gaussian_core(reinterpret_cast<wipp_rand_t_gaussian_float_t_**>(rand),static_cast<float>(mean), static_cast<float>(stddev)); }
 
 
 void rand(wipp_rand_t_ *rand, double *buffer, size_t length) { rand_core(rand, buffer, length); }
@@ -389,27 +392,31 @@ void rand(wipp_rand_t_ *rand, float *buffer, size_t length) { rand_core(rand, bu
 void rand(wipp_rand_t_ *rand, int *buffer, size_t length) { rand_core(rand, buffer, length); }
 
 
-void delete_rand(wipp_rand_t_ *rand)
+void delete_rand(wipp_rand_t_ **rand)
 {
-    switch(rand->_distr_type)
+    if (rand != NULL && *rand != NULL)
     {
-	case WIPP_GAUSS:
-	    if (typeid(double).hash_code() == rand->_data_type)
-	    {
-		delete reinterpret_cast<wipp_rand_t_gaussian_double_t_*>(rand)->_distribution;
-		delete rand->_generator;
-		delete reinterpret_cast<wipp_rand_t_gaussian_double_t_*>(rand);
-	    }
-	    else if(typeid(float).hash_code() == rand->_data_type)
-	    {
+	switch((*rand)->_distr_type)
+	{
+	    case WIPP_GAUSS:
+		if (typeid(double).hash_code() == (*rand)->_data_type)
+		{
+		    delete reinterpret_cast<wipp_rand_t_gaussian_double_t_*>((*rand))->_distribution;
+		    delete (*rand)->_generator;
+		    delete reinterpret_cast<wipp_rand_t_gaussian_double_t_*>((*rand));
+		}
+		else if(typeid(float).hash_code() == (*rand)->_data_type)
+		{
 
-		delete reinterpret_cast<wipp_rand_t_gaussian_float_t_*>(rand)->_distribution;
-		delete rand->_generator;
-		delete reinterpret_cast<wipp_rand_t_gaussian_float_t_*>(rand);
-	    }
-	break;
-	default:
-	break;
+		    delete reinterpret_cast<wipp_rand_t_gaussian_float_t_*>((*rand))->_distribution;
+		    delete (*rand)->_generator;
+		    delete reinterpret_cast<wipp_rand_t_gaussian_float_t_*>((*rand));
+		}
+	    break;
+	    default:
+	    break;
+	}
+	*rand = NULL;
     }
 }
 

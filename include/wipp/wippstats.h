@@ -113,10 +113,10 @@ void minmax(const wipp_complex_t *buffer, size_t length, wipp_complex_t *min, wi
 struct wipp_rand_t_;
 typedef wipp_rand_t_ wipp_rand_t;
 
-void init_rand_gaussian(wipp_rand_t *rand, double mean, double stddev);
-void init_rand_gaussian(wipp_rand_t *rand, float mean, float stddev);
-void init_rand_gaussian(wipp_rand_t *rand, int mean, int stddev);
-void delete_rand(wipp_rand_t *rand);
+void init_rand_gaussian(wipp_rand_t **rand, double mean, double stddev);
+void init_rand_gaussian(wipp_rand_t **rand, float mean, float stddev);
+void init_rand_gaussian(wipp_rand_t **rand, int mean, int stddev);
+void delete_rand(wipp_rand_t **rand);
 void rand(wipp_rand_t *rand, double *buffer, size_t length);
 void rand(wipp_rand_t *rand, float *buffer, size_t length);
 void rand(wipp_rand_t *rand, int *buffer, size_t length);
