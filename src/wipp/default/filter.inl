@@ -136,10 +136,13 @@ void init_fir(wipp_fir_filter_t **fir, const double *coefs, size_t length, const
 
 void delete_fir(wipp_fir_filter_t **fir)
 {
-    delete[] (*fir)->buffer;
-    delete[] (*fir)->coefs;
-    delete *fir;
-    *fir = NULL;
+    if (fir != NULL && *fir != NULL)
+    {
+	delete[] (*fir)->buffer;
+	delete[] (*fir)->coefs;
+	delete *fir;
+	*fir = NULL;
+    }
 }
 
 void fir_filter(wipp_fir_filter_t *fir, double *signal, size_t length)
