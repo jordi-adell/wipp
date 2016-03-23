@@ -308,6 +308,27 @@ TEST(fftTest, init_delete)
 }
 
 
+
+
+TEST(randTest, init_delete)
+{
+  wipp::wipp_rand_t *rand;
+  wipp::init_rand_gaussian(&rand, 0, 1);
+
+  EXPECT_FALSE(rand == NULL);
+
+  wipp::delete_rand(&rand);
+
+  EXPECT_TRUE(rand == NULL);
+
+  wipp::delete_rand(&rand);
+
+}
+
+
+
+
+
 }
 }
 
