@@ -212,9 +212,9 @@ void init_iir(wipp_iir_filter_t **iir,
 {
     init_iir(iir, a_coefs, a_length, b_coefs, b_length);
     if (x_pastValues != NULL)
-	memcpy((*iir)->x_buffer, x_pastValues, b_length*sizeof(double));
+	memcpy((*iir)->x_buffer, x_pastValues, a_length*sizeof(double));
     if (y_pastValues != NULL)
-	memcpy((*iir)->y_buffer, y_pastValues, a_length*sizeof(double));
+	memcpy((*iir)->y_buffer, y_pastValues, b_length*sizeof(double));
 }
 
 
@@ -234,26 +234,30 @@ void delete_iir(wipp_iir_filter_t **iir)
 void iir_filter(wipp_iir_filter_t *iir, const double *signal_in, double *signal_out, size_t length)
 {
     //
-    //   y(n) = gain * (sum_i a_i*x(n-i) + sum_j b_j*x(n-j) )
+    //   y(n) = gain * (sum_i a_i*x(n-i) - sum_j b_j*y(n-j) )
     //
 
     for (size_t i = 0; i < length; ++i)
     {
-	signal_out[i] = 0;
-	//	for (size_t a = 0; a < iir->a_order; ++a)
-	for (size_t a = 0,k = iir->y_position; a < iir->a_order; ++a, k = (k+1)%iir->a_order)
-	{
-	    signal_out[i] -= iir->a_coefs[a] * iir->y_buffer[k];
-	}
-	for (size_t b = 0,k = iir->x_position; b < iir->b_order; ++b, k = (k+1)%iir->b_order)
-	{
-	    signal_out[i] += iir->b_coefs[b] * iir->x_buffer[k];
-	}
-
 	iir->x_buffer[iir->x_position] = signal_in[i];
-	iir->y_buffer[iir->y_position] = signal_out[i];
-
 	iir->x_position = (iir->x_position + 1) % iir->b_order;
+
+	signal_out[i] = 0;
+	for (size_t b = 1,k = iir->y_position; b < iir->b_order; ++b, k = (k+1)%iir->b_order)
+	{
+	    signal_out[i] -= iir->b_coefs[b] * iir->y_buffer[k];
+	}
+	for (size_t a = 0,k = iir->x_position; a < iir->a_order; ++a, k = (k+1)%iir->a_order)
+	{
+	    signal_out[i] += iir->a_coefs[a] * iir->x_buffer[k];
+	}
+
+	if (iir->b_order > 0)
+	{
+	    signal_out[i] /= iir->b_coefs[0];
+	}
+
+	iir->y_buffer[iir->y_position] = signal_out[i];
 	iir->y_position = (iir->y_position + 1) % iir->a_order;
 
     }
