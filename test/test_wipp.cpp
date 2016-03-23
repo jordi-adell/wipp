@@ -35,15 +35,15 @@ TEST(wippTest, wippCopyTest)
     short int smin = std::numeric_limits<short int>::min();
     short int smax = std::numeric_limits<short int>::max();
 
-    long int imin = std::numeric_limits<int>::min();
-    long int imax = std::numeric_limits<int>::max();
+    int imin = std::numeric_limits<int>::min();
+    int imax = std::numeric_limits<int>::max();
 
     DEBUG_STREAM(" min: " << fmin << " max: " << fmax << " : " << 2*(fmin/3) + fmax/3 << " " << 2*fmin/3);
 
     double inDbuffer[len] = {dmin, 2*(dmin/3) + dmax/3, dmin + 2*(dmax/3), dmax};
     float  inFbuffer[len] = {fmin, 2*(fmin/3) + fmax/3, fmin/3 + 2*(fmax/3), fmax};
     short  inSbuffer[len] = {smin, static_cast<short>(2*(smin/3) + smax/3), static_cast<short>(smin/3 + 2*(smax/3)), smax};
-    int   inIbuffer[len] = {smin, static_cast<long> (2*(imin/3) + imax/3), static_cast<long> (imin/3 + 2*(imax/3)), imax};
+    int inIbuffer[len] =  {smin, static_cast<int> (2*(imin/3) + imax/3), static_cast<int> (imin/3 + 2*(imax/3)), imax};
 
     double oDbuffer[len];
     float  oFbuffer[len];
