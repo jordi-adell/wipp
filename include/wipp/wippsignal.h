@@ -126,6 +126,7 @@ void cf_write(wipp_circular_buffer_t *cb, uint32_t *buffer, size_t length, size_
 void cf_skip(wipp_circular_buffer_t *cb, size_t length, size_t *skipped);
 void cf_size(wipp_circular_buffer_t *cb, size_t *size);
 void cf_occupancy(wipp_circular_buffer_t *cb, size_t *occupancy);
+void cf_free(wipp_circular_buffer_t *cb, size_t *free);
 
 
 void linear2mel(const double *linear, double *mel, size_t length);

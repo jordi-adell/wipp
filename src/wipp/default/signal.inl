@@ -320,6 +320,11 @@ void cf_occupancy(wipp_circular_buffer_t *cb, size_t *occupancy)
     *occupancy = cb->occupancy;
 }
 
+void cf_free(wipp_circular_buffer_t *cb, size_t *free)
+{
+    *free = cb->size - cb->occupancy;
+}
+
 void cf_skip(wipp_circular_buffer_t *cb, size_t length, size_t *skipped)
 {
     if (length > cb->occupancy) length = cb->occupancy;
