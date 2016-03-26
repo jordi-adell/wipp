@@ -18,6 +18,8 @@
 #endif
 
 #include <limits>
+#include <fstream>
+
 namespace wipp
 {
 namespace test
@@ -332,6 +334,76 @@ TEST(randTest, init_delete)
 
 }
 
+
+
+TEST(testWindowing, hanning)
+{
+
+  double hanning16[16]={0,0.0432,0.1654,0.3455,0.5523,0.7500,0.9045,0.9891,0.9891,0.9045,0.7500,0.5523,0.3455,0.1654,0.0432,0};
+  double hanning32[32]={0,0.0102,0.0405,0.0896,0.1555,0.2355,0.3263,0.4243,0.5253,0.6253,0.7202,0.8061,0.8794,0.9372,0.9771,0.9974,0.9974,0.9771,0.9372,0.8794,0.8061,0.7202,0.6253,0.5253,0.4243,0.3263,0.2355,0.1555,0.0896,0.0405,0.0102,0};
+
+
+
+  for (size_t n=16; n <= 2048; n=n*2)
+  {
+    DEBUG_STREAM("Hanning window length " << n);
+    double frame[n];
+    wipp::set(1, frame, n);
+    wipp::window(frame, n, wipp::wippHANN);
+
+    for (size_t i = 0; i < n; ++i)
+    {
+      if (n == 16)
+	EXPECT_LT(fabs(frame[i] - hanning16[i]), 5e-5);
+      else if (n == 32)
+	EXPECT_LT(fabs(frame[i] - hanning32[i]), 5e-5);
+      else
+	EXPECT_EQ((1-cos(2*M_PI*i/(n-1)))/2, frame[i]);
+    }
+
+  }
+
+}
+
+
+
+
+TEST(testWindowing, ola)
+{
+  const int n_windows = 100;
+  for (size_t window_size = 1024; window_size < 4096; window_size = window_size + 64)
+  {
+    size_t window_shift = window_size/2;
+    size_t ola_length = window_shift*(n_windows+1);
+
+    DEBUG_STREAM("Window size: " << window_size << ", ola length:" << ola_length << ", window_shift: " << window_shift);
+
+    double frame[window_size];
+    double ola[ola_length];
+
+    wipp::set(1,frame, window_size);
+    wipp::setZeros(ola, ola_length);
+
+    wipp::window(frame, window_size, wipp::wippHANN);
+
+    for (int n = 0; n < n_windows; ++n)
+      wipp::add(frame, &ola[window_shift*n], window_size);
+
+    std::ofstream ofs("window_ola.txt");
+
+    for (size_t i = 0; i < ola_length; ++i)
+      ofs << ola[i] << std::endl;
+
+    for (size_t i = window_shift; i < ola_length - window_shift; ++i)
+    {
+//      if (fabs(ola[i]-1) < 1e-3 )
+//	DEBUG_STREAM("i: " << i << " " << ola[i]);
+      EXPECT_LT(fabs(ola[i] - 1), 2e-3);
+    }
+
+  }
+
+}
 
 
 
