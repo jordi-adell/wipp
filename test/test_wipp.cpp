@@ -268,6 +268,12 @@ TEST(circularBufferTest, write_read)
 
   EXPECT_EQ(output_position, 2*cf_length);
 
+  double sum;
+  wipp::sub(data, output, 2*cf_length);
+  wipp::abs(output, 2*cf_length);
+  wipp::sum(output, 2*cf_length, &sum);
+  EXPECT_EQ(sum, 0);
+
 }
 
 
