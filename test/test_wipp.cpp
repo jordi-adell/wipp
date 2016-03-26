@@ -11,6 +11,7 @@
 #include <wipp/wippsignal.h>
 #include <wipp/wippfft.h>
 #include <wipp/wippstats.h>
+#include <wipp/wipplogger.h>
 
 #ifndef DEBUG_STREAM
 #define DEBUG_STREAM(x)
@@ -118,7 +119,7 @@ TEST(firTest, init_delete)
   for (float N = 1; N < 100000; N = N*1.05)
   {
     size_t n = N;
-    std::cout << "order: " << n << std::endl;
+    DEBUG_STREAM("order: " << n);
 
     wipp::wipp_fir_filter_t *fir;
     double coefs[n];
@@ -275,7 +276,7 @@ TEST(fftTest, init_delete)
 
   for (int i = 0; i < 15; ++i)
   {
-    std::cout << "order: " << (1 << i) << std::endl;
+    DEBUG_STREAM("order: " << (1 << i));
     wipp::wipp_fft_t *fft;
     wipp::init_wipp_fft(&fft, 1 << i);
 
@@ -292,7 +293,7 @@ TEST(fftTest, init_delete)
   for (int i = 1; i < 512; ++i)
   {
     if (i % 100 == 0)
-      std::cout << "up to order: " << i << std::endl;
+      DEBUG_STREAM("up to order: " << i);
     wipp::wipp_fft_t *fft;
     wipp::init_wipp_fft(&fft, i);
 

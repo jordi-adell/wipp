@@ -8,10 +8,18 @@ set(PROJECT_VERSION_PATCH 1)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 # add C++11 -O3 and -sse here
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -O3 -msse4")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+
+if(DEBUG)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Og -g")
+    add_definitions("-DWIPP_DEBUG")
+else(DEBUG)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -msse4")
+endif(DEBUG)
 
 find_package(IPP)
 find_package(FFTW)
+find_package(Boost REQUIRED COMPONENTS system filesystem)
 
 if(IPP_FOUND)
     message(STATUS "IPP found")
@@ -31,7 +39,8 @@ include_directories(
   include
   ${IPP_INCLUDE_DIRS}
   ${FFTW_INCLUDE_DIRS}
-)
+  ${Boost_INCLUDE_DIRS}
+  )
 
 ## Declare a cpp library
 add_library(wipp
@@ -42,12 +51,14 @@ add_library(wipp
   src/${PROJECT_NAME}/wippsignal.cpp
   src/${PROJECT_NAME}/wippstats.cpp
   src/${PROJECT_NAME}/wippdefs.cpp
-)
+  src/${PROJECT_NAME}/wipplogger.cpp
+  )
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(wipp
   ${IPP_LIBRARIES}
   ${FFTW_LIBRARIES}
+  ${Boost_LIBRARIES}
 )
 
 #############
