@@ -234,6 +234,22 @@ namespace wipp{
   void sqrt(const uint16_t *buffer_in, uint16_t *buffer_out, size_t length);
   void sqrt(const uint32_t *buffer_in, uint32_t *buffer_out, size_t length);
 
+
+  void sqr(double *buffer,size_t length);
+  void sqr(float *buffer, size_t length);
+  void sqr(int16_t *buffer,size_t length);
+  void sqr(int32_t *buffer, size_t length);
+  void sqr(uint32_t *buffer, size_t length);
+  void sqr(uint16_t *buffer, size_t length);
+
+  void sqr(const double *buffer_in, double *buffer_out, size_t length);
+  void sqr(const float *buffer_in, float *buffer_out, size_t length);
+  void sqr(const int16_t *buffer_in, int16_t *buffer_out, size_t length);
+  void sqr(const int32_t *buffer_in, int32_t *buffer_out, size_t length);
+  void sqr(const uint16_t *buffer_in, uint16_t *buffer_out, size_t length);
+  void sqr(const uint32_t *buffer_in, uint32_t *buffer_out, size_t length);
+
+
   void logn(double *buffer,size_t length);
   void logn(float *buffer, size_t length);
   void logn(int16_t *buffer,size_t length);

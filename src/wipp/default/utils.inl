@@ -23,6 +23,12 @@
 
 #include <math.h>
 
+template<typename T>
+void std_sqrt(const T *value, T *sqrt_value)
+{
+    *sqrt_value = sqrt(*value);
+}
+
 namespace wipp{
 
   void copyBuffer(const short *inbuffer, short *outbuffer, size_t length)
@@ -502,16 +508,19 @@ namespace wipp{
   void sqrt_core(T *buffer, size_t length)
   {
       for (size_t i = 0; i < length; ++i)
-	  buffer[i] *= buffer[i];
+	  std_sqrt(&buffer[i], &buffer[i]);
   }
 
   template<typename T>
   void sqrt_core(const T *buffer_in, T* buffer_out, size_t length)
   {
       for (size_t i = 0; i < length; ++i)
-	  buffer_out[i] = buffer_in[i] * buffer_in[i];
+	  std_sqrt(&buffer_in[i], &buffer_out[i]);
   }
 
+
+
+  /// ---- This should be square root, rather than ()²
   void sqrt(double *buffer, size_t length){ sqrt_core(buffer, length);}
   void sqrt(float *buffer, size_t length){ sqrt_core(buffer, length);}
   void sqrt(int16_t *buffer, size_t length){ sqrt_core(buffer, length);}
@@ -526,6 +535,34 @@ namespace wipp{
   void sqrt(const uint16_t *buffer_in, uint16_t *buffer_out, size_t length){ sqrt_core(buffer_in, buffer_out, length);}
   void sqrt(const uint32_t *buffer_in, uint32_t *buffer_out, size_t length){ sqrt_core(buffer_in, buffer_out, length);}
 
+
+  template<typename T>
+  void sqr_core(T *buffer, size_t length)
+  {
+      for (size_t i = 0; i < length; ++i)
+	  buffer[i] *= buffer[i];
+  }
+
+  template<typename T>
+  void sqr_core(const T *buffer_in, T* buffer_out, size_t length)
+  {
+      for (size_t i = 0; i < length; ++i)
+	  buffer_out[i] = buffer_in[i] * buffer_in[i];
+  }
+
+  void sqr(double *buffer, size_t length){ sqr_core(buffer, length);}
+  void sqr(float *buffer, size_t length){ sqr_core(buffer, length);}
+  void sqr(int16_t *buffer, size_t length){ sqr_core(buffer, length);}
+  void sqr(int32_t *buffer, size_t length){ sqr_core(buffer, length);}
+  void sqr(uint16_t *buffer, size_t length){ sqr_core(buffer, length);}
+  void sqr(uint32_t *buffer, size_t length){ sqr_core(buffer, length);}
+
+  void sqr(const double *buffer_in, double *buffer_out, size_t length){ sqr_core(buffer_in, buffer_out, length);}
+  void sqr(const float *buffer_in, float *buffer_out, size_t length){ sqr_core(buffer_in, buffer_out, length);}
+  void sqr(const int16_t *buffer_in, int16_t *buffer_out, size_t length){ sqr_core(buffer_in, buffer_out, length);}
+  void sqr(const int32_t *buffer_in, int32_t *buffer_out, size_t length){ sqr_core(buffer_in, buffer_out, length);}
+  void sqr(const uint16_t *buffer_in, uint16_t *buffer_out, size_t length){ sqr_core(buffer_in, buffer_out, length);}
+  void sqr(const uint32_t *buffer_in, uint32_t *buffer_out, size_t length){ sqr_core(buffer_in, buffer_out, length);}
 
 
   template<typename T>
