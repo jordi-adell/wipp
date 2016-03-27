@@ -7,7 +7,6 @@ set(PROJECT_VERSION_PATCH 1)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
-# add C++11 -O3 and -sse here
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 
 if(DEBUG)
@@ -43,7 +42,7 @@ include_directories(
   )
 
 ## Declare a cpp library
-add_library(wipp
+add_library(wipp SHARED
   src/${PROJECT_NAME}/wipputils.cpp
   src/${PROJECT_NAME}/wippfilter.cpp
   src/${PROJECT_NAME}/wippfft.cpp
