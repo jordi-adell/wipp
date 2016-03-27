@@ -95,6 +95,28 @@ TEST(wippTest, wippCopyTest)
 }
 
 
+TEST(sqrTest, sqrt_sqr)
+{
+  size_t length = 1000;
+  double frame[length];
+  double sqrt_frame[length];
+  double sqr_frame[length];
+  wipp::wipp_rand_t *rand;
+  wipp::init_rand_gaussian(&rand, 100, 10);
+  wipp::rand(rand, frame, length);
+  wipp::threshold_get(frame, length, 0, 0);
+
+  wipp::sqrt(frame, sqrt_frame, length);
+  wipp::sqr(frame, sqr_frame, length);
+
+  for (size_t i = 0; i < length; ++i)
+    EXPECT_EQ(sqrt_frame[i]*sqrt_frame[i], frame[i]);
+  for (size_t i = 0; i < length; ++i)
+    EXPECT_EQ(sqr_frame[i], frame[i]*frame[i]);
+
+
+}
+
 TEST(iirTest, init_delete)
 {
 
