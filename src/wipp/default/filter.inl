@@ -188,7 +188,7 @@ void fir_filter(wipp_fir_filter_t *fir, const double *signal_in, double *signal_
 	signal_out[i] = 0;
 	for (size_t j = 0,k = fir->position; j < fir->order; ++j, k = (k+1)%fir->order)
 	{
-	    signal_out[i] = fir->buffer[k] * fir->coefs[j];
+	    signal_out[i] += fir->buffer[k] * fir->coefs[j];
 	}
 	fir->buffer[fir->position] = signal_in[i];
 	fir->position = (fir->position + 1) % fir->order;
