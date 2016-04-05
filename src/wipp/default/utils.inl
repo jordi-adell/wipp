@@ -315,6 +315,15 @@ namespace wipp{
       }
   }
 
+  void mult(const double *buffer_a, const wipp_complex_t *buffer_b, wipp_complex_t *buffer, size_t length)
+  {
+      for (size_t i = 0; i < length;++i)
+      {
+	  buffer[i].re = buffer_b[i].re * buffer_a[i];
+	  buffer[i].im = buffer_b[i].im * buffer_a[i];
+      }
+  }
+
   void mult(const wipp_complex_t *buffer_a, wipp_complex_t *buffer_b, size_t length)
   {
       // (a + ib)* (c + id) = ac + iad + ibc - bd = (ac - db) +i(ad + bc)

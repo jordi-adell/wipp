@@ -128,6 +128,7 @@ namespace wipp{
   void mult(const uint16_t *buffer_a, uint16_t *buffer_b, size_t length);
   void mult(const uint32_t *buffer_a, uint32_t *buffer_b, size_t length);
   void mult(const double *buffer_a, wipp_complex_t *buffer_b, size_t length);
+  void mult(const double *buffer_a, const wipp_complex_t *buffer_b, wipp_complex_t *buffer, size_t length);
   void mult(const wipp_complex_t *buffer_a, wipp_complex_t *buffer_b, size_t length);
   void mult(const wipp_complex_t *buffer_a, const wipp_complex_t *buffer_b, wipp_complex_t *buffer, size_t length);
 
