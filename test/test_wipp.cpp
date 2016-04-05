@@ -167,6 +167,64 @@ TEST(firTest, init_delete)
   }
 }
 
+TEST(firTest, filter)
+{
+
+  for (int n_coefs = 64; n_coefs < 512; n_coefs += 64)
+  {
+    DEBUG_STREAM("N_COEFS: " << n_coefs);
+    int length = 3*n_coefs;
+    wipp::wipp_fir_filter_t *filter;
+    double lf = 0.1;
+    double hf = 0.3;
+    double coefs[length];
+
+    double signal[length];
+    double filtered[length];
+    double signal_power, filtered_power;
+
+    wipp::fir_coefs(lf, hf, coefs, n_coefs, wipp::wippHANN);
+
+    wipp::init_fir(&filter, coefs, n_coefs);
+
+    for (double freq = 0.01; freq < 0.49; freq += 0.005)
+    {
+//      std::ofstream sfs("signal.txt");
+      for (size_t i = 0; i < length; ++i)
+      {
+	signal[i] = 2*cos(2*M_PI*freq*i);
+//	sfs << signal[i] << std::endl;
+      }
+
+      wipp::power(signal, filtered, length);
+      wipp::sum(filtered, length, &signal_power);
+      signal_power /= length;
+      signal_power= 10*log10(signal_power);
+
+      EXPECT_NEAR(signal_power, 3, 0.2);
+
+      wipp::fir_filter(filter, signal, filtered, length);
+
+      wipp::power(filtered, length);
+      wipp::sum(filtered, length, &filtered_power);
+      filtered_power /= length;
+      filtered_power = 10*log10(filtered_power);
+
+      double gain = filtered_power - signal_power;
+//      INFO_STREAM("Filtered Power " << freq << ": " << gain << " dB");
+
+      if (freq < lf*0.9)
+	EXPECT_LT(gain, -15);
+      else if (lf*1.1 < freq && freq < hf*0.9)
+	EXPECT_NEAR(0, gain, 10);
+      else if (freq > hf*1.1)
+	EXPECT_LT(gain, -15);
+
+    }
+  }
+}
+
+
 
 
 TEST(circularBufferTest, init_delete)
