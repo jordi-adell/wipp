@@ -27,13 +27,21 @@ namespace wipp
 {
 
 
-void power_spectrum(const wipp_complex_t *spectrum, double *power, size_t length)
+void power(const wipp_complex_t *spectrum, double *power, size_t length)
 {
     for (size_t i = 0; i < length; ++i)
-    {
 	power[i] = spectrum[i].re * spectrum[i].re + spectrum[i].im * spectrum[i].im;
-    }
+}
 
+void power(const double *buffer, double *power, size_t length)
+{
+    for (size_t i = 0; i < length; ++i)
+	power[i] = buffer[i]*buffer[i];
+}
+
+void power(double *buffer, size_t length)
+{
+    power(buffer, buffer, length);
 }
 
 void magnitude(const wipp_complex_t *buffer, double *magnitude, size_t length)

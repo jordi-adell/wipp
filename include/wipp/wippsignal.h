@@ -33,7 +33,9 @@
 namespace wipp
 {
 
-void power_spectrum(const wipp_complex_t *spectrum, double *power, size_t length);
+void power(const wipp_complex_t *buffer, double *power, size_t length);
+void power(const double *buffer, double *power, size_t length);
+void power(double *buffer, size_t length);
 void magnitude(const wipp_complex_t* buffer, double *magnitude, size_t length);
 
 void ramp(double *buffer, size_t length, double offset, double slope);
