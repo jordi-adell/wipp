@@ -22,6 +22,9 @@
 
 namespace wipp
 {
+
+void wipp_sinc(double fmin, double fmax, double *sinc, size_t length);
+
 namespace test
 {
 
@@ -154,7 +157,6 @@ TEST(firTest, init_delete)
     }
 
     wipp::init_fir(&fir, coefs, n);
-
     EXPECT_FALSE(fir == NULL);
 
     wipp::delete_fir(&fir);
