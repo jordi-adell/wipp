@@ -67,7 +67,7 @@ void init_fir(wipp_fir_filter_t **fir, const double *coefs, size_t length, const
 void delete_fir(wipp_fir_filter_t **fir);
 void fir_filter(wipp_fir_filter_t *fir, double *signal, size_t length);
 void fir_filter(wipp_fir_filter_t *fir, const double *signal_in, double *signal_out, size_t length);
-
+void fir_get_coefs(wipp_fir_filter_t *fir, double *coefs, size_t length);
 
 // IIR filter
 void init_iir(wipp_iir_filter_t **iir, const double *a_coefs, size_t a_length, const double *b_coefs, size_t b_length);

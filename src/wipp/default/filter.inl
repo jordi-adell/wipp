@@ -175,6 +175,14 @@ void fir_filter(wipp_fir_filter_t *fir, const double *signal_in, double *signal_
     }
 }
 
+
+
+void fir_get_coefs(wipp_fir_filter_t *fir, double *coefs, size_t length)
+{
+    memcpy(coefs, fir->coefs, std::min(length, fir->order)*sizeof(*(fir->coefs)));
+}
+
+
 struct wipp_iir_filter_t_
 {
 	size_t a_order;
