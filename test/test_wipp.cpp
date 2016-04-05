@@ -252,6 +252,32 @@ TEST(firTest, coefs)
 }
 
 
+TEST(firTest, sinc)
+{
+  double fmin=0.1;
+  double fmax=0.3;
+  int length = 2048;
+  double frame[length];
+  double spectrum[length+2];
+  double magnitude[1024];
+  wipp_sinc(fmin, fmax, frame, length);
+
+  std::ofstream ofss("tmp1.txt");
+  for (int i = 0; i < length; ++i)
+    ofss << frame[i] << std::endl;
+
+  wipp::wipp_fft_t *fft;
+  wipp::init_wipp_fft(&fft, length);
+  wipp::fft(frame, spectrum, fft);
+  wipp::magnitude(reinterpret_cast<wipp_complex_t*>(frame), magnitude, length/2);
+  wipp::power(magnitude, length/2);
+
+  std::ofstream ofsm("tmp2.txt");
+  for (int i = 0; i < length/2; ++i)
+    ofsm << magnitude[i] << std::endl;
+
+}
+
 
 
 
