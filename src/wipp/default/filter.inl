@@ -53,17 +53,37 @@ void wipp_hann(T *frame, size_t length)
 
 
 
-void wipp_sinc(double fmax, double fmin, double *sinc, size_t length)
+void wipp_sinc(double fmin, double fmax, double *sinc, size_t length)
 {
-    for (size_t i = 0; i < length/2; ++i)
+
+    double low_pass_max[length];
+    double low_pass_min[length];
+
+    double sum_max=0;
+    double sum_min=0;
+
+    low_pass_max[0] = low_pass_min[0] = 0;
+    low_pass_max[length/2] = low_pass_min[length/2] = 1;
+
+    for (long i = 1; i < length; ++i)
     {
-	sinc[i] = (sin(2*(i - length/2)*fmax) - sin(2*(i - length/2)*fmin))/(i*M_PI);
+	if (i != length/2)
+	    low_pass_max[i] = sin((i-static_cast<long>(length)/2)*2*M_PI*fmax)/(2*M_PI*fmax*(i-static_cast<long>(length)/2));
+	sum_max += low_pass_max[i];
     }
-    sinc[length/2] = 1;
-    for (size_t i = length/2 + 1; i < length; ++i)
+
+    for (long i = 1; i < length; ++i)
     {
-	sinc[i] = (sin(2*(i - length/2)*fmax) - sin(2*(i - length/2)*fmin))/(i*M_PI);
+	if (i != length/2)
+	    low_pass_min[i] = sin((i-static_cast<long>(length)/2)*2*M_PI*fmin)/(2*M_PI*fmin*(i-static_cast<long>(length)/2));
+	sum_min += low_pass_min[i];
     }
+
+    for (size_t i = 1; i < length; ++i)
+    {
+	sinc[i] = low_pass_max[i]/sum_max - low_pass_min[i]/sum_min;
+    }
+
 }
 
 
