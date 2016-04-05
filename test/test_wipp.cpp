@@ -224,6 +224,34 @@ TEST(firTest, filter)
   }
 }
 
+TEST(firTest, coefs)
+{
+  size_t length = 2048;
+  double coefs[length];
+  double fir_coefs[length];
+  wipp::fir_coefs(0.1, 0.3, coefs, length, wippHANN);
+
+  wipp::wipp_fir_filter_t *fir;
+  wipp::init_fir(&fir, coefs, length);
+
+  wipp::fir_get_coefs(fir, fir_coefs, length);
+  for (size_t i = 0; i < length; ++i)
+  {
+    EXPECT_EQ(coefs[i], fir_coefs[i]);
+  }
+
+  std::ofstream ofsm("coefs.txt");
+  std::ofstream offsm("fir_coefs.txt");
+
+  for (int i = 0; i < length; ++i)
+  {
+    ofsm << coefs[i] << std::endl;
+    offsm << fir_coefs[i] << std::endl;
+  }
+
+}
+
+
 
 
 
