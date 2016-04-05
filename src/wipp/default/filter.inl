@@ -139,10 +139,10 @@ void init_fir(wipp_fir_filter_t **fir, const double *coefs, size_t length)
 	*fir = new wipp_fir_filter_t_();
 	(*fir)->order = length;
 	(*fir)->buffer = new double[(*fir)->order];
-	memset((*fir)->buffer,0,length*sizeof(double));
+	memset((*fir)->buffer,0,length*sizeof(*((*fir)->buffer)));
 	(*fir)->position = 0;
 	(*fir)->coefs = new double[(*fir)->order];
-	memcpy((*fir)->coefs, coefs, (*fir)->order*sizeof(double));
+	memcpy((*fir)->coefs, coefs, (*fir)->order*sizeof((*(*fir)->coefs)));
     }
 }
 
@@ -150,7 +150,7 @@ void init_fir(wipp_fir_filter_t **fir, const double *coefs, size_t length, const
 {
     init_fir(fir, coefs, length);
     if (fir != NULL && *fir != NULL && (*fir)->buffer != NULL)
-	memcpy((*fir)->buffer, pastValues, length);
+	memcpy((*fir)->buffer, pastValues, length*sizeof(*((*fir)->buffer)));
 }
 
 
