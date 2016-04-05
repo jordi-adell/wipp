@@ -117,9 +117,9 @@ void window(uint32_t *frame, size_t length, wipp_window_t window_type) { window_
 
 
 
-int fir_coefs(double fmax, double fmin, double *coefs, size_t length, wipp_window_t window_type)
+int fir_coefs(double fmin, double fmax, double *coefs, size_t length, wipp_window_t window_type)
 {
-    wipp_sinc(fmax, fmin, coefs, length);
+    wipp_sinc(fmin, fmax, coefs, length);
     window(coefs, length, window_type);
     return 0;
 }
