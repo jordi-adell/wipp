@@ -267,7 +267,7 @@ TEST(firTest, sinc)
     ofss << frame[i] << std::endl;
 
   wipp::wipp_fft_t *fft;
-  wipp::init_wipp_fft(&fft, length);
+  wipp::init_fft(&fft, length);
   wipp::fft(frame, spectrum, fft);
   wipp::magnitude(reinterpret_cast<wipp_complex_t*>(frame), magnitude, length/2);
   wipp::power(magnitude, length/2);
@@ -276,6 +276,7 @@ TEST(firTest, sinc)
   for (int i = 0; i < length/2; ++i)
     ofsm << magnitude[i] << std::endl;
 
+  wipp::delete_fft(&fft);
 }
 
 
@@ -422,15 +423,15 @@ TEST(fftTest, init_delete)
   {
     DEBUG_STREAM("order: " << (1 << i));
     wipp::wipp_fft_t *fft;
-    wipp::init_wipp_fft(&fft, 1 << i);
+    wipp::init_fft(&fft, 1 << i);
 
     EXPECT_FALSE(fft == NULL);
 
-    wipp::delete_wipp_fft(&fft);
+    wipp::delete_fft(&fft);
 
     EXPECT_TRUE(fft == NULL);
 
-    wipp::delete_wipp_fft(&fft);
+    wipp::delete_fft(&fft);
   }
 
 
@@ -439,15 +440,15 @@ TEST(fftTest, init_delete)
     if (i % 100 == 0)
       DEBUG_STREAM("up to order: " << i);
     wipp::wipp_fft_t *fft;
-    wipp::init_wipp_fft(&fft, i);
+    wipp::init_fft(&fft, i);
 
     EXPECT_FALSE(fft == NULL);
 
-    wipp::delete_wipp_fft(&fft);
+    wipp::delete_fft(&fft);
 
     EXPECT_TRUE(fft == NULL);
 
-    wipp::delete_wipp_fft(&fft);
+    wipp::delete_fft(&fft);
   }
 
 }
@@ -472,13 +473,13 @@ TEST(randTest, init_delete)
 
 
 
+
+
 TEST(testWindowing, hanning)
 {
 
   double hanning16[16]={0,0.0432,0.1654,0.3455,0.5523,0.7500,0.9045,0.9891,0.9891,0.9045,0.7500,0.5523,0.3455,0.1654,0.0432,0};
   double hanning32[32]={0,0.0102,0.0405,0.0896,0.1555,0.2355,0.3263,0.4243,0.5253,0.6253,0.7202,0.8061,0.8794,0.9372,0.9771,0.9974,0.9974,0.9771,0.9372,0.8794,0.8061,0.7202,0.6253,0.5253,0.4243,0.3263,0.2355,0.1555,0.0896,0.0405,0.0102,0};
-
-
 
   for (size_t n=16; n <= 2048; n=n*2)
   {

@@ -42,7 +42,7 @@ struct wipp_fft_t_
 
 
 
-void init_wipp_fft(wipp_fft_t **fft, size_t length)
+void init_fft(wipp_fft_t **fft, size_t length)
 {
     if(fft != NULL)
     {
@@ -57,7 +57,7 @@ void init_wipp_fft(wipp_fft_t **fft, size_t length)
     }
 }
 
-void delete_wipp_fft(wipp_fft_t **fft)
+void delete_fft(wipp_fft_t **fft)
 {
     if (fft != NULL && *fft != NULL)
     {
