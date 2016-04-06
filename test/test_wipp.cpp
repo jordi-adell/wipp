@@ -454,6 +454,32 @@ TEST(fftTest, init_delete)
 }
 
 
+TEST(fftTEST, transform)
+{
+  size_t fft_length = 256;
+  wipp::wipp_fft_t *fft;
+  wipp::init_fft(&fft, fft_length);
+
+  double signal[fft_length];
+  double signal_fft[fft_length+2];
+
+  for (size_t i = 0; i < fft_length; ++i)
+  {
+    signal[i] = sin(2*M_PI*0.2);
+  }
+
+  wipp::window(signal, fft_length, wipp::wippHANN);
+
+  wipp::fft(signal, signal_fft, fft);
+
+
+  std::ofstream ofs("tmp.txt");
+  for (size_t i =0; i < fft_length; ++i)
+    ofs << signal_fft[i] << std::endl;
+
+  wipp::delete_fft(&fft);
+}
+
 
 
 TEST(randTest, init_delete)
