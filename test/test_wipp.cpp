@@ -574,7 +574,7 @@ TEST(testComplex,reinterpret)
     EXPECT_EQ(r_complex[i], r_complex[i-1] + 1);
   }
 
-  for (size_t i=1; i < 2*complex_length; ++i)
+  for (size_t i=0; i < 2*complex_length; ++i)
   {
     real[i] = i;
   }
