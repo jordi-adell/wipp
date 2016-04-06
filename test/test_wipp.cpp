@@ -18,7 +18,7 @@
 #endif
 
 #include <limits>
-#include <fstream>
+//#include <fstream>
 
 namespace wipp
 {
@@ -240,15 +240,6 @@ TEST(firTest, coefs)
     EXPECT_EQ(coefs[i], fir_coefs[i]);
   }
 
-  std::ofstream ofsm("coefs.txt");
-  std::ofstream offsm("fir_coefs.txt");
-
-  for (int i = 0; i < length; ++i)
-  {
-    ofsm << coefs[i] << std::endl;
-    offsm << fir_coefs[i] << std::endl;
-  }
-
 }
 
 
@@ -262,9 +253,9 @@ TEST(firTest, sinc)
   double magnitude[1024];
   wipp_sinc(fmin, fmax, frame, length);
 
-  std::ofstream ofss("tmp1.txt");
-  for (int i = 0; i < length; ++i)
-    ofss << frame[i] << std::endl;
+  //  std::ofstream ofss("tmp1.txt");
+  //  for (int i = 0; i < length; ++i)
+  //    ofss << frame[i] << std::endl;
 
   wipp::wipp_fft_t *fft;
   wipp::init_fft(&fft, length);
@@ -272,9 +263,9 @@ TEST(firTest, sinc)
   wipp::magnitude(reinterpret_cast<wipp_complex_t*>(frame), magnitude, length/2);
   wipp::power(magnitude, length/2);
 
-  std::ofstream ofsm("tmp2.txt");
-  for (int i = 0; i < length/2; ++i)
-    ofsm << magnitude[i] << std::endl;
+  //  std::ofstream ofsm("tmp2.txt");
+  //  for (int i = 0; i < length/2; ++i)
+  //    ofsm << magnitude[i] << std::endl;
 
   wipp::delete_fft(&fft);
 }
@@ -469,13 +460,12 @@ TEST(fftTEST, transform)
   }
 
   wipp::window(signal, fft_length, wipp::wippHANN);
-
   wipp::fft(signal, signal_fft, fft);
 
 
-  std::ofstream ofs("tmp.txt");
-  for (size_t i =0; i < fft_length; ++i)
-    ofs << signal_fft[i] << std::endl;
+  //  std::ofstream ofs("tmp.txt");
+  //  for (size_t i =0; i < fft_length; ++i)
+  //    ofs << signal_fft[i] << std::endl;
 
   wipp::delete_fft(&fft);
 }
@@ -552,15 +542,8 @@ TEST(testWindowing, ola)
     for (int n = 0; n < n_windows; ++n)
       wipp::add(frame, &ola[window_shift*n], window_size);
 
-    std::ofstream ofs("window_ola.txt");
-
-    for (size_t i = 0; i < ola_length; ++i)
-      ofs << ola[i] << std::endl;
-
     for (size_t i = window_shift; i < ola_length - window_shift; ++i)
     {
-//      if (fabs(ola[i]-1) < 1e-3 )
-//	DEBUG_STREAM("i: " << i << " " << ola[i]);
       EXPECT_LT(fabs(ola[i] - 1), 2e-3);
     }
 
