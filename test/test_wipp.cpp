@@ -571,6 +571,43 @@ TEST(testWindowing, ola)
 
 
 
+TEST(testComplex,reinterpret)
+{
+
+  size_t complex_length = 1024;
+  wipp::wipp_complex_t complex[complex_length];
+  double real[2*complex_length];
+
+  for (size_t i = 0; i < complex_length; ++i)
+  {
+    complex[i].re = 2*i;
+    complex[i].im = 2*i + 1;
+  }
+
+  double *r_complex = reinterpret_cast<double*>(complex);
+
+  for (size_t i=1; i < 2*complex_length; ++i)
+  {
+    EXPECT_EQ(r_complex[i], r_complex[i-1] + 1);
+  }
+
+  for (size_t i=1; i < 2*complex_length; ++i)
+  {
+    real[i] = i;
+  }
+
+  wipp::wipp_complex_t *r_real = reinterpret_cast<wipp::wipp_complex_t*>(real);
+
+  for (size_t i = 0; i < complex_length; ++i)
+  {
+    EXPECT_EQ(r_real[i].re, 2*i);
+    EXPECT_EQ(r_real[i].im, 2*i + 1);
+  }
+
+}
+
+
+
 }
 }
 
