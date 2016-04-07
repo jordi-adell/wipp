@@ -61,16 +61,24 @@ void ramp(double *buffer, size_t length, double offset, double slope)
 
 void triangle(double *buffer, size_t length)
 {
+    // length odd: (lenggth/2) is the maximum: 1025/2 = 512.5 = 512; should be one, but also (1025-1)/2 = 512
+    // length even: (length/2-1) and (length/2) should have the same value: maximum is: ((length-1)*1.0F/2) = (1024-1)/2 = 511.5
+    double a = 2.0F/static_cast<double>(length-1);
+    static const double b = 0.0;
+    static const double c = 2.0;
 
-    for (size_t i = 0; i < (length/2 + 0.5); ++i)
+    // y = ax + b
+    for (size_t i = 0; i < length/2; ++i)
     {
-	buffer[i] = static_cast<double>(i)/(static_cast<double>(length-1)/2);
+	buffer[i] = i*a;
     }
 
-    for (size_t i = length/2; i < length; ++i)
+    //y = -ax + c
+    for (size_t i = length/2; i < length-1; ++i)
     {
-	buffer[i] = 2 - static_cast<double>(i)/(static_cast<double>(length-1)/2);
+	buffer[i] = -a*i + c;
     }
+    buffer[length-1] = 0;
 }
 
 
