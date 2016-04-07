@@ -590,6 +590,53 @@ TEST(testComplex,reinterpret)
 }
 
 
+TEST(testTriangle, triangle)
+{
+
+  for (size_t length = 10; length < 512; length = length + 13)
+  {
+    DEBUG_STREAM("LENGTH: " << length);
+    double frame[length];
+    wipp::triangle(frame, length);
+
+    for (size_t i = 0; i < length; ++i)
+    {
+      if (i == 0 || i == length-1)
+      {
+	DEBUG_STREAM("i: " << i << " " << frame[i]);
+	EXPECT_EQ(frame[i],0);
+      }
+      else if (length%2 == 0 && (i == length/2 ||i == length/2 -1) )
+      {
+	DEBUG_STREAM("i: " << i << " " << frame[i]);
+	if (length < 20)
+	  EXPECT_NEAR(frame[i],1, 0.2);
+	else if (length < 100)
+	  EXPECT_NEAR(frame[i],1, 0.04);
+	else
+	  EXPECT_NEAR(frame[i],1, 0.01);
+      }
+      else if (length%2 == 1 && i == length/2 )
+      {
+	DEBUG_STREAM("i: " << i << " " << frame[i]);
+	EXPECT_EQ(frame[i],1);
+      }
+      else if ( (i > length/2-2 && i < length/2 + 2) || (i < 5) || (i > length-4))
+      {
+	DEBUG_STREAM("i: " << i << " " << frame[i]);
+      }
+      else if (i < length/2)
+      {
+	EXPECT_LT(frame[i-1], frame[i]);
+      }
+      else
+      {
+	EXPECT_GT(frame[i-1], frame[i]);
+      }
+    }
+  }
+}
+
 
 }
 }
