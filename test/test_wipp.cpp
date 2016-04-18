@@ -531,6 +531,18 @@ TEST(testWindowing, hanning)
 }
 
 
+TEST(testSet, zeros)
+{
+  int length = 1024;
+  double buffer[length];
+
+ wipp::setZeros(buffer, length);
+
+ for (size_t i = 0; i < length; ++i)
+ {
+   EXPECT_EQ(buffer[i],0);
+ }
+}
 
 
 TEST(testWindowing, ola)
