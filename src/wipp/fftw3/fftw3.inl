@@ -79,14 +79,15 @@ wipp_fft_t* fft(const double *signal, double *spectrum, wipp_fft_t* wipp_fft)
     fftw_execute_r2r(wipp_fft->forward_plan,
 			 wipp_fft->forward_in, wipp_fft->forward_out);
 
-    spectrum[0] = wipp_fft->forward_out[0];
-    spectrum[1] = 0;
-    spectrum[wipp_fft->length-2] = wipp_fft->forward_out[wipp_fft->length/2];
-    spectrum[wipp_fft->length-1] = 0;
-    for (size_t i = 2; i < wipp_fft->length; i=i+2)
+    wipp_complex_t *spectrum_c = reinterpret_cast<wipp_complex_t*>(spectrum);
+
+    spectrum_c[0].re = wipp_fft->forward_out[0];
+    spectrum_c[0].im = 0;
+
+    for (size_t i = 1; i <= wipp_fft->length/2; ++i)
     {
-	spectrum[i] = wipp_fft->forward_out[i];
-	spectrum[i+1] = wipp_fft->forward_out[wipp_fft->length - i];
+	spectrum_c[i].re = wipp_fft->forward_out[i];
+	spectrum_c[i].im = wipp_fft->forward_out[wipp_fft->length - i];
     }
 }
 
@@ -94,10 +95,13 @@ wipp_fft_t* ifft(const double *spectrum, double *signal, wipp_fft_t* wipp_fft)
 {
     wipp_fft->backward_in[0] = spectrum[0];
     wipp_fft->backward_in[wipp_fft->length/2] = spectrum[wipp_fft->length-1];
-    for (size_t i = 1; i < wipp_fft->length-1; i=i+2)
+
+    const wipp_complex_t *spectrum_c = reinterpret_cast<const wipp_complex_t*>(spectrum);
+
+    for (size_t i = 1; i <= wipp_fft->length/2; ++i)
     {
-	wipp_fft->backward_in[i] = spectrum[i];
-	wipp_fft->backward_in[wipp_fft->length - i] = spectrum[i+1];
+	wipp_fft->backward_in[i] = spectrum_c[i].re;
+	wipp_fft->backward_in[wipp_fft->length - i] = spectrum_c[i].im;
     }
 
     fftw_execute_r2r(wipp_fft->backward_plan,
