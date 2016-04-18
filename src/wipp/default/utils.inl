@@ -152,30 +152,18 @@ namespace wipp{
   void set(wipp_complex_t val, wipp_complex_t * buffer, size_t length) { set_core(val, buffer, length); }
 
 
-  void setZeros(double *buffer, size_t length)
+  template<typename T>
+  void setZeros_core(T *buffer, size_t length)
   {
-      memset(buffer, 0.0F, length*sizeof(double));
+      memset(buffer, 0, length*sizeof(T));
   }
-  void setZeros(float *buffer, size_t length)
-  {
-      memset(buffer, 0.0F, length*sizeof(float));
-  }
-  void setZeros(int16_t *buffer, size_t length)
-  {
-      memset(buffer, 0.0F, length*sizeof(int16_t));
-  }
-  void setZeros(int32_t *buffer, size_t length)
-  {
-      memset(buffer, 0.0F, length*sizeof(int32_t));
-  }
-  void setZeros(uint32_t *buffer, size_t length)
-  {
-      memset(buffer, 0.0F, length*sizeof(uint32_t));
-  }
-  void setZeros(uint16_t *buffer, size_t length)
-  {
-      memset(buffer, 0.0F, length*sizeof(uint16_t));
-  }
+
+  void setZeros(double *buffer, size_t length)   {setZeros_core(buffer, length);}
+  void setZeros(float *buffer, size_t length)    {setZeros_core(buffer, length);}
+  void setZeros(int16_t *buffer, size_t length)  {setZeros_core(buffer, length);}
+  void setZeros(int32_t *buffer, size_t length)  {setZeros_core(buffer, length);}
+  void setZeros(uint32_t *buffer, size_t length) {setZeros_core(buffer, length);}
+  void setZeros(uint16_t *buffer, size_t length) {setZeros_core(buffer, length);}
 
   void setZeros(wipp_complex_t *buffer, size_t length)
   {
