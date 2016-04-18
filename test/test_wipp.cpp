@@ -17,17 +17,29 @@
 #define DEBUG_STREAM(x)
 #endif
 
+#include <boost/filesystem.hpp>
+
 #include <limits>
-//#include <fstream>
+#include <fstream>
+
 
 namespace wipp
 {
 
+// non-exposed fucntion to be tested.
 void wipp_sinc(double fmin, double fmax, double *sinc, size_t length);
 
 namespace test
 {
 
+template<typename T>
+void save_buffer(T *buffer, size_t length, const std::string &file_basename)
+{
+  boost::filesystem::create_directories("./tmp/");
+  std::ofstream ofs(std::string("./tmp/") + file_basename + ".txt");
+  for (size_t i = 0; i < length; ++i)
+    ofs << buffer[i] << std::endl;
+}
 
 TEST(wippTest, wippCopyTest)
 {
