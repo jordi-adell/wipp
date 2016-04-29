@@ -59,26 +59,86 @@ void ramp(double *buffer, size_t length, double offset, double slope)
     }
 }
 
+/**
+ * @brief triangle   triangle that goes from -1 to 1 and then back to -1 in period samples.
+ * You can shift it using the phase value.
+ * @param buffer
+ * @param length   number of samples to use, can be equal or lower than period. If larger, the remaining will be filled with zeros.
+ * @param phase    sample shift of the triangle.
+ * @param period   length of the triangle.
+ */
+void triangle(double *buffer, size_t length, int period, float phase, float asym, double offset)
+{
+    phase = (phase > 2*M_PI) ? 0.99*2*M_PI : phase;
+    phase = (phase < 0)      ?        0.01 : phase;
+
+    asym = (asym > M_PI)  ?  M_PI : asym;
+    asym = (asym < -M_PI) ? -M_PI : asym;
+
+
+
+    double n = period*(phase/(4*M_PI)); // i-> buffer index, n -> sample within triangle period?
+//    size_t n = d_n;
+    size_t i = 0;
+    const double center = period*((asym+M_PI)/(2*M_PI)) ;
+    const double slope_to_center   = 1.0F/static_cast<double>(center);
+    const double slope_from_center = 1.0F/static_cast<double>(period-center);
+
+//    std::cout << period << " " << asym << " " << center << std::endl;
+//    std::cout << "slopes: " << slope_to_center << " " << slope_from_center << std::endl;
+
+    const double b = offset + slope_to_center*n;
+    const double c = 1 + offset - slope_from_center*(n-center-1);
+
+//    std::cout << "b: " << b << ", c: " << c << ", n: " << n << std::endl;
+
+
+    if (n <= center)
+	buffer[i] = b;
+    else
+	buffer[i] = c;
+
+    ++n; ++i;
+
+
+    while (i < length)
+    {
+	// y = ax + b
+	for (; n <= center && i < length; ++i, ++n)
+	{
+	    buffer[i] = slope_to_center + buffer[i-1];
+//	    std::cout << "i: " << i << ", n:" << n << ", t[i]: " << buffer[i] << ", a:" << slope_to_center << std::endl;
+	}
+
+	if (i < length)
+	{
+	    buffer[i] = 1 + offset - slope_from_center*(n-center);
+	    ++i; ++n;
+
+	    //y = -ax + c
+	    for (; n <= period && i < length; ++i, ++n)
+	    {
+		buffer[i] = -slope_from_center + buffer[i-1];
+//		std::cout << "i: " << i << ", n:" << n << ", t[i]: " << buffer[i] << ", b:" << -slope_from_center << std::endl;
+	    }
+
+	    if (i < length)
+	    {
+		n = n - period;
+		buffer[i] = offset + n*slope_to_center;
+	    }
+	    ++i; ++n;
+	}
+
+    }
+
+//    std::cout << "I: " << i << ", N: " << n << std::endl;
+}
+
+
 void triangle(double *buffer, size_t length)
 {
-    // length odd: (lenggth/2) is the maximum: 1025/2 = 512.5 = 512; should be one, but also (1025-1)/2 = 512
-    // length even: (length/2-1) and (length/2) should have the same value: maximum is: ((length-1)*1.0F/2) = (1024-1)/2 = 511.5
-    double a = 2.0F/static_cast<double>(length-1);
-    static const double b = 0.0;
-    static const double c = 2.0;
-
-    // y = ax + b
-    for (size_t i = 0; i < length/2; ++i)
-    {
-	buffer[i] = i*a;
-    }
-
-    //y = -ax + c
-    for (size_t i = length/2; i < length-1; ++i)
-    {
-	buffer[i] = -a*i + c;
-    }
-    buffer[length-1] = 0;
+    triangle(buffer, length, length, 0, 0, 0);
 }
 
 

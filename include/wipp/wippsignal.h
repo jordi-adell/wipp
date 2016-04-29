@@ -39,6 +39,7 @@ void power(double *buffer, size_t length);
 void magnitude(const wipp_complex_t* buffer, double *magnitude, size_t length);
 
 void ramp(double *buffer, size_t length, double offset, double slope);
+void triangle(double *buffer, size_t length, int period, float phase, float asym=0, double offset = 0);
 void triangle(double *buffer, size_t length);
 
 
