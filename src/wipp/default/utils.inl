@@ -24,9 +24,9 @@
 #include <math.h>
 
 template<typename T>
-void std_sqrt(const T *value, T *sqrt_value)
+inline void std_sqrt(const T &value, T &sqrt_value)
 {
-    *sqrt_value = sqrt(*value);
+    sqrt_value = sqrt(value);
 }
 
 namespace wipp{
@@ -505,14 +505,14 @@ namespace wipp{
   void sqrt_core(T *buffer, size_t length)
   {
       for (size_t i = 0; i < length; ++i)
-	  std_sqrt(&buffer[i], &buffer[i]);
+	  std_sqrt(buffer[i], buffer[i]);
   }
 
   template<typename T>
   void sqrt_core(const T *buffer_in, T* buffer_out, size_t length)
   {
       for (size_t i = 0; i < length; ++i)
-	  std_sqrt(&buffer_in[i], &buffer_out[i]);
+	  std_sqrt(buffer_in[i], buffer_out[i]);
   }
 
 
