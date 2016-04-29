@@ -727,6 +727,100 @@ TEST(testTriangle, triangle)
 }
 
 
+TEST(testTriangle, asym_triangle)
+{
+
+//  _logger_.setLogLevel(Logger::TRACE);
+
+  for (float flength = 100; flength < 512; flength += 13)
+  {
+    int length = static_cast<int>(flength+0.5);
+
+    double frame[length];
+
+    for (float fperiod = std::max(0.2F*length, 100.0F); fperiod < 1.2*length; fperiod *= 1.3)
+    {
+      int period = static_cast<int>(fperiod+0.5);
+
+      for (float phase = 0; phase < 2*M_PI; phase += 0.3)
+      {
+
+	for (float offset = 0; offset < 2; offset += 0.2)
+	{
+
+	  for (float asym = -2*M_PI/3; asym < 2*M_PI/3; asym += M_PI/5)
+	  {
+
+	    wipp::triangle(frame, length, period, phase, asym, offset);
+	    //	    save_buffer(frame, length, "frame");
+
+	    size_t i = 0;
+	    double n = (period/(4*M_PI))*phase + 0.5; // i-> buffer index, n -> sample within triangle period?
+	    const double center = period*(asym/(2*M_PI) + 0.5);
+
+	    DEBUG_STREAM("PERIOD: " << period <<
+			 ", PHASE: " << phase <<
+			 ", LENGTH: " << length <<
+			 ", OFFSET: " << offset <<
+			 ", ASYM: " << asym <<
+			 ", CENTER: " << center <<
+			 ", N: " << n);
+
+
+	    for (n++, i = 1; i < length; ++i, ++n)
+	    {
+
+	      TRACE_STREAM("i: " << i << " " << frame[i] << " n: " << n);
+
+	      if (n >= period) n = n - period;
+
+	      if (n == 0)
+	      {
+		TRACE_STREAM("i: " << i << " " << frame[i] << " n: " << n);
+		EXPECT_NEAR(frame[i], offset , 0.01);
+	      }
+	      else if (n == period -1 )
+	      {
+		TRACE_STREAM("i: " << i << " " << frame[i] << " n: " << n << " (END PERIOD)");
+		EXPECT_NEAR(frame[i], offset + 1/(period - center), 0.01);
+	      }
+	      else if (period%2 == 0 && (n == center || n == center -1) )
+	      {
+		TRACE_STREAM("i: " << i << " " << frame[i] << " n: " << n);
+		if (period < 20)
+		  EXPECT_NEAR(frame[i],1 + offset, 0.82);
+		else if (period < 100)
+		  EXPECT_NEAR(frame[i],1 + offset, 0.15);
+		else
+		  EXPECT_NEAR(frame[i],1 + offset, 0.1);
+	      }
+	      else if (period%2 == 1 && n == center )
+	      {
+		TRACE_STREAM("i: " << i << " " << frame[i] << " n: " << n);
+		EXPECT_NEAR(frame[i],1 + offset, 0.5);
+	      }
+	      else if ( (n > center-2 && n < center + 2) || (n < 5) || (n > period-4))
+	      {
+		TRACE_STREAM("i: " << i << " " << frame[i] << " n: " << n);
+	      }
+	      else if (n < center )
+	      {
+		TRACE_STREAM(frame[i-1] << " <  " << frame[i] << " c: " << i << " " << n << " " << center);
+		EXPECT_LE(frame[i-1], frame[i]);
+	      }
+	      else
+	      {
+		EXPECT_GE(frame[i-1], frame[i]);
+	      }
+	    }
+	  }
+	}
+      }
+    }
+  }
+}
+
+
 }
 }
 
