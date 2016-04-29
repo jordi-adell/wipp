@@ -24,5 +24,6 @@ namespace  wipp {
 	void Logger::enable() { _enabled = true;}
 	void Logger::disable() { _enabled = false; }
 
+	void Logger::setLogLevel(LogLevel level) { _level = level; }
 }
 

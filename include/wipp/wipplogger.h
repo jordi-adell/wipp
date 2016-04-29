@@ -45,6 +45,7 @@ class Logger
 	bool isEnabled(LogLevel level);
 	void enable();
 	void disable();
+	void setLogLevel(LogLevel level);
 
     private:
 	LogLevel _level;
@@ -56,7 +57,7 @@ class Logger
 
 }
 
-static wipp::Logger _logger_(wipp::Logger::TRACE);
+static wipp::Logger _logger_(wipp::Logger::DEBUG);
 
 #ifdef WIPP_DEBUG
 
