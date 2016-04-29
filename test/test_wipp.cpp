@@ -685,29 +685,34 @@ TEST(testTriangle, triangle)
 
     for (size_t i = 0; i < length; ++i)
     {
-      if (i == 0 || i == length-1)
+      if (i == 0)
       {
-	DEBUG_STREAM("i: " << i << " " << frame[i]);
+	TRACE_STREAM("i: " << i << " " << frame[i]);
 	EXPECT_EQ(frame[i],0);
+      }
+      else if (i == length -1)
+      {
+	TRACE_STREAM("i: " << i << " " << frame[i]);
+	EXPECT_NEAR(frame[i], 0, (2.0F/length)*1.05);
       }
       else if (length%2 == 0 && (i == length/2 ||i == length/2 -1) )
       {
-	DEBUG_STREAM("i: " << i << " " << frame[i]);
+	TRACE_STREAM("i: " << i << " " << frame[i]);
 	if (length < 20)
 	  EXPECT_NEAR(frame[i],1, 0.2);
 	else if (length < 100)
-	  EXPECT_NEAR(frame[i],1, 0.04);
+	  EXPECT_NEAR(frame[i],1, 0.06);
 	else
-	  EXPECT_NEAR(frame[i],1, 0.01);
+	  EXPECT_NEAR(frame[i],1, 0.02);
       }
       else if (length%2 == 1 && i == length/2 )
       {
-	DEBUG_STREAM("i: " << i << " " << frame[i]);
-	EXPECT_EQ(frame[i],1);
+	TRACE_STREAM("i: " << i << " " << frame[i]);
+	EXPECT_NEAR(frame[i],1, 0.1);
       }
       else if ( (i > length/2-2 && i < length/2 + 2) || (i < 5) || (i > length-4))
       {
-	DEBUG_STREAM("i: " << i << " " << frame[i]);
+	TRACE_STREAM("i: " << i << " " << frame[i]);
       }
       else if (i < length/2)
       {
