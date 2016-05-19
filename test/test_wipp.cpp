@@ -225,11 +225,9 @@ TEST(firTest, filter)
 
     for (double freq = 0.01; freq < 0.49; freq += 0.005)
     {
-//      std::ofstream sfs("signal.txt");
       for (size_t i = 0; i < length; ++i)
       {
 	signal[i] = 2*cos(2*M_PI*freq*i);
-//	sfs << signal[i] << std::endl;
       }
 
       wipp::power(signal, filtered, length);
@@ -247,12 +245,12 @@ TEST(firTest, filter)
       filtered_power = 10*log10(filtered_power);
 
       double gain = filtered_power - signal_power;
-//      INFO_STREAM("Filtered Power " << freq << ": " << gain << " dB");
+      INFO_STREAM("Filtered Power " << freq << ": " << gain << " dB");
 
       if (freq < lf*0.9)
 	EXPECT_LT(gain, -15);
       else if (lf*1.1 < freq && freq < hf*0.9)
-	EXPECT_NEAR(0, gain, 10);
+	EXPECT_NEAR(0, gain, 5);
       else if (freq > hf*1.1)
 	EXPECT_LT(gain, -15);
 
