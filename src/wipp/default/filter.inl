@@ -270,17 +270,21 @@ void iir_filter(wipp_iir_filter_t *iir, const double *signal_in, double *signal_
 
     for (size_t i = 0; i < length; ++i)
     {
-	iir->x_buffer[iir->x_position] = signal_in[i];
 	iir->x_position = (iir->x_position + 1) % iir->b_order;
+	iir->x_buffer[iir->x_position] = signal_in[i];
 
 	signal_out[i] = 0;
-	for (size_t b = 1,k = iir->y_position; b < iir->b_order; ++b, k = (k+1)%iir->b_order)
+
+
+	for (size_t b = 1,k = iir->y_position; b < iir->b_order; ++b, --k)
 	{
 	    signal_out[i] -= iir->b_coefs[b] * iir->y_buffer[k];
+	    if (k <= 0) k = iir->b_order;
 	}
-	for (size_t a = 0,k = iir->x_position; a < iir->a_order; ++a, k = (k+1)%iir->a_order)
+	for (size_t a = 0,k = iir->x_position; a < iir->a_order; ++a, --k)
 	{
 	    signal_out[i] += iir->a_coefs[a] * iir->x_buffer[k];
+	    if (k <= 0) k = iir->a_order;
 	}
 
 	if (iir->b_order > 0)
@@ -288,8 +292,8 @@ void iir_filter(wipp_iir_filter_t *iir, const double *signal_in, double *signal_
 	    signal_out[i] /= iir->b_coefs[0];
 	}
 
-	iir->y_buffer[iir->y_position] = signal_out[i];
 	iir->y_position = (iir->y_position + 1) % iir->a_order;
+	iir->y_buffer[iir->y_position] = signal_out[i];
 
     }
 
