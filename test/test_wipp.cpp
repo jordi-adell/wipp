@@ -152,6 +152,30 @@ TEST(iirTest, init_delete)
 
 }
 
+TEST(iirTest, filter)
+{
+    wipp::wipp_iir_filter_t *iir;
+    static const int n = 2;
+    static const int length = 10;
+    double b_coefs[n] = {1, 0.97};
+    double a_coefs[n] = {1, 0};
+
+    double signal[length] = {1000, 1000, 1000, 1000, 0, 0, 0, 0, 0, 0};
+    double reference[length] = {1.0000e3, 0.0300e3, 0.9709e3, 0.05822699e3, -0.05648019e3, 0.0547857e3, -0.0531422e3, 0.0515479e3, -0.05000150061e3, 0.04850146e3};
+    double filtered[length];
+
+    wipp::init_iir(&iir, a_coefs, n, b_coefs, n);
+
+    EXPECT_FALSE(iir == nullptr);
+
+    wipp::iir_filter(iir, signal, filtered, length);
+
+    for (int i = 0; i < length; ++i)
+    {
+	EXPECT_NEAR(reference[i], filtered[i], 1e-4);
+    }
+}
+
 TEST(firTest, init_delete)
 {
 
