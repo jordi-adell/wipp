@@ -231,6 +231,9 @@ void init_iir(wipp_iir_filter_t **iir, const double *a_coefs, size_t a_length, c
 
     memcpy((*iir)->a_coefs, a_coefs, a_length*sizeof(double));
     memcpy((*iir)->b_coefs, b_coefs, b_length*sizeof(double));
+
+    memset((*iir)->x_buffer, 0, (*iir)->a_order*sizeof(double));
+    memset((*iir)->y_buffer, 0, (*iir)->b_order*sizeof(double));
 }
 
 void init_iir(wipp_iir_filter_t **iir,
