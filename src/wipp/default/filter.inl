@@ -185,13 +185,15 @@ void fir_filter(wipp_fir_filter_t *fir, const double *signal_in, double *signal_
 {
     for (size_t i = 0; i < length; ++i)
     {
+	fir->position = (fir->position + 1) % fir->order;
+	fir->buffer[fir->position] = signal_in[i];
+
 	signal_out[i] = 0;
-	for (size_t j = 0,k = fir->position; j < fir->order; ++j, k = (k+1)%fir->order)
+	for (size_t j = 0,k = fir->position; j < fir->order; ++j, --k)
 	{
 	    signal_out[i] += fir->buffer[k] * fir->coefs[j];
+	    if (k <= 0) k = fir->order;
 	}
-	fir->buffer[fir->position] = signal_in[i];
-	fir->position = (fir->position + 1) % fir->order;
     }
 }
 
@@ -274,7 +276,6 @@ void iir_filter(wipp_iir_filter_t *iir, const double *signal_in, double *signal_
 	iir->x_buffer[iir->x_position] = signal_in[i];
 
 	signal_out[i] = 0;
-
 
 	for (size_t b = 1,k = iir->y_position; b < iir->b_order; ++b, --k)
 	{
