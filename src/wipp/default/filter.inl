@@ -226,8 +226,8 @@ void init_iir(wipp_iir_filter_t **iir, const double *a_coefs, size_t a_length, c
     (*iir)->b_coefs = new double[(*iir)->b_order];
     (*iir)->x_position = 0;
     (*iir)->y_position = 0;
-    (*iir)->x_buffer = new double[(*iir)->b_order];
-    (*iir)->y_buffer = new double[(*iir)->a_order];
+    (*iir)->x_buffer = new double[(*iir)->a_order];
+    (*iir)->y_buffer = new double[(*iir)->b_order];
 
     memcpy((*iir)->a_coefs, a_coefs, a_length*sizeof(double));
     memcpy((*iir)->b_coefs, b_coefs, b_length*sizeof(double));
