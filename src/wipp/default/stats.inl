@@ -93,6 +93,7 @@ void var_core(const T *buffer, size_t length, T* var)
     mean2 /= length;
 
     *var = mean2 - pow(static_cast<double>(mean_value),2);
+    if (*var < 0) *var = 0;
 }
 
 void var(const double *buffer, size_t length, double *var){ var_core(buffer, length, var); }
