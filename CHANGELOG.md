@@ -1,0 +1,135 @@
+# WIPP project Change Log
+	All notable changes to this project will be documented in this file.
+
+## [Unreleased]
+
+## [2.0.2] - 2016-05-20
+
+### Fixed
+- fix for negative variances 
+  Negative variances might happen when estimating very small variances with very few data.
+- fix same issue as with IIR filter about multiplication order 
+- fix internal buffer allocation 
+- fix bug that caused wrong values in last imag. element of spectrum 
+- fix the way buffers and coeficients were multiplied. 
+  Because of the way the internal buffers were explored we were caculationg
+	filter output based on:
+		sum_i a_i*x(n-(N-i))
+	instead of
+		sum_i a_i*x(n-i)
+- several unit tests
+- fix basic triangular function to assure right slope, zero at edges and maximum 
+- fix the FIR filter calculation must be accumulative 
+- fixed bug that made sqrt operate as (.)^2 
+- integer conversion fixed 
+- fix a and b coeficients exchanged in FIR calculation 
+
+### Added
+- CPACK capability to generate debian packages 
+- triangle function with phase asym and offset parameters
+	asym = asymetry of the triangle belongs to (-PI,PI)
+	       it is used to indicate the position of the maximum of the
+	       triangle in the perior, thus the triangle becomes asymetric.
+
+	phase = intiial phase of the signal (0 ,2*PI), indicate at which
+	      position in the period the signal starts.
+	offset = constant value added to all the elements of the signal generated.
+- several unit tests
+- added a function to multiply real and complex numbers 
+- function to get coefs from a fir filter 
+- the sqr functions
+- wipp logger for debugging and testing 
+- function to retrieve the available space in the circular buffer 
+- functions to generate random distributions 
+- functions to retrieve the position of maxima and minima 
+- standard deviation function 
+  No available yet for complex numbers
+- variance functions 
+- functions to retrieve minima and maxima values 
+  faster than calculating min and max separately
+- abs functions 
+- multC functions 
+- subC functions 
+- sub functions 
+- add functions 
+- min and max functions 
+- window function for all supported typenames 
+- IIR filters 
+- circular buffer 
+- threshold functions (lt, let, gt and get flavours) 
+  This functions replace al values above/below the threshold
+  by a given value.
+
+  Flavours:
+  lt -> lower than
+  let -> lower or equal than
+  gt -> grater than
+  get -> greater or equal than.
+
+- magnitude, ramp and triangle functions 
+- sum function for complex numbers 
+- mean function for complex values 
+- polar to cartesian coordinates function 
+- conjugate functions 
+- functions to add a consntant value to a buffer 
+- div fucntion for real, integer and complex values 
+- mult functions for complex numbers 
+- functions to set all positions of a buffer to the same value 
+- added copyBuffer for complex values 
+- default implementation of a FIR filter 
+
+### Changed
+- c++11 compatibility activated 
+- added -O3 and -msse compiler flags 
+- several unit tests
+- refactor fft function using reinterpret_cast to complex values 
+- renamed fft init/delete functions 
+- the order of parameters in functions requesting min and max values 
+  from (...,fmax, fmin, ...) to (..., fmin, fmax, ...)
+  because usually fmin goes firsts.
+- wipp_sinc reimplemented 
+  reimplemented computing the two sincs separately because they
+  have to be normalised independently. Also added some 2*M_PI
+  correction coeficients to get the desired maximum value of one,
+  in the frequency domain.
+- remove 'spectrum' from power function name.
+- power function for new types 
+- made libwipp a shared library 
+- expanded init/delete test to multiple fft orders 
+- init functions get a **data instead of *data 
+  This is to initialise estructures with pointers passes by reference.
+  In this way, we do not need to allocate the pointer ans pass them by value,
+  and users of the library can allocate all the data at set up time, rather
+  than having to allocate them at initialisation time, in the:
+  set up -> initialisation -> run -> delete
+  cycle.
+- Change FFT API to return reals valuesin CCS format 
+  CCS format, is compact format for FFT of real signals.
+  Because FFT of real signals is symetric, we can express it
+  in this way:
+
+  CCS[0] = real(FFT[0])
+  CCS[1] = 0 
+  CCS[2] = real(FFT[1])
+  CCS[3] = imag(FFT[1])
+  CCS[4] = real(FFT[2])
+  CCS[5] = imag(FFT[2])
+  ...
+  CCS[M-1] = real(FFT[N/2])
+  CCS[M] = 0
+
+  Therefore the length of the CCS formated buffer has to be N+2,
+  if N is the size of the FFT and length of the frame to be transformed.
+- solve a bug that made the input signal constant 
+
+#### Contributors: Jordi Adell <adellj@gmail.com>
+
+
+
+## [0.1.9] - 2014-11-12
+
+### Added
+- several unit tests
+	
+#### Contributors: Jordi Adell
+
