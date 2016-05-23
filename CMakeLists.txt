@@ -1,11 +1,6 @@
-cmake_minimum_required(VERSION 2.8.3)
-project(wipp)
+cmake_minimum_required(VERSION 3.2.2)
+project(wipp VERSION 2.1.0)
 
-set(PROJECT_VERSION_MAJOR 2)
-set(PROJECT_VERSION_MINOR 1)
-set(PROJECT_VERSION_PATCH 0)
-
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 set(CMAKE_CXX_FLAGS "-std=c++11")
 
