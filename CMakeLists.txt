@@ -1,9 +1,11 @@
 cmake_minimum_required(VERSION 3.2.2)
 project(wipp VERSION 2.1.0)
 
+###########################
+## Configure compilation ##
+###########################
 
 set(CMAKE_CXX_FLAGS "-std=c++11")
-
 if(DEBUG)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -g")
     add_definitions("-DWIPP_DEBUG")
@@ -11,6 +13,12 @@ if(DEBUG)
 else(DEBUG)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -msse4")
 endif(DEBUG)
+
+#############################################
+## Find modules and configure dependencies ##
+#############################################
+
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 find_package(IPP)
 find_package(FFTW)
@@ -37,7 +45,10 @@ include_directories(
   ${Boost_INCLUDE_DIRS}
   )
 
-## Declare a cpp library
+###################################
+## Declare and configure targets ##
+###################################
+
 add_library(wipp SHARED
   src/${PROJECT_NAME}/wipputils.cpp
   src/${PROJECT_NAME}/wippfilter.cpp
@@ -84,10 +95,9 @@ install(FILES
   DESTINATION ${INCLUDE_DESTINATION}
 )
 
-#install(FILES ${PROJECT_NAME}-config.cmake DESTINATION ${LIB_DESTINATION})
-
-#export(EXPORT wipp NAMESPACE 
-export(PACKAGE ${PROJECT_NAME})
+########################
+## Package generation ##
+########################
 
 SET(CPACK_GENERATOR "DEB")
 SET(CPACK_PACKAGE_NAME "lib${PROJECT_NAME}")
