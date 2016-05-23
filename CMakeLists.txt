@@ -60,7 +60,12 @@ add_library(wipp SHARED
   src/${PROJECT_NAME}/wipplogger.cpp
   )
 
-## Specify libraries to link a library or executable target against
+set_target_properties(wipp
+PROPERTIES
+VERSION ${PROJECT_VERSION}
+SOVERSION ${PROJECT_VERSION_MAJOR}
+)
+
 target_link_libraries(wipp
   ${IPP_LIBRARIES}
   ${FFTW_LIBRARIES}
