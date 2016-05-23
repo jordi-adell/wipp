@@ -1,155 +1,121 @@
-#  Copyright (C) 2004-2009, Robotics Equipment Corporation GmbH
+# - Find Intel IPP
+# Find the IPP libraries
+# Options:
+#
+#   IPP_STATIC: true if using static linking
+#   IPP_MULTI_THREADED: true if using multi-threaded static linking
+#
+# This module defines the following variables:
+#
+#   IPP_FOUND       : True if IPP_INCLUDE_DIR are found
+#   IPP_INCLUDE_DIR : where to find ipp.h, etc.
+#   IPP_INCLUDE_DIRS: set when IPP_INCLUDE_DIR found
+#   IPP_LIBRARIES   : the library to link against.
 
-IF( NOT IPP_FOUND )
+include(FindPackageHandleStandardArgs)
 
-IF( ${CMAKE_CL_64} )
-ELSE( ${CMAKE_CL_64} )
-	FILE(GLOB IPP_INCLUDE_PATHS_0 "$ENV{ProgramFiles(x86)}/Intel/IPP/*.*/ia32/include")
-	FILE(GLOB IPP_INCLUDE_PATHS_1 "/opt/intel/ipp/*.*/ia32/include")
-	FILE(GLOB IPP_INCLUDE_PATHS_2 "/usr/local/intel/ipp/*.*/ia32/include")
-	FILE(GLOB IPP_LIBRARY_PATHS_0 "$ENV{ProgramFiles(x86)}/Intel/IPP/*.*/ia32/lib")
-	FILE(GLOB IPP_LIBRARY_PATHS_1 "$ENV{ProgramFiles(x86)}/Intel/IPP/*.*/ia32/stublib")
-	FILE(GLOB IPP_LIBRARY_PATHS_2 "/opt/intel/ipp/*.*/ia32/lib")
-	FILE(GLOB IPP_LIBRARY_PATHS_3 "/opt/intel/ipp/*.*/ia32/sharedlib")
-	FILE(GLOB IPP_LIBRARY_PATHS_4 "/usr/local/intel/ipp/*.*/ia32/lib")
-	FILE(GLOB IPP_LIBRARY_PATHS_5 "/usr/local/intel/ipp/*.*/ia32/sharedlib")
-ENDIF( ${CMAKE_CL_64} )
+set(IPP_ROOT /opt/intel/ipp CACHE PATH "Folder contains IPP")
 
-SET(
-	IPP_INCLUDE_PATHS
-	${IPP_INCLUDE_PATHS_0}
-	${IPP_INCLUDE_PATHS_1}
-	${IPP_INCLUDE_PATHS_2}
-)
+# Find header file dir
+find_path(IPP_INCLUDE_DIR ipp.h
+    PATHS ${IPP_ROOT}/include)
 
-SET(
-	IPP_LIBRARY_PATHS
-	${IPP_LIBRARY_PATHS_0}
-	${IPP_LIBRARY_PATHS_1}
-	${IPP_LIBRARY_PATHS_2}
-	${IPP_LIBRARY_PATHS_3}
-	${IPP_LIBRARY_PATHS_4}
-	${IPP_LIBRARY_PATHS_5}
-)
+# Find libraries
 
-FIND_PATH(
-  IPP_INCLUDE_DIR
-  ippi.h
-  ${IPP_INCLUDE_PATHS}
-)
+# Handle suffix
+set(_IPP_ORIG_CMAKE_FIND_LIBRARY_SUFFIXES ${CMAKE_FIND_LIBRARY_SUFFIXES})
 
-FIND_LIBRARY( IPP_IPPCORELMERGED NAMES ippcorel ippcore PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPACEMERGED   NAMES ippacemerged     PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPACMERGED    NAMES ippacmerged      PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPCCEMERGED   NAMES ippccemerged     PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPCCMERGED    NAMES ippccmerged      PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPCHEMERGED   NAMES ippchemerged     PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPCHMERGED    NAMES ippchmerged      PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPCVEMERGED   NAMES ippcvemerged     PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPCVMERGED    NAMES ippcvmerged      PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPDCEMERGED   NAMES ippdcemerged     PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPDCMERGED    NAMES ippdcmerged      PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPIEMERGED    NAMES ippiemerged      PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPIMERGED     NAMES ippimerged       PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPJEMERGED    NAMES ippjemerged      PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPJMERGED     NAMES ippjmerged       PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPMEMERGED    NAMES ippmemerged      PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPMMERGED     NAMES ippmmerged       PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPSCEMERGED   NAMES ippscemerged     PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPSCMERGED    NAMES ippscmerged      PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPSEMERGED    NAMES ippsemerged      PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPSMERGED     NAMES ippsmerged       PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPSREMERGED   NAMES ippsremerged     PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPSRMERGED    NAMES ippsrmerged      PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPVCEMERGED   NAMES ippvcemerged     PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPVCMERGED    NAMES ippvcmerged      PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPVMEMERGED   NAMES ippvmemerged     PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPVMMERGED    NAMES ippvmmerged      PATHS ${IPP_LIBRARY_PATHS} )
+if(WIN32)
+    set(CMAKE_FIND_LIBRARY_SUFFIXES .lib)
+else()
+    if(IPP_STATIC)
+        set(CMAKE_FIND_LIBRARY_SUFFIXES .a)
+    else()
+        set(CMAKE_FIND_LIBRARY_SUFFIXES .so)
+    endif()
+endif()
 
-SET(
-  IPP_MERGED_LIBRARIES
-  ${IPP_IPPACEMERGED}
-  ${IPP_IPPACMERGED}
-  
-  ${IPP_IPPCVEMERGED}
-  ${IPP_IPPCVMERGED}
-  
-  ${IPP_IPPMEMERGED}
-  ${IPP_IPPMMERGED}
-  
-  ${IPP_IPPDCEMERGED}
-  ${IPP_IPPDCMERGED}
-  
-  ${IPP_IPPVCEMERGED}
-  ${IPP_IPPVCMERGED}
-  
-  ${IPP_IPPCCEMERGED}
-  ${IPP_IPPCCMERGED}
-  
-  ${IPP_IPPCHEMERGED}
-  ${IPP_IPPCHMERGED}
-  
-  ${IPP_IPPVMEMERGED}
-  ${IPP_IPPVMMERGED}
-  
-  ${IPP_IPPJEMERGED}
-  ${IPP_IPPJMERGED}
-  
-  ${IPP_IPPSREMERGED}
-  ${IPP_IPPSRMERGED}
-  
-  ${IPP_IPPSCEMERGED}
-  ${IPP_IPPSCMERGED}
-  
-  ${IPP_IPPIEMERGED}
-  ${IPP_IPPIMERGED}
-  
-  ${IPP_IPPSEMERGED} 
-  ${IPP_IPPSMERGED}
-  
-  ${IPP_IPPCORELMERGED}
-)
+if(IPP_STATIC)
+    if(IPP_MULTI_THREADED)
+        set(IPP_LIBNAME_SUFFIX _t)
+    else()
+        set(IPP_LIBNAME_SUFFIX _l)
+    endif()
+else()
+    set(IPP_LIBNAME_SUFFIX "")
+endif()
 
-FIND_LIBRARY( IPP_IPPACSHARED    NAMES    ippac   PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPCCSHARED    NAMES    ippcc   PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPCHSHARED    NAMES    ippch   PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPCORELSHARED NAMES    ippcore PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPCVSHARED    NAMES    ippcv   PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPDCSHARED    NAMES    ippdc   PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPISHARED     NAMES    ippi    PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPJSHARED     NAMES    ippj    PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPMSHARED     NAMES    ippm    PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPSSHARED     NAMES    ipps    PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPSCSHARED    NAMES    ippsc   PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPSRSHARED    NAMES    ippsr   PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPVCSHARED    NAMES    ippvc   PATHS ${IPP_LIBRARY_PATHS} )
-FIND_LIBRARY( IPP_IPPVMSHARED    NAMES    ippvm   PATHS ${IPP_LIBRARY_PATHS} )
+macro(find_ipp_library IPP_COMPONENT)
+  string(TOLOWER ${IPP_COMPONENT} IPP_COMPONENT_LOWER)
 
-SET(
-  IPP_SHARED_LIBRARIES
-  ${IPP_IPPACSHARED}
-  ${IPP_IPPCCSHARED}
-  ${IPP_IPPCHSHARED}
-  ${IPP_IPPCORELSHARED}
-  ${IPP_IPPCVSHARED}
-  ${IPP_IPPDCSHARED}
-  ${IPP_IPPISHARED}
-  ${IPP_IPPJSHARED}
-  ${IPP_IPPMSHARED}
-  ${IPP_IPPSSHARED}
-  ${IPP_IPPSCSHARED}
-  ${IPP_IPPSRSHARED}
-  ${IPP_IPPVCSHARED}
-  ${IPP_IPPVMSHARED}
-)
+  find_library(IPP_LIB_${IPP_COMPONENT} ipp${IPP_COMPONENT_LOWER}${IPP_LIBNAME_SUFFIX}
+               PATHS ${IPP_ROOT}/lib/ia32/)
+endmacro()
 
-SET( IPP_FOUND 0 )
-IF( EXISTS "${IPP_INCLUDE_DIR}" )
-  SET( IPP_FOUND 1 )
-	ADD_DEFINITIONS( -DHAVE_IPP )
-  INCLUDE_DIRECTORIES(
-    ${IPP_INCLUDE_DIR}
-  )
-ENDIF( EXISTS "${IPP_INCLUDE_DIR}" )
+# IPP components
+# Core
+find_ipp_library(CORE)
+# Audio Coding
+find_ipp_library(AC)
+# Color Conversion
+find_ipp_library(CC)
+# String Processing
+find_ipp_library(CH)
+# Cryptography
+find_ipp_library(CP)
+# Computer Vision
+find_ipp_library(CV)
+# Data Compression
+find_ipp_library(DC)
+# Data Integrity
+find_ipp_library(DI)
+# Generated Functions
+find_ipp_library(GEN)
+# Image Processing
+find_ipp_library(I)
+# Image Compression
+find_ipp_library(J)
+# Realistic Rendering and 3D Data Processing
+find_ipp_library(R)
+# Small Matrix Operations
+find_ipp_library(M)
+# Signal Processing
+find_ipp_library(S)
+# Speech Coding
+find_ipp_library(SC)
+# Speech Recognition
+find_ipp_library(SR)
+# Video Coding
+find_ipp_library(VC)
+# Vector Math
+find_ipp_library(VM)
 
-ENDIF( NOT IPP_FOUND )
+set(IPP_LIBRARY
+    ${IPP_LIB_CORE}
+    ${IPP_LIB_AC}
+    ${IPP_LIB_CC}
+    ${IPP_LIB_CH}
+    ${IPP_LIB_CP}
+    ${IPP_LIB_CV}
+    ${IPP_LIB_DC}
+    ${IPP_LIB_DI}
+    ${IPP_LIB_GEN}
+    ${IPP_LIB_I}
+    ${IPP_LIB_J}
+    ${IPP_LIB_R}
+    ${IPP_LIB_M}
+    ${IPP_LIB_S}
+    ${IPP_LIB_SC}
+    ${IPP_LIB_SR}
+    ${IPP_LIB_VC}
+    ${IPP_LIB_VM})
+
+set(CMAKE_FIND_LIBRARY_SUFFIXES ${_IPP_ORIG_CMAKE_FIND_LIBRARY_SUFFIXES})
+
+find_package_handle_standard_args(IPP DEFAULT_MSG
+    IPP_INCLUDE_DIR IPP_LIBRARY)
+
+if (IPP_FOUND)
+    set(IPP_INCLUDE_DIRS ${IPP_INCLUDE_DIR})
+    set(IPP_LIBRARIES ${IPP_LIBRARY})
+endif()
