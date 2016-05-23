@@ -82,6 +82,7 @@ set(INCLUDE_DESTINATION "include/${PROJECT_NAME}")
 
 ## Mark executables and/or libraries for installation
 install(TARGETS wipp
+  COMPONENT bin
   ARCHIVE DESTINATION ${LIB_DESTINATION}
   LIBRARY DESTINATION ${LIB_DESTINATION}
   RUNTIME DESTINATION ${BIN_DESTINATION}
@@ -98,6 +99,7 @@ install(FILES
   include/${PROJECT_NAME}/wippsignal.h
   include/${PROJECT_NAME}/wippstats.h
   DESTINATION ${INCLUDE_DESTINATION}
+  COMPONENT dev
 )
 
 ########################
