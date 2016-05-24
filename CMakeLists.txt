@@ -12,7 +12,9 @@ if(DEBUG)
     add_definitions("-DWIPP_DEBUG")
     message(STATUS "DEBUG mode")
 else(DEBUG)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -msse4")
+  set(OPT_FLAGS, "-O3 -msse4")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OPT_FLAGS}")
+  message(STATUS "optimisation flags: ${OPT_FLAGS}")
 endif(DEBUG)
 
 #############################################
