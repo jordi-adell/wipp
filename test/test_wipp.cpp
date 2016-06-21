@@ -53,6 +53,9 @@ TEST(wippTest, wippCopyTest)
     short int smin = std::numeric_limits<short int>::min();
     short int smax = std::numeric_limits<short int>::max();
 
+    unsigned short int usmin = std::numeric_limits<unsigned short int>::min();
+    unsigned short int usmax = std::numeric_limits<unsigned short int>::max();
+
     int imin = std::numeric_limits<int>::min();
     int imax = std::numeric_limits<int>::max();
 
@@ -62,17 +65,20 @@ TEST(wippTest, wippCopyTest)
     float  inFbuffer[len] = {fmin, 2*(fmin/3) + fmax/3, fmin/3 + 2*(fmax/3), fmax};
     short  inSbuffer[len] = {smin, static_cast<short>(2*(smin/3) + smax/3), static_cast<short>(smin/3 + 2*(smax/3)), smax};
     int inIbuffer[len] =  {smin, static_cast<int> (2*(imin/3) + imax/3), static_cast<int> (imin/3 + 2*(imax/3)), imax};
+    unsigned short inUSbuffer[len] = {usmin, static_cast<unsigned short int> (2*(usmin/3) + usmax/3), static_cast<unsigned short int> (usmin/3 + 2*(usmax/3)), usmax};
 
     double oDbuffer[len];
     float  oFbuffer[len];
     short  oSbuffer[len];
     int   oIbuffer[len];
+    unsigned short oUSbuffer[len];
 
     // Check equal resolution
     copyBuffer(inDbuffer, oDbuffer, len);
     copyBuffer(inFbuffer, oFbuffer, len);
     copyBuffer(inSbuffer, oSbuffer, len);
     copyBuffer(inIbuffer, oIbuffer, len);
+    copyBuffer(inUSbuffer, oUSbuffer, len);
 
     for (int i = 0; i<len; ++i)
     {
@@ -84,13 +90,14 @@ TEST(wippTest, wippCopyTest)
 	EXPECT_EQ(inSbuffer[i], oSbuffer[i]);
 	DEBUG_STREAM("I: " << inIbuffer[i] << " I: " << oIbuffer[i]);
 	EXPECT_EQ(inIbuffer[i], oIbuffer[i]);
+	DEBUG_STREAM("US: " << inIbuffer[i] << " US: " << oIbuffer[i]);
+	EXPECT_EQ(inUSbuffer[i], oUSbuffer[i]);
     }
 
     // from Low to High resolution
 
     copyBuffer(inSbuffer, oFbuffer, len);
     copyBuffer(inSbuffer, oDbuffer, len);
-
     for (int i = 0; i<len; ++i)
     {
 	DEBUG_STREAM("S: " << inSbuffer[i] << " F: " << oFbuffer[i]);
@@ -107,6 +114,16 @@ TEST(wippTest, wippCopyTest)
 	DEBUG_STREAM("I: " << inIbuffer[i] << " D: " << oDbuffer[i]);
 	EXPECT_EQ(inIbuffer[i], oDbuffer[i]);
     }
+    copyBuffer(inUSbuffer, oFbuffer, len);
+    copyBuffer(inUSbuffer, oDbuffer, len);
+    for (int i = 0; i<len; ++i)
+    {
+	DEBUG_STREAM("US: " << inUSbuffer[i] << " F: " << oFbuffer[i]);
+	EXPECT_EQ(inUSbuffer[i], oFbuffer[i]);
+	DEBUG_STREAM("US: " << inUSbuffer[i] << " D: " << oDbuffer[i]);
+	EXPECT_EQ(inUSbuffer[i], oDbuffer[i]);
+    }
+
 }
 
 

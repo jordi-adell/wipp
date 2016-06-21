@@ -36,6 +36,11 @@ namespace wipp{
     memcpy(reinterpret_cast<void*>(outbuffer), reinterpret_cast<const void*>(inbuffer), length*sizeof(short));
   }
 
+  void copyBuffer(const unsigned short *inbuffer, unsigned short *outbuffer, size_t length)
+  {
+    memcpy(reinterpret_cast<void*>(outbuffer), reinterpret_cast<const void*>(inbuffer), length*sizeof(unsigned short));
+  }
+
   void copyBuffer(const int *inbuffer, int *outbuffer, size_t length)
   {
     memcpy(reinterpret_cast<void*>(outbuffer), reinterpret_cast<const void*>(inbuffer), length*sizeof(int));
@@ -70,6 +75,18 @@ namespace wipp{
   }
 
   void copyBuffer(const short *inbuffer, double *outbuffer, size_t length)
+  {
+    for (size_t i = 0; i < length; ++i)
+      outbuffer[i] = static_cast<double>(inbuffer[i]);
+  }
+
+  void copyBuffer(const unsigned short *inbuffer, float *outbuffer, size_t length)
+  {
+    for (size_t i = 0; i < length; ++i)
+      outbuffer[i] = static_cast<float>(inbuffer[i]);
+  }
+
+  void copyBuffer(const unsigned short *inbuffer, double *outbuffer, size_t length)
   {
     for (size_t i = 0; i < length; ++i)
       outbuffer[i] = static_cast<double>(inbuffer[i]);

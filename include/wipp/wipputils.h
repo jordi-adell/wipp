@@ -36,6 +36,7 @@ namespace wipp{
    * into another buffer
    **/
   void copyBuffer(const int16_t *inbuffer, int16_t *outbuffer, size_t length);
+  void copyBuffer(const uint16_t *inbuffer, uint16_t *outbuffer, size_t length);
   void copyBuffer(const int32_t *inbuffer, int32_t *outbuffer, size_t length);
   void copyBuffer(const double *inbuffer, double *outbuffer, size_t length);
   void copyBuffer(const float *inbuffer, float *outbuffer, size_t length);
@@ -48,6 +49,8 @@ namespace wipp{
   void copyBuffer(const int16_t *inbuffer, double *outbuffer, size_t length);
   void copyBuffer(const int32_t *inbuffer, float *outbuffer, size_t length);
   void copyBuffer(const int32_t *inbuffer, double *outbuffer, size_t length);
+  void copyBuffer(const uint16_t *inbuffer, float *outbuffer, size_t length);
+  void copyBuffer(const uint16_t *inbuffer, double *outbuffer, size_t length);
   void copyBuffer(const double *inbuffer, int16_t *outbuffer, size_t length);
   void copyBuffer(const double *inbuffer, uint16_t *outbuffer, size_t length);
   void copyBuffer(const float *inbuffer, int16_t *outbuffer, size_t length);
