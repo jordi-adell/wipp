@@ -79,8 +79,8 @@ void mean(const wipp_complex_t *buffer, size_t length, wipp_complex_t *mean)
 
 
 
-template<typename T>
-void var_core(const T *buffer, size_t length, T* var)
+template<typename T, typename H>
+void var_core(const T *buffer, size_t length, H* var)
 {
     // var(c) = E[x^2] - E^2[x]
     T mean_value;
@@ -97,11 +97,11 @@ void var_core(const T *buffer, size_t length, T* var)
 }
 
 void var(const double *buffer, size_t length, double *var){ var_core(buffer, length, var); }
-void var(const float *buffer, size_t length, float *var){ var_core(buffer, length, var); }
-void var(const int16_t *buffer, size_t length, int16_t *var){ var_core(buffer, length, var); }
-void var(const int32_t *buffer, size_t length, int32_t *var){ var_core(buffer, length, var); }
-void var(const uint16_t *buffer, size_t length, uint16_t *var){ var_core(buffer, length, var); }
-void var(const uint32_t *buffer, size_t length, uint32_t *var){ var_core(buffer, length, var); }
+void var(const float *buffer, size_t length, double *var){ var_core(buffer, length, var); }
+void var(const int16_t *buffer, size_t length, double *var){ var_core(buffer, length, var); }
+void var(const int32_t *buffer, size_t length, double *var){ var_core(buffer, length, var); }
+void var(const uint16_t *buffer, size_t length, double *var){ var_core(buffer, length, var); }
+void var(const uint32_t *buffer, size_t length, double *var){ var_core(buffer, length, var); }
 void var(const wipp_complex_t *buffer, size_t length, wipp_complex_t *var)
 {
     // var(c) = E[x^2] - E^2[x]
@@ -122,19 +122,19 @@ void var(const wipp_complex_t *buffer, size_t length, wipp_complex_t *var)
 
 
 
-template<typename T>
-void stddev_core(const T *buffer, size_t length, T* stddev)
+template<typename T, typename H>
+void stddev_core(const T *buffer, size_t length, H* stddev)
 {
     var(buffer, length, stddev);
     *stddev = std::sqrt(*stddev);
 }
 
 void stddev(const double *buffer, size_t length, double *stddev){ stddev_core(buffer, length, stddev); }
-void stddev(const float *buffer, size_t length, float *stddev){ stddev_core(buffer, length, stddev); }
-void stddev(const int16_t *buffer, size_t length, int16_t *stddev){ stddev_core(buffer, length, stddev); }
-void stddev(const int32_t *buffer, size_t length, int32_t *stddev){ stddev_core(buffer, length, stddev); }
-void stddev(const uint16_t *buffer, size_t length, uint16_t *stddev){ stddev_core(buffer, length, stddev); }
-void stddev(const uint32_t *buffer, size_t length, uint32_t *stddev){ stddev_core(buffer, length, stddev); }
+void stddev(const float *buffer, size_t length, double *stddev){ stddev_core(buffer, length, stddev); }
+void stddev(const int16_t *buffer, size_t length, double *stddev){ stddev_core(buffer, length, stddev); }
+void stddev(const int32_t *buffer, size_t length, double *stddev){ stddev_core(buffer, length, stddev); }
+void stddev(const uint16_t *buffer, size_t length, double *stddev){ stddev_core(buffer, length, stddev); }
+void stddev(const uint32_t *buffer, size_t length, double *stddev){ stddev_core(buffer, length, stddev); }
 
 
 
