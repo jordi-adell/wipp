@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5.2)
-project(wipp VERSION 2.1.1)
+project(wipp VERSION 2.1.2)
 
 ###########################
 ## Configure compilation ##
