@@ -142,6 +142,13 @@ void mel2linear(const double *linear, double *mel, size_t length, const double* 
 void mel2linear(const float *linear, float *mel, size_t length);
 void mel2linear(const float *linear, float *mel, size_t length, const float* mult, const float *div );
 
+
+void cross_corr(const double *buffer1, size_t length, double *buffer2, size_t length2, double *corr, size_t corr_length, int lowLag);
+void cross_corr(const float *buffer1, size_t length, float *buffer2, size_t length2, float *corr, size_t corr_length, int lowLag);
+void cross_corr(const int32_t *buffer1, size_t length, int32_t *buffer2, size_t length2, int32_t *corr, size_t corr_length, int lowLag);
+void cross_corr(const int16_t *buffer1, size_t length, int16_t *buffer2, size_t length2, int16_t *corr, size_t corr_length, int lowLag);
+void cross_corr(const uint16_t *buffer1, size_t length, uint16_t *buffer2, size_t length2, uint16_t *corr, size_t corr_length, int lowLag);
+
 }
 
 

@@ -710,6 +710,32 @@ TEST(testWindowing, ola)
 }
 
 
+TEST(correlation, cross_corr)
+{
+
+  double b1[] = {0, 0.2, 0.5, 0.9, 1, 0.9, 0.5, 0.2, 0};
+  double b2[] = {1, 1, 1, 1};
+  double c[10];
+  double c_res[10]  = {1.6, 0.7, 0.2, 0, 0, 0, 0, 0, 0, 0};
+  double c_2res[10] = {1.6, 2.6, 3.3, 3.3, 2.6, 1.6, 0.7, 0.2, 0, 0};
+
+  wipp::cross_corr(b1, 9, b2, 4, c, 10, 0);
+
+  for (int i = 0; i < 10; ++i)
+  {
+    EXPECT_DOUBLE_EQ(c_res[i], c[i]);
+  }
+
+  wipp::cross_corr(b2, 4, b1, 9, c, 10, 0);
+
+  for (int i = 0; i < 10; ++i)
+  {
+    EXPECT_DOUBLE_EQ(c_2res[i], c[i]);
+  }
+
+}
+
+
 
 
 TEST(testComplex,reinterpret)

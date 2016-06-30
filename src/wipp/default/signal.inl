@@ -450,4 +450,41 @@ void mel2linear(const float *mel, float *linear, size_t length, const float* mul
 void mel2linear(const float *mel, float *linear, size_t length) { mel2linear(mel, linear, length, &default_mult32, &default_div32);}
 
 
+template <typename T>
+void cross_corr_core(const T *buffer1, size_t length1,
+		     const T *buffer2, size_t length2,
+		     T *corr, size_t corr_length, int lowLag)
+{
+    int j = 0;
+    for (size_t iCorr = 0; iCorr < corr_length; ++iCorr)
+    {
+	corr[iCorr] = 0;
+	for (size_t i = 0; i < length1; ++i)
+	{
+	    //TODO:Use wipp::mult here
+	    j = iCorr + i + lowLag;
+	    if (0 <= j && j < length2)
+	    {
+		corr[iCorr] += buffer1[i]*buffer2[j];
+	    }
+	}
+    }
+}
+
+void cross_corr(const double *buffer1, size_t length1, double *buffer2, size_t length2, double *corr, size_t corr_length, int lowLag)
+{cross_corr_core(buffer1, length1, buffer2, length2, corr, corr_length, lowLag); }
+void cross_corr(const float *buffer1, size_t length1, float *buffer2, size_t length2, float *corr, size_t corr_length, int lowLag)
+{cross_corr_core(buffer1, length1, buffer2, length2, corr, corr_length, lowLag); }
+void cross_corr(const int16_t *buffer1, size_t length1, int16_t *buffer2, size_t length2, int16_t *corr, size_t corr_length, int lowLag)
+{cross_corr_core(buffer1, length1, buffer2, length2, corr, corr_length, lowLag); }
+void cross_corr(const int32_t *buffer1, size_t length1, int32_t *buffer2, size_t length2, int32_t *corr, size_t corr_length, int lowLag)
+{cross_corr_core(buffer1, length1, buffer2, length2, corr, corr_length, lowLag); }
+void cross_corr(const uint16_t *buffer1, size_t length1, uint16_t *buffer2, size_t length2, uint16_t *corr, size_t corr_length, int lowLag)
+{cross_corr_core(buffer1, length1, buffer2, length2, corr, corr_length, lowLag); }
+
+
+
+
+
+
 }
