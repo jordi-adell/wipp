@@ -96,6 +96,32 @@ void threshold_get(const int32_t *buffer_in, int32_t *buffer_out, size_t length,
 void threshold_get(const uint16_t *buffer_in, uint16_t *buffer_out, size_t length, uint16_t threshold, uint16_t value);
 void threshold_get(const uint32_t *buffer_in, uint32_t *buffer_out, size_t length, uint32_t threshold, uint32_t value);
 
+void threshold_lt_gt(double *buffer, size_t length, double threshold_lt, double value_lt, double threshold_gt, double value_gt);
+void threshold_lt_gt(float *buffer, size_t length, float threshold_lt, float value_lt, float threshold_gt, float value_gt);
+void threshold_lt_gt(int16_t *buffer, size_t length, int16_t threshold_lt, int16_t value_lt, int16_t threshold_gt, int16_t value_gt);
+void threshold_lt_gt(int32_t *buffer, size_t length, int32_t threshold_lt, int32_t value_lt, int32_t threshold_gt, int32_t value_gt);
+void threshold_lt_gt(uint16_t *buffer, size_t length, uint16_t threshold_lt, uint16_t value_lt, uint16_t threshold_gt, uint16_t value_gt);
+void threshold_lt_gt(uint32_t *buffer, size_t length, uint32_t threshold_lt, uint32_t value_lt, uint32_t threshold_gt, uint32_t value_gt);
+void threshold_lt_gt(const double *buffer_in, double *buffer_out, size_t length, double threshold_lt, double value_lt, double threshold_gt, double value_gt);
+void threshold_lt_gt(const float *buffer_in, float *buffer_out, size_t length, float threshold_lt, float value_lt, float threshold_gt, float value_gt);
+void threshold_lt_gt(const int16_t *buffer_in, int16_t *buffer_out, size_t length, int16_t threshold_lt, int16_t value_lt, int16_t threshold_gt, int16_t value_gt);
+void threshold_lt_gt(const int32_t *buffer_in, int32_t *buffer_out, size_t length, int32_t threshold_lt, int32_t value_lt, int32_t threshold_gt, int32_t value_gt);
+void threshold_lt_gt(const uint16_t *buffer_in, uint16_t *buffer_out, size_t length, uint16_t threshold_lt, uint16_t value_lt, uint16_t threshold_gt, uint16_t value_gt);
+void threshold_lt_gt(const uint32_t *buffer_in, uint32_t *buffer_out, size_t length, uint32_t threshold_lt, uint32_t value_lt, uint32_t threshold_gt, uint32_t value_gt);
+
+void threshold_let_get(double *buffer, size_t length, double threshold_let, double value_let, double threshold_get, double value_get);
+void threshold_let_get(float *buffer, size_t length, float threshold_let, float value_let, float threshold_get, float value_get);
+void threshold_let_get(int16_t *buffer, size_t length, int16_t threshold_let, int16_t value_let, int16_t threshold_get, int16_t value_get);
+void threshold_let_get(int32_t *buffer, size_t length, int32_t threshold_let, int32_t value_let, int32_t threshold_get, int32_t value_get);
+void threshold_let_get(uint16_t *buffer, size_t length, uint16_t threshold_let, uint16_t value_let, uint16_t threshold_get, uint16_t value_get);
+void threshold_let_get(uint32_t *buffer, size_t length, uint32_t threshold_let, uint32_t value_let, uint32_t threshold_get, uint32_t value_get);
+void threshold_let_get(const double *buffer_in, double *buffer_out, size_t length, double threshold_let, double value_let, double threshold_get, double value_get);
+void threshold_let_get(const float *buffer_in, float *buffer_out, size_t length, float threshold_let, float value_let, float threshold_get, float value_get);
+void threshold_let_get(const int16_t *buffer_in, int16_t *buffer_out, size_t length, int16_t threshold_let, int16_t value_let, int16_t threshold_get, int16_t value_get);
+void threshold_let_get(const int32_t *buffer_in, int32_t *buffer_out, size_t length, int32_t threshold_let, int32_t value_let, int32_t threshold_get, int32_t value_get);
+void threshold_let_get(const uint16_t *buffer_in, uint16_t *buffer_out, size_t length, uint16_t threshold_let, uint16_t value_let, uint16_t threshold_get, uint16_t value_get);
+void threshold_let_get(const uint32_t *buffer_in, uint32_t *buffer_out, size_t length, uint32_t threshold_let, uint32_t value_let, uint32_t threshold_get, uint32_t value_get);
+
 struct wipp_circular_buffer_t_;
 typedef wipp_circular_buffer_t_ wipp_circular_buffer_t;
 

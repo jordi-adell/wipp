@@ -149,6 +149,80 @@ TEST(sqrTest, sqrt_sqr)
 
 }
 
+
+TEST (threshold, lt_gt_let_get)
+{
+
+  size_t length = 1000;
+  double frame[length];
+  double out_frame[length];
+  wipp::wipp_rand_t *rand;
+  wipp::init_rand_gaussian(&rand, 0.0F, 1000.0F);
+  wipp::rand(rand, frame, length);
+
+  wipp::threshold_lt(frame, out_frame, length, 0.0, -1000.0F);
+  for (size_t i = 0; i < length; ++i)
+  {
+    EXPECT_TRUE(out_frame[i] > 0 || out_frame[i] == -1000);
+    if (frame[i] >= 0)
+      EXPECT_GE(out_frame[i], 0);
+    else
+      EXPECT_EQ(out_frame[i], -1000);
+  }
+
+  wipp::threshold_gt(frame, out_frame, length, 0, 1000);
+  for (size_t i = 0; i < length; ++i)
+  {
+    EXPECT_TRUE(out_frame[i] < 0 || out_frame[i] == 1000);
+    if (frame[i] <= 0)
+      EXPECT_LE(out_frame[i], 0);
+    else
+      EXPECT_EQ(out_frame[i], 1000);
+  }
+
+  wipp::threshold_let(frame, out_frame, length, 0.0, -1000.0F);
+  for (size_t i = 0; i < length; ++i)
+  {
+    EXPECT_TRUE(out_frame[i] > 0 || out_frame[i] == -1000);
+    if (frame[i] > 0)
+      EXPECT_GE(out_frame[i], 0);
+    else
+      EXPECT_EQ(out_frame[i], -1000);
+  }
+
+  wipp::threshold_get(frame, out_frame, length, 0, 1000);
+  for (size_t i = 0; i < length; ++i)
+  {
+    EXPECT_TRUE(out_frame[i] < 0 || out_frame[i] == 1000);
+    if (frame[i] < 0)
+      EXPECT_LE(out_frame[i], 0);
+    else
+      EXPECT_EQ(out_frame[i], 1000);
+  }
+
+  wipp::threshold_lt_gt(frame, out_frame, length, 0, -1, 10, 20);
+  for (size_t i = 0; i < length; ++i)
+  {
+    EXPECT_TRUE(out_frame[i] >= 0 && out_frame[i] < 10  || out_frame[i] == -1 || out_frame[i] == 20 );
+    if (frame[i] <= 0)
+      EXPECT_LE(out_frame[i], -1);
+    else if (frame[i] >= 10)
+      EXPECT_EQ(out_frame[i], 20);
+  }
+
+  wipp::threshold_let_get(frame, out_frame, length, 0, -1, 10, 20);
+  for (size_t i = 0; i < length; ++i)
+  {
+    EXPECT_TRUE(out_frame[i] >= 0 && out_frame[i] < 10  || out_frame[i] == -1 || out_frame[i] == 20 );
+    if (frame[i] < 0)
+      EXPECT_LE(out_frame[i], -1);
+    else if (frame[i] > 10)
+      EXPECT_EQ(out_frame[i], 20);
+  }
+
+
+}
+
 TEST(iirTest, init_delete)
 {
 
