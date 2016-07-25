@@ -900,6 +900,38 @@ TEST(testTriangle, triangle)
   }
 }
 
+template <typename T>
+void testRamp(T *buffer, int length, double min, double max, double slope)
+{
+  wipp::ramp(buffer, length, min, slope);
+  EXPECT_EQ(buffer[0], static_cast<T>(min));
+  for (size_t i = 1; i < length; ++i)
+  {
+    EXPECT_GE(buffer[i], buffer[i-1]);
+    EXPECT_NEAR(buffer[i] - buffer[i-1], static_cast<T>(slope), 1);
+  }
+}
+
+
+TEST(testRamp, ramp)
+{
+  const size_t length = 1000;
+  const double min = 100;
+  const double max = M_PI*1000;
+  const double slope = 30;
+
+  double dbuffer[length];
+  testRamp(dbuffer, length, min, max, slope);
+  int ibuffer[length];
+  testRamp(ibuffer, length, min, max, slope);
+  float fbuffer[length];
+  testRamp(fbuffer, length, min, max, slope);
+  uint16_t ubuffer[length];
+  testRamp(ubuffer, length, min, max, slope);
+
+}
+
+
 
 TEST(testTriangle, asym_triangle)
 {

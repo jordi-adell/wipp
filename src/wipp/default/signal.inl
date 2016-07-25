@@ -51,13 +51,21 @@ void magnitude(const wipp_complex_t *buffer, double *magnitude, size_t length)
 }
 
 
-void ramp(double *buffer, size_t length, double offset, double slope)
+template<typename T>
+void ramp_core(T *buffer, size_t length, double offset, double slope)
 {
     for (size_t i = 0; i < length; ++i)
     {
 	buffer[i] = slope*i + offset;
     }
 }
+
+void ramp(double *buffer, size_t length, double offset, double slope) {ramp_core(buffer, length, offset, slope);}
+void ramp(float *buffer, size_t length, double offset, double slope) {ramp_core(buffer, length, offset, slope);}
+void ramp(int *buffer, size_t length, double offset, double slope) {ramp_core(buffer, length, offset, slope);}
+void ramp(uint16_t *buffer, size_t length, double offset, double slope) {ramp_core(buffer, length, offset, slope);}
+
+
 
 /**
  * @brief triangle   triangle that goes from -1 to 1 and then back to -1 in period samples.
