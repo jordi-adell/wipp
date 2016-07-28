@@ -912,6 +912,22 @@ void testRamp(T *buffer, int length, double min, double max, double slope)
   }
 }
 
+TEST(testMedian, median)
+{
+  size_t length = 5;
+  int buffer[]={3,4,16,5,7};
+  int median;
+
+  wipp::median(&buffer[0], length, &median);
+  EXPECT_EQ(median, 5);
+
+  double dbuffer[]={0.1,0.5,0.3,0.8,0.2,0.9,0.4,0.2,0.7,0.009,0.7,0.5,0.3,0.2,10.5,0.4,0.3,0.8,0.7,0.9,0.7,0.9,0.5,0.1,0.5,60.7,90.8,0.7,0.5,0.4,0.009,0.7,0.5,0.4,0.3,0.1,0.6,0.8,0};
+  length = 39;
+  double dmedian;
+  wipp::median(&dbuffer[0], length, &dmedian);
+  EXPECT_EQ(dmedian, 0.5);
+}
+
 
 TEST(testRamp, ramp)
 {

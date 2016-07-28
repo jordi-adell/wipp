@@ -27,6 +27,8 @@
 #include <typeinfo>
 #include <math.h>
 
+#include <algorithm>
+
 namespace wipp
 {
 
@@ -54,6 +56,32 @@ void sum(const wipp_complex_t *buffer, size_t length, wipp_complex_t *sum)
     }
 }
 
+
+template<typename T>
+void sort(const T *buffer, T *sorted, size_t length)
+{
+    memcpy(sorted, buffer, sizeof(T)*length);
+    std::sort(sorted, &sorted[length]);
+    //    for (int i = 0; i < length; ++i)
+    //	std::cout << sorted[i] << std::endl;
+}
+
+
+template<typename T>
+void median_core(const T *buffer, size_t length, T* median)
+{
+    T sorted[length];
+    int center = static_cast<double>(length)/2 - 0.5;
+    sort(buffer, sorted, length);
+    *median = sorted[center];
+}
+
+void median(const double *buffer, size_t length, double *median){ median_core(buffer, length, median); }
+void median(const float *buffer, size_t length, float *median){ median_core(buffer, length, median); }
+void median(const int16_t *buffer, size_t length, int16_t *median){ median_core(buffer, length, median); }
+void median(const int32_t *buffer, size_t length, int32_t *median){ median_core(buffer, length, median); }
+void median(const uint16_t *buffer, size_t length, uint16_t *median){ median_core(buffer, length, median); }
+void median(const uint32_t *buffer, size_t length, uint32_t *median){ median_core(buffer, length, median); }
 
 
 template<typename T>

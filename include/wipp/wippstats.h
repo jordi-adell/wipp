@@ -32,6 +32,14 @@
 namespace wipp
 {
 
+void median(const double *buffer, size_t length, double *median);
+void median(const float *buffer, size_t length, float *median);
+void median(const int16_t *buffer, size_t length, int16_t *median);
+void median(const int32_t *buffer, size_t length, int32_t *median);
+void median(const uint16_t *buffer, size_t length, uint16_t *median);
+void median(const uint32_t *buffer, size_t length, uint32_t *median);
+
+
 void mean(const double *buffer, size_t length, double *mean);
 void mean(const float *buffer, size_t length, double *mean);
 void mean(const int16_t *buffer, size_t length, double *mean);
