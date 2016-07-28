@@ -110,6 +110,12 @@ namespace wipp{
       outbuffer[i] = static_cast<short>(inbuffer[i]);
   }
 
+  void copyBuffer(const double *inbuffer, int *outbuffer, size_t length)
+  {
+    for (size_t i = 0; i < length; ++i)
+      outbuffer[i] = static_cast<int>(inbuffer[i]);
+  }
+
   void copyBuffer(const double *inbuffer, unsigned short *outbuffer, size_t length)
   {
     for (size_t i = 0; i < length; ++i)
