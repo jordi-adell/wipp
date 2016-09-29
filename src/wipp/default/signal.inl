@@ -378,7 +378,7 @@ void init_cirular_buffer_core(wipp_circular_buffer_template_t_<T> **cb, size_t s
     (*cb)->occupancy = 0;
     (*cb)->position = 0;
     (*cb)->buffer = new T[(*cb)->size];
-    (*cb)->data_type = typeid(double).hash_code();
+    (*cb)->data_type = typeid(T).hash_code();
 }
 
 void init_cirular_buffer(wipp_circular_buffer_t **buffer, size_t size, double   *init_values, size_t length)
