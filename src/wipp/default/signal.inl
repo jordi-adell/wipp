@@ -20,6 +20,7 @@
 * along with WIPP.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include <wipp/wippsignal.h>
+#include <wipp/wippstats.h>
 
 #include <typeinfo>
 
@@ -624,6 +625,72 @@ void cross_corr(const int32_t *buffer1, size_t length1, int32_t *buffer2, size_t
 void cross_corr(const uint16_t *buffer1, size_t length1, uint16_t *buffer2, size_t length2, uint16_t *corr, size_t corr_length, int lowLag)
 {cross_corr_core(buffer1, length1, buffer2, length2, corr, corr_length, lowLag); }
 
+
+template <typename T>
+void median_filter_core(const T* inbuffer, T* outbuffer, size_t length, int maskSize)
+{
+    maskSize = 2* (maskSize/2) + 1; // make it next odd number.
+
+    size_t start = maskSize/2; // get center of the mask.
+    size_t end = length - start;
+    T tmp_buff[maskSize];
+
+    size_t i = 0;
+    for (i = start; i < end; ++i)
+    {
+	median(&inbuffer[i - start], maskSize, &outbuffer[i]);
+    }
+
+    memcpy(reinterpret_cast<void*>(tmp_buff), reinterpret_cast<const void*>(inbuffer), sizeof(T)*maskSize);
+    for (i = 0; i < start; ++i)
+    {
+	tmp_buff[maskSize - i - 1] = inbuffer[0];
+	median(tmp_buff, maskSize, &outbuffer[start - i - 1]);
+    }
+
+    memcpy(reinterpret_cast<void*>(tmp_buff), reinterpret_cast<const void*>(&inbuffer[length - maskSize]), sizeof(T)*maskSize);
+    for (i = 0; i < start; ++i)
+    {
+	tmp_buff[i] = inbuffer[length - 1];
+	median(tmp_buff, maskSize, &outbuffer[length - start + i]);
+    }
+}
+
+template <typename T>
+void median_filter_core(T* buffer, size_t length, int maskSize)
+{
+    T outbuffer[length];
+    median_filter_core(buffer, outbuffer, length, maskSize);
+    memcpy(reinterpret_cast<void*>(buffer), reinterpret_cast<const void*>(outbuffer), sizeof(T)*length);
+}
+
+
+void median_filter(const double *inbuffer, double *outbuffer, size_t length, int maskSize)
+{median_filter_core(inbuffer, outbuffer, length, maskSize);}
+void median_filter(const float *inbuffer, float *outbuffer, size_t length, int maskSize)
+{median_filter_core(inbuffer, outbuffer, length, maskSize);}
+void median_filter(const int16_t *inbuffer, int16_t *outbuffer, size_t length, int maskSize)
+{median_filter_core(inbuffer, outbuffer, length, maskSize);}
+void median_filter(const int32_t *inbuffer, int32_t *outbuffer, size_t length, int maskSize)
+{median_filter_core(inbuffer, outbuffer, length, maskSize);}
+void median_filter(const uint16_t *inbuffer, uint16_t *outbuffer, size_t length, int maskSize)
+{median_filter_core(inbuffer, outbuffer, length, maskSize);}
+void median_filter(const uint32_t *inbuffer, uint32_t *outbuffer, size_t length, int maskSize)
+{median_filter_core(inbuffer, outbuffer, length, maskSize);}
+
+
+void median_filter( double *buffer, size_t length, int maskSize)
+{median_filter_core(buffer, length, maskSize);}
+void median_filter( float *buffer, size_t length, int maskSize)
+{median_filter_core(buffer, length, maskSize);}
+void median_filter( int16_t *buffer, size_t length, int maskSize)
+{median_filter_core(buffer, length, maskSize);}
+void median_filter( int32_t *buffer, size_t length, int maskSize)
+{median_filter_core(buffer, length, maskSize);}
+void median_filter( uint16_t *buffer, size_t length, int maskSize)
+{median_filter_core(buffer, length, maskSize);}
+void median_filter( uint32_t *buffer, size_t length, int maskSize)
+{median_filter_core(buffer, length, maskSize);}
 
 
 

@@ -191,6 +191,21 @@ void cross_corr(const int32_t *buffer1, size_t length, int32_t *buffer2, size_t 
 void cross_corr(const int16_t *buffer1, size_t length, int16_t *buffer2, size_t length2, int16_t *corr, size_t corr_length, int lowLag);
 void cross_corr(const uint16_t *buffer1, size_t length, uint16_t *buffer2, size_t length2, uint16_t *corr, size_t corr_length, int lowLag);
 
+void median_filter(const double *inbuffer, double *outbuffer, size_t length, int maskSize);
+void median_filter(const float *inbuffer, float *outbuffer, size_t length, int maskSize);
+void median_filter(const int16_t *inbuffer, int16_t *outbuffer, size_t length, int maskSize);
+void median_filter(const int32_t *inbuffer, int32_t *outbuffer, size_t length, int maskSize);
+void median_filter(const uint16_t *inbuffer, uint16_t *outbuffer, size_t length, int maskSize);
+void median_filter(const uint32_t *inbuffer, uint32_t *outbuffer, size_t length, int maskSize);
+
+void median_filter(double *buffer, size_t length, int maskSize);
+void median_filter(float *buffer, size_t length, int maskSize);
+void median_filter(int16_t *buffer, size_t length, int maskSize);
+void median_filter(int32_t *buffer, size_t length, int maskSize);
+void median_filter(uint16_t *buffer, size_t length, int maskSize);
+void median_filter(uint32_t *buffer, size_t length, int maskSize);
+
+
 }
 
 
