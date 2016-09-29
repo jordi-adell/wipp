@@ -529,7 +529,8 @@ void cf_skip(wipp_circular_buffer_t *cb, size_t length, size_t *skipped)
     if (length > cb->occupancy) length = cb->occupancy;
     cb->position = (cb->position + length)%cb->size;
     cb->occupancy -= length;
-    *skipped = length;
+    if (skipped != NULL)
+	*skipped = length;
 }
 
 
