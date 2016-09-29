@@ -134,9 +134,9 @@ void init_cirular_buffer(wipp_circular_buffer_t **buffer, size_t size, int32_t  
 void init_cirular_buffer(wipp_circular_buffer_t **buffer, size_t size, uint16_t *init_values, size_t length);
 void init_cirular_buffer(wipp_circular_buffer_t **buffer, size_t size, uint32_t *init_values, size_t length);
 
-template<typename T>
+template<typename circular_buffer_base_type>
 void init_cirular_buffer(wipp_circular_buffer_t **buffer, size_t size)
-{ init_cirular_buffer(buffer, size, (T*) NULL, 0); }
+{ init_cirular_buffer(buffer, size, (circular_buffer_base_type*) NULL, 0); }
 
 void delete_circular_buffer(wipp_circular_buffer_t **buffer);
 
