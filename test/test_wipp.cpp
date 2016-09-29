@@ -915,19 +915,43 @@ void testRamp(T *buffer, int length, double min, double max, double slope)
 TEST(testMedian, median)
 {
   size_t length = 5;
-  int buffer[]={3,4,16,5,7};
-  int median;
+  int buffer[]     = {3,4,16,5,7};
+   int median;
 
   wipp::median(&buffer[0], length, &median);
   EXPECT_EQ(median, 5);
 
-  double dbuffer[]={0.1,0.5,0.3,0.8,0.2,0.9,0.4,0.2,0.7,0.009,0.7,0.5,0.3,0.2,10.5,0.4,0.3,0.8,0.7,0.9,0.7,0.9,0.5,0.1,0.5,60.7,90.8,0.7,0.5,0.4,0.009,0.7,0.5,0.4,0.3,0.1,0.6,0.8,0};
+
+  double dbuffer[]   ={0.1,0.5,0.3,0.8,0.2,0.9,0.4,0.2,0.7,0.009,0.7,0.5,0.3,0.2,10.5,0.4,0.3,0.8,0.7,0.9,0.7,0.9,0.5,0.1,0.5,60.7,90.8,0.7,0.5,0.4,0.009,0.7,0.5,0.4,0.3,0.1,0.6,0.8,0};
+
   length = 39;
   double dmedian;
   wipp::median(&dbuffer[0], length, &dmedian);
   EXPECT_EQ(dmedian, 0.5);
+
 }
 
+
+TEST(testMedian, median_filter)
+{
+  int length = 20;
+  int buffer[] =    {1, 2, 3, 20, 5, 6, -60, 8, 9, 10, 12, 9, 8, 7, 2, 5, 4, 3, -30, 1};
+  int reference[] = {1, 2, 3,  5, 5, 6,   6, 8, 9,  9,  9, 9, 8, 7, 5, 4, 3, 3,  1, 1};
+  int obuffer[length];
+
+  median_filter(buffer, obuffer, length, 5);
+  for (size_t i = 0; i < length; ++i)
+  {
+    EXPECT_EQ(reference[i], obuffer[i]);
+  }
+
+  median_filter(buffer, length, 5);
+  for (size_t i = 0; i < length; ++i)
+  {
+    EXPECT_EQ(reference[i], buffer[i]);
+  }
+
+}
 
 TEST(testRamp, ramp)
 {
