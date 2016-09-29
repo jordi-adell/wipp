@@ -154,6 +154,13 @@ void cf_next(const wipp_circular_buffer_t *cb, int32_t  *buffer, size_t length, 
 void cf_next(const wipp_circular_buffer_t *cb, uint16_t *buffer, size_t length, size_t *stored);
 void cf_next(const wipp_circular_buffer_t *cb, uint32_t *buffer, size_t length, size_t *stored);
 
+void cf_pointer(const wipp_circular_buffer_t *buffer, const double *pointer);
+void cf_pointer(const wipp_circular_buffer_t *buffer, const float *pointer);
+void cf_pointer(const wipp_circular_buffer_t *buffer, const int16_t *pointer);
+void cf_pointer(const wipp_circular_buffer_t *buffer, const int32_t *pointer);
+void cf_pointer(const wipp_circular_buffer_t *buffer, const uint16_t *pointer);
+void cf_pointer(const wipp_circular_buffer_t *buffer, const uint32_t *pointer);
+
 void cf_write(wipp_circular_buffer_t *cb, double   *buffer, size_t length, size_t *stored);
 void cf_write(wipp_circular_buffer_t *cb, float    *buffer, size_t length, size_t *stored);
 void cf_write(wipp_circular_buffer_t *cb, int16_t  *buffer, size_t length, size_t *stored);

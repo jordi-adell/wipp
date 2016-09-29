@@ -482,6 +482,24 @@ void cf_next(const wipp_circular_buffer_t *cb, uint32_t *buffer, size_t length, 
 { cf_next_core(reinterpret_cast<const wipp_circular_buffer_uint32_t_t_*>(cb), buffer, length, stored); }
 
 
+template <typename T>
+void cf_pointer_core(const wipp_circular_buffer_t *cf_buffer, const T *pointer)
+{
+    // Might be interesting to check data type here, to avoid
+    // Segmentation fault in case of missuse of the function.
+    // However, there would be some overload here.
+    //    cf_buffer->data_type
+    pointer = reinterpret_cast<T*>(cf_buffer->buffer);
+}
+
+void cf_pointer(const wipp_circular_buffer_t *buffer, const double *pointer)   {cf_pointer_core(buffer, pointer);}
+void cf_pointer(const wipp_circular_buffer_t *buffer, const float *pointer)    {cf_pointer_core(buffer, pointer);}
+void cf_pointer(const wipp_circular_buffer_t *buffer, const int16_t *pointer)  {cf_pointer_core(buffer, pointer);}
+void cf_pointer(const wipp_circular_buffer_t *buffer, const int32_t *pointer)  {cf_pointer_core(buffer, pointer);}
+void cf_pointer(const wipp_circular_buffer_t *buffer, const uint16_t *pointer) {cf_pointer_core(buffer, pointer);}
+void cf_pointer(const wipp_circular_buffer_t *buffer, const uint32_t *pointer) {cf_pointer_core(buffer, pointer);}
+
+
 template<typename T>
 void cf_write_core(wipp_circular_buffer_template_t_<T> *cb, T *buffer, size_t length, size_t *stored)
 {
