@@ -453,6 +453,34 @@ void cf_read(wipp_circular_buffer_t *cb, uint16_t *buffer, size_t length, size_t
 void cf_read(wipp_circular_buffer_t *cb, uint32_t *buffer, size_t length, size_t *stored)
 { cf_read_core(reinterpret_cast<wipp_circular_buffer_uint32_t_t_*>(cb), buffer, length, stored); }
 
+template<typename T>
+void cf_next_core(const wipp_circular_buffer_template_t_<T> *cb, T *buffer, size_t length, size_t *stored)
+{
+    size_t i = 0;
+    size_t position = cb->position;
+    size_t occupancy = cb->occupancy;
+    for (;
+	 i < length && occupancy > 0;
+	 ++i, position=(position+1)%cb->size, --occupancy)
+    {
+	buffer[i] = cb->buffer[position];
+    }
+    *stored = i;
+}
+
+void cf_next(const wipp_circular_buffer_t *cb, double   *buffer, size_t length, size_t *stored)
+{ cf_next_core(reinterpret_cast<const wipp_circular_buffer_double_t_*>(cb), buffer, length, stored); }
+void cf_next(const wipp_circular_buffer_t *cb, float    *buffer, size_t length, size_t *stored)
+{ cf_next_core(reinterpret_cast<const wipp_circular_buffer_float_t_*>(cb), buffer, length, stored); }
+void cf_next(const wipp_circular_buffer_t *cb, int16_t  *buffer, size_t length, size_t *stored)
+{ cf_next_core(reinterpret_cast<const wipp_circular_buffer_int16_t_t_*>(cb), buffer, length, stored); }
+void cf_next(const wipp_circular_buffer_t *cb, int32_t  *buffer, size_t length, size_t *stored)
+{ cf_next_core(reinterpret_cast<const wipp_circular_buffer_int32_t_t_*>(cb), buffer, length, stored); }
+void cf_next(const wipp_circular_buffer_t *cb, uint16_t *buffer, size_t length, size_t *stored)
+{ cf_next_core(reinterpret_cast<const wipp_circular_buffer_uint16_t_t_*>(cb), buffer, length, stored); }
+void cf_next(const wipp_circular_buffer_t *cb, uint32_t *buffer, size_t length, size_t *stored)
+{ cf_next_core(reinterpret_cast<const wipp_circular_buffer_uint32_t_t_*>(cb), buffer, length, stored); }
+
 
 template<typename T>
 void cf_write_core(wipp_circular_buffer_template_t_<T> *cb, T *buffer, size_t length, size_t *stored)
