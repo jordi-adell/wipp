@@ -1,12 +1,26 @@
 # WIPP project Change Log
 	All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [2.2.0] - 2016-10-05
+
+### Changes
+
+### Added
+- added median_filter functions
+- added a function to the the internal pointer in circular buffers
+- added function to get next values in circular buffer
+- added function to calculate median values from buffers
+- support for converting int 32 bits into double buffers
+- extend ramp function to more type names.
+- added threshold_lt_gt and threshold_let_get function
 
 ## [2.1.1] - 2016-05-25
 
 ### Fixed
 - now shlibs file is include in the debian so that dependencies can be properly tracked
+- solved a bug that caused an infinite recursion
+- check for NULL pointer to avoid segfault
+- fix a bug where 'double' was used instead of template
 
 ## [2.1.0] - 2016-05-20
 
