@@ -46,6 +46,11 @@ void ramp(uint16_t *buffer, size_t length, double offset, double slope);
 void triangle(double *buffer, size_t length, int period, float phase, float asym=0, double offset = 0);
 void triangle(double *buffer, size_t length);
 
+void tone(double *buffer, size_t length, double magnitude, double frequency, double phase);
+void tone(float *buffer, size_t length, double magnitude, double frequency, double phase);
+void tone(int32_t *buffer, size_t length, double magnitude, double frequency, double phase);
+void tone(int16_t *buffer, size_t length, double magnitude, double frequency, double phase);
+
 void threshold_lt(double *buffer, size_t length, double threshold, double value);
 void threshold_lt(float *buffer, size_t length, float threshold, float value);
 void threshold_lt(int16_t *buffer, size_t length, int16_t threshold, int16_t value);

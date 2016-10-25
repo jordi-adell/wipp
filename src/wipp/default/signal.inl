@@ -151,6 +151,22 @@ void triangle(double *buffer, size_t length)
 }
 
 
+template <typename T>
+void tone_core(T *buffer, size_t length, double magnitud, double frequency, double phase)
+{
+    while(phase < -M_PI) phase += 2*M_PI;
+    while(phase > M_PI) phase -= 2*M_PI;
+    for (size_t i = 0; i < length; ++i)
+    {
+	buffer[i] = static_cast<T>(magnitud*sin(2*M_PI*frequency*static_cast<double>(i) + phase));
+    }
+}
+
+void tone(double *buffer, size_t length, double magnitude, double frequency, double phase){ tone_core(buffer, length, magnitude, frequency, phase); }
+void tone(float *buffer, size_t length, double magnitude, double frequency, double phase){ tone_core(buffer, length, magnitude, frequency, phase); }
+void tone(int32_t *buffer, size_t length, double magnitude, double frequency, double phase){ tone_core(buffer, length, magnitude, frequency, phase); }
+void tone(int16_t *buffer, size_t length, double magnitude, double frequency, double phase){ tone_core(buffer, length, magnitude, frequency, phase); }
+
 template<typename T>
 void threshold_lt_core(const T *buffer_in, T *buffer_out, size_t length, T threshold, T value)
 {

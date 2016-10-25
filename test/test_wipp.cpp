@@ -972,6 +972,31 @@ TEST(testRamp, ramp)
 }
 
 
+TEST(signal, tone)
+{
+  size_t length=1024;
+  double d_buffer[length];
+  int i_buffer[length];
+  float f_buffer[length];
+  double phase = M_PI/3;
+  double magnitude = 1.4;
+  double frequency = 0.34;
+
+  tone(d_buffer, length, magnitude, frequency, phase);
+  tone(f_buffer, length, magnitude, frequency, phase);
+  tone(i_buffer, length, magnitude, frequency, phase);
+
+
+  for (int i = 0; i < length; ++i)
+  {
+    double value = magnitude*sin(2*M_PI*frequency*static_cast<double>(i) + phase);
+    EXPECT_DOUBLE_EQ(value, d_buffer[i]);
+    EXPECT_FLOAT_EQ(static_cast<float>(value), f_buffer[i]);
+    EXPECT_EQ(static_cast<int>(value), i_buffer[i]);
+  }
+
+}
+
 
 TEST(testTriangle, asym_triangle)
 {
