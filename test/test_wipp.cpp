@@ -997,6 +997,16 @@ TEST(signal, tone)
 
 }
 
+TEST(stats, maxAbs)
+{
+    double source[10] = {1, -200, 3, 4, 5, 60.56, 7, 8, 9, 10};
+    double max;
+
+    wipp::max(source, 10, &max);
+    EXPECT_DOUBLE_EQ(60.56, max);
+    wipp::maxAbs(source, 10, &max);
+    EXPECT_DOUBLE_EQ(200, max);
+}
 
 TEST(testTriangle, asym_triangle)
 {

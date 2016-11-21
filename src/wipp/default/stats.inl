@@ -244,6 +244,28 @@ void max(const wipp_complex_t *buffer, size_t length, wipp_complex_t *max)
 
 
 
+template<typename T>
+void maxAbs_core(const T *buffer, size_t length, T *maxAbs, size_t *idx)
+{
+    *maxAbs = 0; //std::numeric_limits<T>::min();
+    for (size_t i = 0; i < length; ++i)
+    {
+	*maxAbs = (fabs(buffer[i]) > *maxAbs) ? fabs(buffer[i]) : *maxAbs;
+	*idx = i;
+    }
+}
+
+void maxAbs(const double *buffer, size_t length, double *max) { size_t idx; maxAbs_core(buffer, length, max, &idx); }
+void maxAbs(const float *buffer, size_t length, float *max) { size_t idx; maxAbs_core(buffer, length, max, &idx); }
+void maxAbs(const int16_t *buffer, size_t length, int16_t *max) { size_t idx; maxAbs_core(buffer, length, max, &idx); }
+void maxAbs(const int32_t *buffer, size_t length, int32_t *max) { size_t idx; maxAbs_core(buffer, length, max, &idx); }
+void maxAbs(const uint16_t *buffer, size_t length, uint16_t *max) { size_t idx; maxAbs_core(buffer, length, max, &idx); }
+void maxAbs(const uint32_t *buffer, size_t length, uint32_t *max) { size_t idx; maxAbs_core(buffer, length, max, &idx); }
+
+void maxAbs(const wipp_complex_t *buffer, size_t length, wipp_complex_t *max)
+{ wipp::max(buffer, length, max); }
+
+
 void minidx(const double *buffer, size_t length, double *min, size_t *idx) { min_core(buffer, length, min, idx); }
 void minidx(const float *buffer, size_t length, float *min, size_t *idx) { min_core(buffer, length, min, idx); }
 void minidx(const int16_t *buffer, size_t length, int16_t *min, size_t *idx) { min_core(buffer, length, min, idx); }
