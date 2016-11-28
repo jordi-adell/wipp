@@ -45,11 +45,17 @@ void power(double *buffer, size_t length)
     power(buffer, buffer, length);
 }
 
-void magnitude(const wipp_complex_t *buffer, double *magnitude, size_t length)
+template <typename T>
+void magnitude_core(const wipp_complex_t *buffer, T *magnitude, size_t length)
 {
     for (size_t i = 0; i < length; ++i)
 	magnitude[i] = sqrt(buffer[i].re*buffer[i].re + buffer[i].im*buffer[i].im);
 }
+
+void magnitude(const wipp_complex_t *buffer, double *magnitude, size_t length)
+{ magnitude_core(buffer, magnitude, length); }
+void magnitude(const wipp_complex_t *buffer, float *magnitude, size_t length)
+{ magnitude_core(buffer, magnitude, length); }
 
 
 template<typename T>
