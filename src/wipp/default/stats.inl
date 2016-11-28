@@ -32,8 +32,8 @@
 namespace wipp
 {
 
-template<typename T>
-void sum_core(const T *buffer, size_t length, T* sum)
+template<typename T, typename V>
+void sum_core(const T *buffer, size_t length, V* sum)
 {
     *sum = 0;
     for (size_t i = 0; i  < length; ++i)
@@ -84,19 +84,19 @@ void median(const uint16_t *buffer, size_t length, uint16_t *median){ median_cor
 void median(const uint32_t *buffer, size_t length, uint32_t *median){ median_core(buffer, length, median); }
 
 
-template<typename T>
-void mean_core(const T *buffer, size_t length, T* mean)
+template<typename T, typename V>
+void mean_core(const T *buffer, size_t length, V* mean)
 {
     sum_core(buffer, length, mean);
     *mean /= length;
 }
 
 void mean(const double *buffer, size_t length, double *mean){ mean_core(buffer, length, mean); }
-void mean(const float *buffer, size_t length, float *mean){ mean_core(buffer, length, mean); }
-void mean(const int16_t *buffer, size_t length, int16_t *mean){ mean_core(buffer, length, mean); }
-void mean(const int32_t *buffer, size_t length, int32_t *mean){ mean_core(buffer, length, mean); }
-void mean(const uint16_t *buffer, size_t length, uint16_t *mean){ mean_core(buffer, length, mean); }
-void mean(const uint32_t *buffer, size_t length, uint32_t *mean){ mean_core(buffer, length, mean); }
+void mean(const float *buffer, size_t length, double  *mean){ mean_core(buffer, length, mean); }
+void mean(const int16_t *buffer, size_t length, double  *mean){ mean_core(buffer, length, mean); }
+void mean(const int32_t *buffer, size_t length, double  *mean){ mean_core(buffer, length, mean); }
+void mean(const uint16_t *buffer, size_t length, double  *mean){ mean_core(buffer, length, mean); }
+void mean(const uint32_t *buffer, size_t length, double  *mean){ mean_core(buffer, length, mean); }
 void mean(const wipp_complex_t *buffer, size_t length, wipp_complex_t *mean)
 {
     sum(buffer, length, mean);
@@ -111,7 +111,7 @@ template<typename T, typename H>
 void var_core(const T *buffer, size_t length, H* var)
 {
     // var(c) = E[x^2] - E^2[x]
-    T mean_value;
+    double mean_value;
     double mean2 = 0;
     mean(buffer, length, &mean_value);
     for (size_t i = 0; i < length; ++i)
