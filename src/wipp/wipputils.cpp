@@ -19,7 +19,7 @@
 * You should have received a copy of the GNU General Public License
 * along with WIPP.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include <wipp/wipp.h>
+#include <wipp/wipputils.h>
 
 #ifdef IPP_FOUND
 #include "ipp/ipputils.inl"
