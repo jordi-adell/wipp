@@ -8,6 +8,7 @@ addons:
    - cmake
    - cmake-data
    - libfftw3-dev   
+   - libgtest-dev
 
 branches:
  only:
