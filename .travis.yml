@@ -35,9 +35,9 @@ branches:
 before_script:
  - mkdir build
  - cd build
- - cmake -Dtest=yes ../
+ - cmake -DCMAKE_CXX_COMPILER=g++-4.8 -Dtest=yes ../
 
 script:
- - make -DCMAKE_CXX_COMPILER=g++-4.8 tests
+ - make tests
  - make test
 
