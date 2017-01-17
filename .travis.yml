@@ -4,7 +4,9 @@ branches:
  only:
   - master
 
-before_script: cmake 
+before_script:
+ - cd build
+ - cmake -Dtest=yes ../../
 
 script:
  - make test
