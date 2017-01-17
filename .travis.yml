@@ -1,3 +1,4 @@
+dist: trusty
 language: cpp
 compiler:
  - gcc
@@ -13,8 +14,7 @@ addons:
    - cmake-data
    - libfftw3-dev   
    - libgtest-dev
-   - libboost-filesystem-dev
-   - libboost-system-dev
+   - libboost1.55-all-dev
 
 env: COMPILER=g++-4.8
 
