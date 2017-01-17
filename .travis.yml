@@ -1,4 +1,5 @@
 language: cpp
+compiler: g++-4.8
 
 addons:
  apt:
