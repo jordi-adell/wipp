@@ -1,4 +1,4 @@
-# WIPP
+# WIPP [![Build Status](https://travis-ci.org/jordi-adell/wipp.svg?branch=master)](https://travis-ci.org/jordi-adell/wipp)
 
 ## Description
 
