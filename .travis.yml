@@ -1,5 +1,6 @@
 language: cpp
-compiler: g++-4.8
+compiler:
+ - gcc
 
 addons:
  apt:
@@ -37,6 +38,6 @@ before_script:
  - cmake -Dtest=yes ../
 
 script:
- - make tests
+ - make -DCMAKE_CXX_COMPILER=g++-4.8 tests
  - make test
 
