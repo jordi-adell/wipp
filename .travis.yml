@@ -7,7 +7,7 @@ addons:
   packages:
    - cmake
    - cmake-data
-   - libfftw-dev   
+   - libfftw3-dev   
 
 branches:
  only:
