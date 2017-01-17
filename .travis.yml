@@ -9,14 +9,11 @@ addons:
    - george-edison55-precise-backports # cmake 3.2.3
    - ubuntu-toolchain-r-test
   packages:
-   - g++-4.8
    - cmake
    - cmake-data
    - libfftw3-dev   
    - libgtest-dev
    - libboost1.55-all-dev
-
-env: COMPILER=g++-4.8
 
 before_install:
  - sudo wget https://github.com/google/googletest/archive/release-1.7.0.tar.gz
@@ -35,7 +32,7 @@ branches:
 before_script:
  - mkdir build
  - cd build
- - cmake -DCMAKE_CXX_COMPILER=g++-4.8 -DCMAKE_C_COMPILER=gcc-4.8 -Dtest=yes ../
+ - cmake -Dtest=yes ../
 
 script:
  - make tests
