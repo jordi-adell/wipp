@@ -5,6 +5,7 @@ branches:
   - master
 
 before_script:
+ - mkdir build
  - cd build
  - cmake -Dtest=yes ../../
 
