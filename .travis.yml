@@ -9,6 +9,9 @@ addons:
    - cmake-data
    - libfftw3-dev   
    - libgtest-dev
+   - libboost-filesystem-dev
+   - libboost-system-dev
+
 
 branches:
  only:
