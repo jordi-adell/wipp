@@ -32,5 +32,6 @@ before_script:
  - cmake -Dtest=yes ../
 
 script:
+ - make tests
  - make test
 
