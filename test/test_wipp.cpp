@@ -591,7 +591,7 @@ void fftTestTransform(double freq, int fft_length, const std::vector<double> &ff
 
   for (size_t i = 0; i < fft_length; ++i)
   {
-    std::cout << i << " " << signal_fft[i] << " " << fft_ref[i] << std::endl;
+//    std::cout << i << " " << signal_fft[i] << " " << fft_ref[i] << std::endl;
     EXPECT_NEAR(signal_fft[i], fft_ref[i], 1e-4);
   }
 
