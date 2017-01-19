@@ -36,5 +36,5 @@ before_script:
 
 script:
  - make tests
- - make test
+ - ctest -V
 
