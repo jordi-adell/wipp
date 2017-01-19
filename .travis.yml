@@ -37,4 +37,4 @@ before_script:
 script:
  - make tests
  - ctest -V
- - make package
+
