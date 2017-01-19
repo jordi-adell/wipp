@@ -326,7 +326,8 @@ namespace wipp{
       }
   }
 
-  void mult(const double *buffer_a, const wipp_complex_t *buffer_b, wipp_complex_t *buffer, size_t length)
+  template <typename T>
+  void mult_complex_core(const T *buffer_a, const wipp_complex_t *buffer_b, wipp_complex_t *buffer, size_t length)
   {
       for (size_t i = 0; i < length;++i)
       {
@@ -334,6 +335,12 @@ namespace wipp{
 	  buffer[i].im = buffer_b[i].im * buffer_a[i];
       }
   }
+
+  void mult(const double *buffer_a, const wipp_complex_t *buffer_b, wipp_complex_t *buffer, size_t length)
+  {mult_complex_core(buffer_a, buffer_b, buffer, length);}
+  void mult(const float *buffer_a, const wipp_complex_t *buffer_b, wipp_complex_t *buffer, size_t length)
+  {mult_complex_core(buffer_a, buffer_b, buffer, length);}
+
 
   void mult(const wipp_complex_t *buffer_a, wipp_complex_t *buffer_b, size_t length)
   {
@@ -523,6 +530,73 @@ namespace wipp{
   void divC(uint16_t C, uint16_t *buffer, size_t length) { divC_core(C, buffer, length); }
   void divC(uint32_t C, uint32_t *buffer, size_t length) { divC_core(C, buffer, length); }
 
+  template<typename T>
+  void addProduct_core(const T* buffer_a, const T* buffer_b, const T *buffer_c, T *buffer, size_t length)
+  {
+      for (size_t i = 0; i < length; ++i)
+      {
+	  buffer[i] = buffer_c[i] + buffer_a[i]*buffer_b[i];
+      }
+  }
+
+  void addProduct(const double *buffer_a, const double *buffer_b, const double *buffer_c, double *buffer, size_t length)
+  {addProduct_core(buffer_a, buffer_b, buffer_c, buffer, length);}
+  void addProduct(const float *buffer_a, const float *buffer_b, const float *buffer_c, float *buffer, size_t length)
+  {addProduct_core(buffer_a, buffer_b, buffer_c, buffer, length);}
+  void addProduct(const int16_t *buffer_a, const int16_t *buffer_b, const int16_t *buffer_c, int16_t *buffer, size_t length)
+  {addProduct_core(buffer_a, buffer_b, buffer_c, buffer, length);}
+  void addProduct(const int32_t *buffer_a, const int32_t *buffer_b, const int32_t *buffer_c, int32_t *buffer, size_t length)
+  {addProduct_core(buffer_a, buffer_b, buffer_c, buffer, length);}
+  void addProduct(const uint16_t *buffer_a, const uint16_t *buffer_b, const uint16_t *buffer_c, uint16_t *buffer, size_t length)
+  {addProduct_core(buffer_a, buffer_b, buffer_c, buffer, length);}
+
+  void addProduct(const double *buffer_a, const double *buffer_b, double *buffer, size_t length)
+  {addProduct_core(buffer_a, buffer_b, buffer, buffer, length); }
+  void addProduct(const float *buffer_a, const float *buffer_b, float *buffer, size_t length)
+  {addProduct_core(buffer_a, buffer_b, buffer, buffer, length); }
+  void addProduct(const int16_t *buffer_a, const int16_t *buffer_b, int16_t *buffer, size_t length)
+  {addProduct_core(buffer_a, buffer_b, buffer, buffer, length); }
+  void addProduct(const int32_t *buffer_a, const int32_t *buffer_b, int32_t *buffer, size_t length)
+  {addProduct_core(buffer_a, buffer_b, buffer, buffer, length); }
+  void addProduct(const uint16_t *buffer_a, const uint16_t *buffer_b, uint16_t *buffer, size_t length)
+  {addProduct_core(buffer_a, buffer_b, buffer, buffer, length); }
+  void addProduct(const uint32_t *buffer_a, const uint32_t *buffer_b, uint32_t *buffer, size_t length)
+  {addProduct_core(buffer_a, buffer_b, buffer, buffer, length); }
+
+  template<typename T>
+  void addProductC_core(T C, const T *buffer_a, const T *buffer_b, T *buffer, size_t length)
+  {
+      for (size_t i = 0; i < length; ++i)
+      {
+	  buffer[i] = buffer_b[i] + C*buffer_a[i];
+      }
+  }
+
+  void addProductC(double C, const double *buffer_a, const double *buffer_b, double *buffer, size_t length)
+  {addProductC_core(C, buffer_a, buffer_b, buffer, length); }
+  void addProductC(float C, const float *buffer_a, const float *buffer_b, float *buffer, size_t length)
+  {addProductC_core(C, buffer_a, buffer_b, buffer, length); }
+  void addProductC(int16_t C, const int16_t *buffer_a, const int16_t *buffer_b, int16_t *buffer, size_t length)
+  {addProductC_core(C, buffer_a, buffer_b, buffer, length); }
+  void addProductC(int32_t C, const int32_t *buffer_a, const int32_t *buffer_b, int32_t *buffer, size_t length)
+  {addProductC_core(C, buffer_a, buffer_b, buffer, length); }
+  void addProductC(uint16_t C, const uint16_t *buffer_a, const uint16_t *buffer_b, uint16_t *buffer, size_t length)
+  {addProductC_core(C, buffer_a, buffer_b, buffer, length); }
+  void addProductC(uint32_t C, const uint32_t *buffer_a, const uint32_t *buffer_b, uint32_t *buffer, size_t length)
+  {addProductC_core(C, buffer_a, buffer_b, buffer, length); }
+
+  void addProductC(double C, const double *buffer_in, double *buffer_out, size_t length)
+  {addProductC_core(C, buffer_in, buffer_out, buffer_out, length);}
+  void addProductC(float C, const float *buffer_in, float *buffer_out, size_t length)
+  {addProductC_core(C, buffer_in, buffer_out, buffer_out, length);}
+  void addProductC(int16_t C, const int16_t *buffer_in, int16_t *buffer_out, size_t length)
+  {addProductC_core(C, buffer_in, buffer_out, buffer_out, length);}
+  void addProductC(int32_t C, const int32_t *buffer_in, int32_t *buffer_out, size_t length)
+  {addProductC_core(C, buffer_in, buffer_out, buffer_out, length);}
+  void addProductC(uint16_t C, const uint16_t *buffer_in, uint16_t *buffer_out, size_t length)
+  {addProductC_core(C, buffer_in, buffer_out, buffer_out, length);}
+  void addProductC(uint32_t C, const uint32_t *buffer_in, uint32_t *buffer_out, size_t length)
+  {addProductC_core(C, buffer_in, buffer_out, buffer_out, length);}
 
   template<typename T>
   void sqrt_core(T *buffer, size_t length)

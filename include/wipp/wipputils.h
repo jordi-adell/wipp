@@ -133,6 +133,8 @@ namespace wipp{
   void mult(const uint32_t *buffer_a, uint32_t *buffer_b, size_t length);
   void mult(const double *buffer_a, wipp_complex_t *buffer_b, size_t length);
   void mult(const double *buffer_a, const wipp_complex_t *buffer_b, wipp_complex_t *buffer, size_t length);
+  void mult(const float *buffer_a, wipp_complex_t *buffer_b, size_t length);
+  void mult(const float *buffer_a, const wipp_complex_t *buffer_b, wipp_complex_t *buffer, size_t length);
   void mult(const wipp_complex_t *buffer_a, wipp_complex_t *buffer_b, size_t length);
   void mult(const wipp_complex_t *buffer_a, const wipp_complex_t *buffer_b, wipp_complex_t *buffer, size_t length);
 
@@ -195,13 +197,13 @@ namespace wipp{
   void multC(uint16_t C, uint16_t *buffer, size_t length);
   void multC(uint32_t C, uint32_t *buffer, size_t length);
 
-
   void divC(double C, const double *buffer_in, double *buffer_out, size_t length);
   void divC(float C, const float *buffer_in, float *buffer_out, size_t length);
   void divC(int16_t C, const int16_t *buffer_in, int16_t *buffer_out, size_t length);
   void divC(int32_t C, const int32_t *buffer_in, int32_t *buffer_out, size_t length);
   void divC(uint16_t C, const uint16_t *buffer_in, uint16_t *buffer_out, size_t length);
   void divC(uint32_t C, const uint32_t *buffer_in, uint32_t *buffer_out, size_t length);
+
   void divC(double C, double *buffer, size_t length);
   void divC(float C, float *buffer, size_t length);
   void divC(int16_t C, int16_t *buffer, size_t length);
@@ -209,6 +211,36 @@ namespace wipp{
   void divC(uint16_t C, uint16_t *buffer, size_t length);
   void divC(uint32_t C, uint32_t *buffer, size_t length);
 
+
+  void addProduct(const double* buffer_a, const double *buffer_b, const double *buffer_c, double *buffer, size_t length);
+  void addProduct(const float* buffer_a, const float *buffer_b, const float *buffer_c, float *buffer, size_t length);
+  void addProduct(const int16_t* buffer_a, const int16_t *buffer_b, const int16_t *buffer_c, int16_t *buffer, size_t length);
+  void addProduct(const int32_t* buffer_a, const int32_t *buffer_b, const int32_t *buffer_c, int32_t *buffer, size_t length);
+  void addProduct(const uint16_t* buffer_a, const uint16_t *buffer_b, const uint16_t *buffer_c, uint16_t *buffer, size_t length);
+  void addProduct(const uint32_t* buffer_a, const uint32_t *buffer_b, const uint32_t *buffer_c, uint32_t *buffer, size_t length);
+
+  void addProduct(const wipp_complex_t* buffer_a, const wipp_complex_t *buffer_b, const wipp_complex_t *buffer_c, wipp_complex_t *buffer, size_t length);
+
+  void addProduct(const double* buffer_a, const double *buffer_b, double *buffer, size_t length);
+  void addProduct(const float* buffer_a, const float *buffer_b, float *buffer, size_t length);
+  void addProduct(const int16_t* buffer_a, const int16_t *buffer_b, int16_t *buffer, size_t length);
+  void addProduct(const int32_t* buffer_a, const int32_t *buffer_b, int32_t *buffer, size_t length);
+  void addProduct(const uint16_t* buffer_a, const uint16_t *buffer_b, uint16_t *buffer, size_t length);
+  void addProduct(const uint32_t* buffer_a, const uint32_t *buffer_b, uint32_t *buffer, size_t length);
+
+  void addProductC(double C, const double* buffer_a, const double *buffer_b, double *buffer, size_t length);
+  void addProductC(float C, const float* buffer_a, const float *buffer_b, float *buffer, size_t length);
+  void addProductC(int16_t C, const int16_t* buffer_a, const int16_t *buffer_b, int16_t *buffer, size_t length);
+  void addProductC(int32_t C, const int32_t* buffer_a, const int32_t *buffer_b, int32_t *buffer, size_t length);
+  void addProductC(uint16_t C, const uint16_t* buffer_a, const uint16_t *buffer_b, uint16_t *buffer, size_t length);
+  void addProductC(uint32_t C, const uint32_t* buffer_a, const uint32_t *buffer_b, uint32_t *buffer, size_t length);
+
+  void addProductC(double C, const double *buffer_in, double *buffer_out, size_t length);
+  void addProductC(float C, const float *buffer_in, float *buffer_out, size_t length);
+  void addProductC(int16_t C, const int16_t *buffer_in, int16_t *buffer_out, size_t length);
+  void addProductC(int32_t C, const int32_t *buffer_in, int32_t *buffer_out, size_t length);
+  void addProductC(uint16_t C, const uint16_t *buffer_in, uint16_t *buffer_out, size_t length);
+  void addProductC(uint32_t C, const uint32_t *buffer_in, uint32_t *buffer_out, size_t length);
 
   void abs(double *buffer,size_t length);
   void abs(float *buffer, size_t length);
