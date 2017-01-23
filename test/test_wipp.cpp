@@ -413,7 +413,47 @@ TEST(circularBufferTest, init_delete)
 
 }
 
+TEST(circularBufferTest, occupancy)
+{
+  wipp::wipp_circular_buffer_t *cf;
+  const size_t cf_length = 1024;
+  const size_t step = 131;
+  size_t stored, occupancy, free, data_position, output_position;
+  occupancy = free = data_position = output_position = 0;
 
+  double data[2*cf_length];
+  double output[2*cf_length];
+
+  wipp::set(1, data, cf_length);
+
+  wipp::init_cirular_buffer<double>(&cf, cf_length);
+  wipp::cf_write(cf, data, cf_length/2, &stored);
+  wipp::cf_occupancy(cf, &occupancy);
+  EXPECT_EQ(cf_length/2, stored);
+  EXPECT_EQ(cf_length/2, occupancy);
+  wipp::delete_circular_buffer(&cf);
+
+  wipp::init_cirular_buffer<double>(&cf, cf_length);
+  wipp::cf_write(cf, data, cf_length, &stored);
+  wipp::cf_occupancy(cf, &occupancy);
+  EXPECT_EQ(cf_length, stored);
+  EXPECT_EQ(cf_length, occupancy);
+  wipp::delete_circular_buffer(&cf);
+
+  wipp::init_cirular_buffer<double>(&cf, cf_length);
+  wipp::cf_write(cf, data, cf_length + cf_length/2, &stored);
+  wipp::cf_occupancy(cf, &occupancy);
+  EXPECT_EQ(cf_length, stored);
+  EXPECT_EQ(cf_length, occupancy);
+  wipp::cf_write(cf, data, cf_length + cf_length/2, &stored);
+  wipp::cf_occupancy(cf, &occupancy);
+  EXPECT_EQ(0, stored);
+  EXPECT_EQ(cf_length, occupancy);
+  wipp::delete_circular_buffer(&cf);
+  
+
+
+}
 
 TEST(circularBufferTest, write_read)
 {
