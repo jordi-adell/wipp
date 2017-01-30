@@ -136,7 +136,7 @@ namespace wipp{
 
   void copyBuffer(const wipp_complex_t *inbuffer, wipp_complex_t *outbuffer, size_t length)
   {
-      memcpy(outbuffer, inbuffer, length);
+      memcpy(outbuffer, inbuffer, length*sizeof(wipp_complex_t));
   }
 
 
