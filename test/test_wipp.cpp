@@ -609,6 +609,47 @@ TEST(fftTest, init_delete)
 
 }
 
+TEST(conj, basic)
+{
+  int length = 4;
+  wipp::wipp_complex_t signal[length];
+  wipp::wipp_complex_t conj[length];
+  signal[0].re = 1; //
+  signal[0].im = -2;
+  signal[1].re = 3; //
+  signal[1].im = 4;
+  signal[2].re = 5; //
+  signal[2].im = -6;
+  signal[3].re = 7; //
+  signal[3].im = 8;
+
+  wipp::conj(signal, conj, length);
+
+  for  (int i = 0; i < length; ++i)
+  {
+    EXPECT_EQ(signal[i].re, conj[i].re);
+    EXPECT_EQ(-signal[i].im, conj[i].im);
+  }
+
+  wipp::conjFlip(signal, conj, length);
+
+  for (int i = 1; i <= length; ++i)
+  {
+    EXPECT_EQ( signal[i-1].re, conj[length - i].re);
+    EXPECT_EQ(-signal[i-1].im, conj[length - i].im);
+  }
+
+
+  wipp::conjFlip(signal, signal, length);
+
+  for (int i = 0; i < length; ++i)
+  {
+    EXPECT_EQ(signal[i].re, conj[i].re);
+    EXPECT_EQ(signal[i].im, conj[i].im);
+  }
+
+}
+
 
 
 void fftTestTransform(double freq, int fft_length, const std::vector<double> &fft_ref)

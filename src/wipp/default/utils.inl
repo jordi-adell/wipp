@@ -778,11 +778,24 @@ namespace wipp{
 
   void conjFlip(const wipp_complex_t *complex_in, wipp_complex_t *complex_out, size_t length)
   {
+      wipp_complex_t *aux = NULL;
+      if (complex_in == complex_out)
+      {
+	  aux = complex_out;
+	  complex_out = new wipp_complex_t[length];
+      }
+
       for (size_t i = 0; i < length; ++i)
       {
 	  complex_out[i].re =   complex_in[length-i-1].re;
 	  complex_out[i].im = - complex_in[length-i-1].im;
       }
+
+      if (aux != NULL)
+      {
+	  wipp::copyBuffer(complex_out, aux, length);
+      }
+
   }
 
   void polar2cart(const double *module, const double *phase, wipp_complex_t *cart, size_t length)
