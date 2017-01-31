@@ -149,6 +149,28 @@ TEST(sqrTest, sqrt_sqr)
 
 }
 
+TEST(sum, complex)
+{
+  int length = 1 << 10;
+  wipp_complex_t signal[length];
+  wipp_complex_t value, sum_value;
+
+  value.re = 1;
+  value.im = 1;
+
+  for (int i = 0; i < length; ++i)
+  {
+    signal[i] = value;
+  }
+
+  wipp::sum(signal, length, &sum_value);
+  
+  EXPECT_EQ(length, sum_value.re);
+  EXPECT_EQ(length, sum_value.im);
+
+}
+
+
 TEST(div, complex)
 {
   int length = 2;
