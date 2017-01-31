@@ -403,7 +403,7 @@ namespace wipp{
 			 /
 			 (buffer_a[i].re*buffer_a[i].re + buffer_a[i].im*buffer_a[i].im);
 
-	  buffer[i].im = (buffer_a[i].re*buffer_b[i].im + buffer_a[i].im*buffer_b[i].re)
+	  buffer[i].im = (buffer_a[i].re*buffer_b[i].im - buffer_a[i].im*buffer_b[i].re)
 			 /
 			 (buffer_a[i].re*buffer_a[i].re + buffer_a[i].im*buffer_a[i].im);
       }
@@ -411,7 +411,7 @@ namespace wipp{
 
   void div(const wipp_complex_t *buffer_a, wipp_complex_t *buffer_b, size_t length)
   {
-      div(buffer_b, buffer_b, buffer_b, length);
+      div(buffer_a, buffer_b, buffer_b, length);
   }
 
 

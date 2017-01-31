@@ -149,6 +149,50 @@ TEST(sqrTest, sqrt_sqr)
 
 }
 
+TEST(div, complex)
+{
+  int length = 2;
+  wipp_complex_t a[length];
+  wipp_complex_t b[length];
+  wipp_complex_t c[length];
+  wipp_complex_t ref[length];
+
+
+  a[0].re = 1;
+  a[0].im = 2;
+  a[1].re = 3;
+  a[1].im = -4;
+
+  b[0].re = 5;
+  b[0].im = 6;
+  b[1].re = 7;
+  b[1].im = -8;
+
+  double denom = 5*5 + (6)*(6);
+  ref[0].re = (1*5 + 2*(6)) / denom;
+  ref[0].im = (2*5 - 1*(6)) / denom;
+
+  denom = 7*7 + (-8)*(-8);
+  ref[1].re = (3*7 + (-4)*(-8)) / denom;
+  ref[1].im = ((-4)*7 - 3*(-8)) / denom;
+
+  // (b + bij) * (b - bij)
+  // (b*b - b*bij + bi*bj + bi*bi
+
+  // (a + aij) / (b + bij)
+  // (a + aij) * (b - bij) / (b*b + bi*bi)
+  // (a*b - a*bij + ai*bj + aibi) / (b*b + bi*bi)
+  // (a*b + aibi + (ai*b - abi)j) / (b*b + bi*bi)
+
+  wipp::div(b, a, c, length);
+
+  for (int i = 0; i < length; ++i)
+  {
+    EXPECT_EQ(ref[i].re, c[i].re);
+    EXPECT_EQ(ref[i].im, c[i].im);
+  }
+
+}
 
 TEST (threshold, lt_gt_let_get)
 {
