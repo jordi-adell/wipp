@@ -167,7 +167,7 @@ namespace wipp{
   void addC(int32_t C, int32_t *buffer, size_t length);
   void addC(uint16_t C, uint16_t *buffer, size_t length);
   void addC(uint32_t C, uint32_t *buffer, size_t length);
-
+  void addC(wipp_complex_t C, wipp_complex_t *buffer, size_t length);
 
 
   void subC(double C, const double *buffer_in, double *buffer_out, size_t length);

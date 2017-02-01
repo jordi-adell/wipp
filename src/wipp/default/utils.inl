@@ -442,6 +442,14 @@ namespace wipp{
   void addC(int32_t C, int32_t *buffer, size_t length) { addC_core(C, buffer, length); }
   void addC(uint16_t C, uint16_t *buffer, size_t length) { addC_core(C, buffer, length); }
   void addC(uint32_t C, uint32_t *buffer, size_t length) { addC_core(C, buffer, length); }
+  void addC(wipp_complex_t C, wipp_complex_t *buffer, size_t length)
+  {
+      for (size_t i = 0; i < length; ++i)
+      {
+	  buffer[i].re += C.re;
+	  buffer[i].im += C.im;
+      }
+  }
 
 
 
