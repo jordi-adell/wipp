@@ -11,6 +11,12 @@ the efficient libraries are not available.
 ## Documentation
 https://github.com/jordi-adell/wipp
 
+## Installation
+### PPA repository debian/ubuntu
+> sudo echo "deb [trusted=yes] https://repo.fury.io/jordi-adell/ /" >> /etc/apt/sources.list
+
+### Download debian package
+https://github.com/jordi-adell/wipp/releases
 
 ## Licensing
 --------------------------------------------------------------------------------
