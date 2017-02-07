@@ -1,0 +1,4 @@
+var searchData=
+[
+  ['var',['var',['../d8/d78/namespacewipp.html#a1da972b9007c89a3ec930bc03d4de993',1,'wipp::var(const double *buffer, size_t length, double *var)'],['../d8/d78/namespacewipp.html#a761f074c18d6db8a806f8519b30ae4ed',1,'wipp::var(const float *buffer, size_t length, double *var)'],['../d8/d78/namespacewipp.html#a8782f98b39feb7de6d171464faae2833',1,'wipp::var(const int16_t *buffer, size_t length, double *var)'],['../d8/d78/namespacewipp.html#a339236b246266c803d432904f7baa7e2',1,'wipp::var(const int32_t *buffer, size_t length, double *var)'],['../d8/d78/namespacewipp.html#a314eb1f649398063517169757d90b74f',1,'wipp::var(const uint16_t *buffer, size_t length, double *var)'],['../d8/d78/namespacewipp.html#aa47e88103bb67503e24bafea7393776f',1,'wipp::var(const uint32_t *buffer, size_t length, double *var)'],['../d8/d78/namespacewipp.html#a1cbf91fcabb6863bf167710cd5cdf1c5',1,'wipp::var(const wipp_complex_t *buffer, size_t length, wipp_complex_t *var)']]]
+];
