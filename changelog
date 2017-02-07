@@ -1,6 +1,25 @@
 # WIPP project Change Log
 	All notable changes to this project will be documented in this file.
 
+## [2.4.0] - 2017-02-07
+
+### Added:
+
+- addC default implementation for compplex numbers
+- package creation to travis ci
+- addProduct function
+- maxAbs function, to compute the maximum of the absolute values of a vector
+- support to generate tone signals
+- implemented magnitude for float precison magnitude vectors
+
+### Fixed:
+
+- important bug in wipp::sum
+- important bug in wipp::div
+- conjFlip when supplying same in and out buffer
+- important bug in copyBuffer function for complex types
+- fixed implementation of mean function
+
 ## [2.2.0] - 2016-10-05
 
 ### Changes
