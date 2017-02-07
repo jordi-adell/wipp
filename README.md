@@ -8,6 +8,8 @@ It is in fact a wrapper to unify several other mathematical libraries, such as I
 IT defaults to some usefull not-that-efficient implementations when
 the efficient libraries are not available.
 
+## Documentation
+https://github.com/jordi-adell/wipp
 
 
 ## Licensing
