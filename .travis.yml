@@ -29,6 +29,7 @@ branches:
  only:
   - master
   - v2.4.X
+  - v2.4.0
 
 before_script:
  - mkdir build
