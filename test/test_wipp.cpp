@@ -28,6 +28,7 @@ namespace wipp
 
 // non-exposed fucntion to be tested.
 void wipp_sinc(double fmin, double fmax, double *sinc, size_t length);
+void wipp_sinc2(double fmin, double fmax, double *sinc, size_t length);
 
 namespace test
 {
@@ -444,19 +445,65 @@ TEST(firTest, sinc)
   double magnitude[1024];
   wipp_sinc(fmin, fmax, frame, length);
 
-  //  std::ofstream ofss("tmp1.txt");
-  //  for (int i = 0; i < length; ++i)
-  //    ofss << frame[i] << std::endl;
+  wipp::wipp_fft_t *fft;
+  wipp::init_fft(&fft, length);
+  wipp::fft(frame, spectrum, fft);
+  wipp::magnitude(reinterpret_cast<wipp_complex_t*>(spectrum), magnitude, length/2);
+  wipp::power(magnitude, length/2);
+  std::ofstream ofs("datat.txt");
+
+  for (int i = 0; i < length/2; ++i)
+  {
+
+      ofs << magnitude[i] << std::endl;
+      double f = i*1.0F/length;
+      DEBUG_STREAM("i: " << i << ", f: " << f << ", FFT abs: " << magnitude[i]);
+      if (f < fmin)
+	  EXPECT_LT(magnitude[i], 1);
+      else if (f > 1.05*fmin && f < fmax*0.99)
+	  EXPECT_NEAR(1, magnitude[i], 0.05);
+      else if (f > fmax)
+	  EXPECT_LT(magnitude[i], 1);
+  }
+
+  wipp::delete_fft(&fft);
+}
+
+TEST(firTest, sinc2)
+{
+  double fmin=0.1;
+  double fmax=0.3;
+  int length = 2048;
+  double frame[length];
+  double spectrum[length+2];
+  double magnitude[1024];
+  wipp_sinc2(fmin, fmax, frame, length);
+//  window(frame, length, wipp::wippHANN);
 
   wipp::wipp_fft_t *fft;
   wipp::init_fft(&fft, length);
   wipp::fft(frame, spectrum, fft);
-  wipp::magnitude(reinterpret_cast<wipp_complex_t*>(frame), magnitude, length/2);
+  wipp::magnitude(reinterpret_cast<wipp_complex_t*>(spectrum), magnitude, length/2);
   wipp::power(magnitude, length/2);
 
-  //  std::ofstream ofsm("tmp2.txt");
-  //  for (int i = 0; i < length/2; ++i)
-  //    ofsm << magnitude[i] << std::endl;
+  float prev = std::numeric_limits<float>::min();
+  for (int i = 0; i < length/2; ++i)
+  {
+      double f = i*1.0F/length;
+      DEBUG_STREAM("i: " << i << ", f: " << f << ", FFT abs: " << magnitude[i]);
+      if (f < fmin)
+	EXPECT_LT(magnitude[i], 1);
+      else if (f > 1.05*fmin && f < (fmax+fmin)*0.99/2)
+	EXPECT_GT(magnitude[i], prev);
+      else if (f > 1.05*(fmax+fmin)/2 && f < 0.99*fmax)
+	EXPECT_LT(magnitude[i], prev);
+      else
+	EXPECT_LT(magnitude[i], 1);
+      prev = magnitude[i];
+  }
+
+  save_buffer(magnitude, length/2, "data");
+  save_buffer(frame, length/2, "datat");
 
   wipp::delete_fft(&fft);
 }
