@@ -52,9 +52,11 @@ void wipp_hann(T *frame, size_t length)
 
 
 
-
 void wipp_sinc(double fmin, double fmax, double *sinc, size_t length)
 {
+
+    if (fmin <= 0) fmin = 1e-100;
+    if (fmax > 0.5) fmax = 0.5;
 
     double low_pass_max[length];
     double low_pass_min[length];
@@ -83,7 +85,42 @@ void wipp_sinc(double fmin, double fmax, double *sinc, size_t length)
     {
 	sinc[i] = low_pass_max[i]/sum_max - low_pass_min[i]/sum_min;
     }
+}
 
+void wipp_sinc2(double fmin, double fmax, double *sinc2, size_t length)
+{
+    double bw = (fmax - fmin)/2;
+    double fc = (fmax + fmin)/2;
+    double sum, sum_fmin, sum_fmax;
+    sum = sum_fmin = sum_fmax = 0;
+
+    double low_pass_min[length];
+    double low_pass_max[length];
+    double band_pass[length];
+
+    for (long i = 0; i < length; ++i)
+    {
+	if (i != length/2)
+	{
+	    band_pass[i]   =  sin((i-static_cast<long>(length)/2)*2*M_PI*bw  )/(2*M_PI*bw*  (i-static_cast<long>(length)/2));
+	    low_pass_min[i] = sin((i-static_cast<long>(length)/2)*2*M_PI*fmin)/(2*M_PI*fmin*(i-static_cast<long>(length)/2));
+	    low_pass_max[i] = sin((i-static_cast<long>(length)/2)*2*M_PI*fmax)/(2*M_PI*fmax*(i-static_cast<long>(length)/2));
+	}
+	else if (i == 0)
+	{
+	    band_pass[i] = low_pass_max[i] = low_pass_min[i] = 0;
+	}
+	else
+	{
+	    band_pass[i] = low_pass_max[i] = low_pass_min[i] = 1;
+	}
+	sum_fmin += low_pass_min[i];
+	sum_fmax += low_pass_max[i];
+    }
+    for (size_t i=0; i < length; ++i)
+    {
+	sinc2[i] = (low_pass_max[i]/sum_fmax - low_pass_min[i]/sum_fmin)*(band_pass[i]);
+    }
 }
 
 
@@ -113,9 +150,23 @@ void window(uint16_t *frame, size_t length, wipp_window_t window_type) { window_
 void window(uint32_t *frame, size_t length, wipp_window_t window_type) { window_core(frame, length, window_type); }
 
 
-
-
-
+int fir_coefs(double fmin, double fmax, double *coefs, size_t length, wipp_window_t window_type, wipp_freq_shape_t freq_shape)
+{
+    int ret = 0;
+    switch (freq_shape) {
+	case wippfRECTANGULAR:
+	    wipp_sinc(fmin, fmax, coefs, length);
+	    window(coefs, length, window_type);
+	break;
+	case wippfTRIANGULAR:
+	    wipp_sinc2(fmin, fmax, coefs, length);
+	    window(coefs, length, window_type);
+	default:
+	    ret = -1;
+	break;
+    }
+    return ret;
+}
 
 int fir_coefs(double fmin, double fmax, double *coefs, size_t length, wipp_window_t window_type)
 {
