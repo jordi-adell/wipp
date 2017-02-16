@@ -161,6 +161,7 @@ int fir_coefs(double fmin, double fmax, double *coefs, size_t length, wipp_windo
 	case wippfTRIANGULAR:
 	    wipp_sinc2(fmin, fmax, coefs, length);
 	    window(coefs, length, window_type);
+	break;
 	default:
 	    ret = -1;
 	break;
