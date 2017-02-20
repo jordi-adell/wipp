@@ -1,5 +1,13 @@
 # WIPP project Change Log
-	All notable changes to this project will be documented in this file.
+All notable changes to this project will be documented in this file.
+
+## [2.5.0] - 2017-02-20
+
+### Added:
+- function to calculate fir ceofs for triangular filters
+
+### Fixed:
+- test for wipp_sinc
 
 ## [2.4.0] - 2017-02-07
 

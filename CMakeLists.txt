@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.2.2)
-project(wipp VERSION 2.4.0)
+project(wipp VERSION 2.5.0)
 #set(PROJECT_VERSION_STATUS "-beta")
 
 ###########################
@@ -15,7 +15,7 @@ if(DEBUG)
 else(DEBUG)
   set(OPT_FLAGS, "-O3 -msse4")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OPT_FLAGS}")
-  message(STATUS "optimisation flags: ${OPT_FLAGS}")
+  message(STATUS "RELEASE mode. Optimisation flags: ${OPT_FLAGS}")
 endif(DEBUG)
 
 #############################################
