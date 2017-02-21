@@ -189,6 +189,20 @@ TEST(utils, sub)
 }
 
 
+TEST(utils, max)
+{
+  size_t length = 14;
+  double data[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 9.3, -4, -5 , 6, -7};
+  size_t idx;
+  double max;
+
+  wipp::maxidx(data, length, &max, &idx);
+  EXPECT_EQ(max, 9.3);
+  EXPECT_EQ(idx, 9);
+
+}
+
+
 TEST(div, complex)
 {
   int length = 2;

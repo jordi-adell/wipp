@@ -212,8 +212,11 @@ void max_core(const T *buffer, size_t length, T *max, size_t *idx)
     *max = std::numeric_limits<T>::min();
     for (size_t i = 0; i < length; ++i)
     {
-	*max = (buffer[i] > *max) ? buffer[i] : *max;
-	*idx = i;
+	if (buffer[i] > *max)
+	{
+	    *max = buffer[i];
+	    *idx = i;
+	}
     }
 }
 
