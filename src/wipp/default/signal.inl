@@ -296,7 +296,13 @@ template<typename T>
 void threshold_lt_gt_core(T *buffer, size_t length,
 			  T threshold_lt, T value_lt, T threshold_gt, T value_gt)
 {
-    threshold_lt_gt_core(buffer, buffer, length, threshold_lt, value_lt, threshold_gt, value_gt);
+    T value;
+    for (size_t i = 0; i < length; ++i)
+    {
+	value = buffer[i];
+	buffer[i] = (value < threshold_lt) ? value_lt : buffer[i];
+	buffer[i] = (value > threshold_gt) ? value_gt : buffer[i];
+    }
 }
 
 void threshold_lt_gt(double *buffer, size_t length, double threshold_lt, double value_lt, double threshold_gt, double value_gt)

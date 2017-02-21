@@ -203,6 +203,41 @@ TEST(utils, max)
 }
 
 
+
+TEST(utils, threshold)
+{
+
+  size_t length = 20;
+  double data[length];
+  double filtered[length];
+
+  wipp::wipp_rand_t *rand;
+  wipp::init_rand_gaussian(&rand, 0, 1);
+
+  wipp::rand(rand, data, length);
+
+  wipp::threshold_lt_gt(data, filtered, length, 0, 0, 1, 1);
+
+  for (size_t i = 0; i < length; ++i)
+  {
+    if (data[i] < 0)
+    {
+      EXPECT_EQ(filtered[i], 0);
+    }
+    else if (data[i] > 1)
+    {
+      EXPECT_EQ(filtered[i], 1);
+    }
+    else
+    {
+      EXPECT_EQ(filtered[i], data[i]);
+    }
+  }
+
+}
+
+
+
 TEST(div, complex)
 {
   int length = 2;
