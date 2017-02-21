@@ -26,7 +26,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 find_package(IPP)
 find_package(FFTW)
-find_package(CUDA)
 find_package(Boost REQUIRED COMPONENTS system filesystem)
 
 if(IPP_FOUND)
@@ -55,7 +54,6 @@ include_directories(
 ###################################
 
 add_library(wipp SHARED
-  src/${PROJECT_NAME}/wippallocate.cpp
   src/${PROJECT_NAME}/wipputils.cpp
   src/${PROJECT_NAME}/wippfilter.cpp
   src/${PROJECT_NAME}/wippfft.cpp
