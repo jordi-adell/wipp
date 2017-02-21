@@ -9,7 +9,7 @@ IT defaults to some usefull not-that-efficient implementations when
 the efficient libraries are not available.
 
 ## Documentation
-https://github.com/jordi-adell/wipp
+http://jordi-adell.github.io/wipp
 
 ## Installation
 ### PPA repository debian/ubuntu
