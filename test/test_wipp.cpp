@@ -172,6 +172,23 @@ TEST(sum, complex)
 }
 
 
+TEST(utils, sub)
+{
+
+  size_t length=7;
+  double a[]={1, 2, 3, 4, 3, 2, 1};
+  double b[]={0, 1, 2, 3, 2, 1, 0};
+
+  wipp::sub(b, a, length);
+
+  for (size_t i = 0; i < length; ++i)
+  {
+    EXPECT_EQ(a[i], 1);
+  }
+
+}
+
+
 TEST(div, complex)
 {
   int length = 2;
@@ -528,6 +545,7 @@ TEST(circularBufferTest, init_delete)
 
 TEST(circularBufferTest, occupancy)
 {
+
   wipp::wipp_circular_buffer_t *cf;
   const size_t cf_length = 1024;
   const size_t step = 131;
@@ -564,8 +582,6 @@ TEST(circularBufferTest, occupancy)
   EXPECT_EQ(cf_length, occupancy);
   wipp::delete_circular_buffer(&cf);
   
-
-
 }
 
 TEST(circularBufferTest, write_read)

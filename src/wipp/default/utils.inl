@@ -253,7 +253,7 @@ namespace wipp{
   void sub_core(const T* buffer_a, const T* buffer_b, T* buffer, size_t length)
   {
       for (size_t i = 0; i < length; ++i)
-	  buffer[i] = buffer_a[i] - buffer_b[i];
+	  buffer[i] = buffer_b[i] - buffer_a[i];
   }
 
   void sub(const double *buffer_a, double* buffer_b, size_t length) { sub_core(buffer_a, buffer_b, length); }
