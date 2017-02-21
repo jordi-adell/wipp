@@ -1,13 +1,12 @@
 # WIPP project Change Log
 All notable changes to this project will be documented in this file.
 
-## [2.5.1] - 2017-02-21
+## [2.5.2] - 2017-02-21
 
 ### Fixed:
-- fixed threshold_lt_gt function
-- fixed maxidx function
-- fixed wipp::sub operation order (a = a-b)
-- fixed link to documentation in README.md file
+- threshold_lt_gt function
+- maxidx function
+- wipp::sub operation order (a = a-b)
 
 ## [2.5.0] - 2017-02-20
 

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.2.2)
-project(wipp VERSION 2.5.1)
+project(wipp VERSION 2.5.2)
 #set(PROJECT_VERSION_STATUS "-beta")
 
 ###########################
