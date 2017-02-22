@@ -174,8 +174,11 @@ void min_core(const T *buffer, size_t length, T *min, size_t *idx)
     *idx = 0;
     for (size_t i = 0; i < length; ++i)
     {
-	*min = (buffer[i] < *min) ? buffer[i] : *min;
-	*idx = i;
+	if (buffer[i] < *min)
+	{
+	    *min = buffer[i];
+	    *idx = i;
+	}
     }
 }
 

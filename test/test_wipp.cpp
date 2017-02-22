@@ -189,17 +189,20 @@ TEST(utils, sub)
 }
 
 
-TEST(utils, max)
+TEST(utils, minmax)
 {
   size_t length = 14;
-  double data[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 9.3, -4, -5 , 6, -7};
+  double data[] = {1, 2, 3, 4, 5, -200, 6, 7, 8, 9, 9.3, -4, -5 , 6, -7};
   size_t idx;
-  double max;
+  double max, min;
 
   wipp::maxidx(data, length, &max, &idx);
   EXPECT_EQ(max, 9.3);
-  EXPECT_EQ(idx, 9);
+  EXPECT_EQ(idx, 10);
 
+  wipp::minidx(data, length, &min, &idx);
+  EXPECT_EQ(min, -200);
+  EXPECT_EQ(idx, 5);
 }
 
 
