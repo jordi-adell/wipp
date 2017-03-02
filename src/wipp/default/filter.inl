@@ -90,7 +90,6 @@ void wipp_sinc(double fmin, double fmax, double *sinc, size_t length)
 void wipp_sinc2(double fmin, double fmax, double *sinc2, size_t length)
 {
     double bw = (fmax - fmin)/2;
-    double fc = (fmax + fmin)/2;
     double sum, sum_fmin, sum_fmax;
     sum = sum_fmin = sum_fmax = 0;
 
@@ -100,23 +99,28 @@ void wipp_sinc2(double fmin, double fmax, double *sinc2, size_t length)
 
     for (long i = 0; i < length; ++i)
     {
-	if (i != length/2)
-	{
-	    band_pass[i]   =  sin((i-static_cast<long>(length)/2)*2*M_PI*bw  )/(2*M_PI*bw*  (i-static_cast<long>(length)/2));
-	    low_pass_min[i] = sin((i-static_cast<long>(length)/2)*2*M_PI*fmin)/(2*M_PI*fmin*(i-static_cast<long>(length)/2));
-	    low_pass_max[i] = sin((i-static_cast<long>(length)/2)*2*M_PI*fmax)/(2*M_PI*fmax*(i-static_cast<long>(length)/2));
-	}
-	else if (i == 0)
+	if (i == 0)
 	{
 	    band_pass[i] = low_pass_max[i] = low_pass_min[i] = 0;
 	}
-	else
+	else if(i == length/2)
 	{
 	    band_pass[i] = low_pass_max[i] = low_pass_min[i] = 1;
+	}
+	else
+	{
+	    if (bw > 0) band_pass[i]   =  sin((i-static_cast<long>(length)/2)*2*M_PI*bw  )/(2*M_PI*bw*  (i-static_cast<long>(length)/2));
+	    if (fmin > 0) low_pass_min[i] = sin((i-static_cast<long>(length)/2)*2*M_PI*fmin)/(2*M_PI*fmin*(i-static_cast<long>(length)/2));
+	    if (fmax > 0) low_pass_max[i] = sin((i-static_cast<long>(length)/2)*2*M_PI*fmax)/(2*M_PI*fmax*(i-static_cast<long>(length)/2));
 	}
 	sum_fmin += low_pass_min[i];
 	sum_fmax += low_pass_max[i];
     }
+
+    if (bw <= 0) memset(band_pass, 0, length*sizeof(double));
+    if (fmin <= 0){ memset(low_pass_min, 0, length*sizeof(double)); sum_fmin = 1;}
+    if (fmax <= 0){ memset(low_pass_min, 0 , sizeof(double)); sum_fmax = 1;}
+
     for (size_t i=0; i < length; ++i)
     {
 	sinc2[i] = (low_pass_max[i]/sum_fmax - low_pass_min[i]/sum_fmin)*(band_pass[i]);
