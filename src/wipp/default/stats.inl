@@ -170,14 +170,17 @@ void stddev(const uint32_t *buffer, size_t length, double *stddev){ stddev_core(
 template<typename T>
 void min_core(const T *buffer, size_t length, T *min, size_t *idx)
 {
-    *min = std::numeric_limits<T>::max();
-    *idx = 0;
-    for (size_t i = 0; i < length; ++i)
+    if (length > 0)
     {
-	if (buffer[i] < *min)
+	*min = buffer[0];
+	*idx = 0;
+	for (size_t i = 1; i < length; ++i)
 	{
-	    *min = buffer[i];
-	    *idx = i;
+	    if (buffer[i] < *min)
+	    {
+		*min = buffer[i];
+		*idx = i;
+	    }
 	}
     }
 }
@@ -212,13 +215,17 @@ void min(const wipp_complex_t *buffer, size_t length, wipp_complex_t *min)
 template<typename T>
 void max_core(const T *buffer, size_t length, T *max, size_t *idx)
 {
-    *max = std::numeric_limits<T>::min();
-    for (size_t i = 0; i < length; ++i)
+    if (length > 0)
     {
-	if (buffer[i] > *max)
+	*max = buffer[0];
+	*idx = 0;
+	for (size_t i = 1; i < length; ++i)
 	{
-	    *max = buffer[i];
-	    *idx = i;
+	    if (buffer[i] > *max)
+	    {
+		*max = buffer[i];
+		*idx = i;
+	    }
 	}
     }
 }
