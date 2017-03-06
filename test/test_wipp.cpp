@@ -546,8 +546,10 @@ TEST(firTest, sinc2)
   double frame[length];
   double spectrum[length+2];
   double magnitude[1024];
+
   wipp_sinc2(fmin, fmax, frame, length);
-//  window(frame, length, wipp::wippHANN);
+
+  //  window(frame, length, wipp::wippHANN);
 
   wipp::wipp_fft_t *fft;
   wipp::init_fft(&fft, length);
@@ -577,6 +579,50 @@ TEST(firTest, sinc2)
   wipp::delete_fft(&fft);
 }
 
+
+TEST(firTest, tone_filter)
+{
+
+  int length = 10000;
+  double signal[length];
+  double filtered[length];
+  double phase = 0;
+  int fir_length = 1024;
+  double coefs[fir_length];
+  double fmin, fmax;
+  fmin = 0.1;
+  fmax = 0.35;
+
+  double delta = 0.07;
+
+  for (double fmin = 0; fmin < 0.5; fmin = fmin + delta)
+  {
+    for (double fmax = fmin + delta; fmax < 0.5; fmax = fmax + delta)
+    {
+      wipp::wipp_fir_filter_t *fir;
+      wipp::wipp_sinc2(fmin, fmax, coefs, fir_length);
+      wipp::init_fir(&fir, coefs, fir_length);
+
+      for (double freq = 0; freq < 0.5; freq = freq + delta)
+      {
+	wipp::tone(signal,length, 5, freq, phase);
+	wipp::fir_filter(fir, signal, filtered, length);
+
+	double spower, fpower;
+	wipp::power(signal, length);
+	wipp::mean(signal, length, &spower);
+	wipp::power(filtered, length);
+	wipp::mean(filtered, length, &fpower);
+
+	if (fpower < 0.001) fpower = 0;
+	DEBUG_STREAM("BW: " << std::setprecision(2) <<  fmin << "-" << fmax << "; F: " << freq << ", SP: "<< spower << ", FP: " << fpower);
+      }
+    }
+  }
+
+
+
+}
 
 
 
