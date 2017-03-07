@@ -593,11 +593,12 @@ TEST(firTest, tone_filter)
   fmin = 0.1;
   fmax = 0.35;
 
-  double delta = 0.07;
+  double delta = 0.01;
+  double delta_bw = 0.07;
 
-  for (double fmin = 0.2; fmin < 0.5; fmin = fmin + delta)
+  for (double fmin = 0.2; fmin < 0.5; fmin = fmin + delta_bw)
   {
-    for (double fmax = fmin + delta; fmax < 0.5; fmax = fmax + delta)
+    for (double fmax = fmin + delta; fmax < 0.5; fmax = fmax + delta_bw)
     {
       wipp::wipp_fir_filter_t *fir;
       wipp::wipp_sinc2(fmin, fmax, coefs, fir_length);
@@ -620,31 +621,26 @@ TEST(firTest, tone_filter)
 
 	if (fmax - fmin > 0.2)
 	{
-	  if (freq < fmin && (fmax-fmin))
+	  if (freq < fmin)
 	    EXPECT_LE(fpower, 3);
-	  else if (freq < (fmax+fmin)/2)
-	    EXPECT_GT(fpower, prevp);
-	  else if (freq <= fmax)
-	    EXPECT_LT(fpower, prevp);
+	  else if (freq < (fmax+fmin)*0.985/2)
+	  {
+	    EXPECT_GE(fpower, prevp);
+	  }
+	  else if (freq < (fmax+fmin)*1.015/2)
+	  {
+	    EXPECT_NEAR(fpower, prevp, 2.2);
+	  }
+	  else if(freq <= fmax)
+	  {
+	    EXPECT_LE(fpower, prevp);
+	  }
 	  else
 	    EXPECT_LE(fpower, 3);
 	}
 
 	prevp = fpower;
 
-	//	std::ofstream coeffs("coefs.txt");
-	//	std::ofstream tonefs("tone.txt");
-	//	std::ofstream filtfs("filtered.txt");
-	//	for (size_t i = 0; i < fir_length; ++i)
-	//	{
-	//	  coeffs << coefs[i] << std::endl;
-	//	}
-	//	for (size_t i = 0; i < length; ++i)
-	//	{
-	//	  tonefs << signal[i] << std::endl;
-	//	  filtfs << filtered[i]  << std::endl;
-	//	}
-	//	break;
       }
     }
   }
