@@ -89,7 +89,14 @@ void wipp_sinc(double fmin, double fmax, double *sinc, size_t length)
 
 void wipp_sinc2(double fmin, double fmax, double *sinc2, size_t length)
 {
-    double bw = (fmax - fmin)/2;
+    if (fmin <= 0) fmin = 1e-100;
+    if (fmax > 0.5) fmax = 0.5;
+
+    double bw = (fmax - fmin)/4;
+    fmax = fmax - bw;
+    fmin = fmin + bw;
+
+
     double sum, sum_fmin, sum_fmax;
     sum = sum_fmin = sum_fmax = 0;
 
