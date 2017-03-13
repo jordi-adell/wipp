@@ -1,5 +1,12 @@
-# WIPP project Change Log
-All notable changes to this project will be documented in this file.
+
+## [2.5.3] - 2017-03-13
+
+### Fixed
+ * new a tone_filter test to test FIR-related functions
+ * bandwith in triangular filter designed with sinc2
+ * division by 0 in wipp_sinc2 function
+ * NaN in min/max functions when constant signal processed
+ * fixed minidx function always choosing last position in vector
 
 ## [2.5.2] - 2017-02-21
 

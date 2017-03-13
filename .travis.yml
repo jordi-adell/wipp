@@ -31,7 +31,7 @@ branches:
   - v2.4.X
   - v2.4.0
   - v2.5.0
-
+  - v2.5.3
 
 before_script:
  - mkdir build
