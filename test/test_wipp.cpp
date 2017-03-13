@@ -1195,7 +1195,7 @@ TEST(testTriangle, triangle)
       if (i == 0)
       {
 	TRACE_STREAM("i: " << i << " " << frame[i]);
-	EXPECT_EQ(frame[i],0);
+	EXPECT_NEAR(frame[i], 0, 0.0016);
       }
       else if (i == length -1)
       {
