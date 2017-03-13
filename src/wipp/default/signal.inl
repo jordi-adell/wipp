@@ -79,18 +79,18 @@ void ramp(uint16_t *buffer, size_t length, double offset, double slope) {ramp_co
  * You can shift it using the phase value.
  * @param buffer
  * @param length   number of samples to use, can be equal or lower than period. If larger, the remaining will be filled with zeros.
- * @param phase    sample shift of the triangle.
  * @param period   length of the triangle.
+ * @param phase    sample shift of the triangle.
+ * @param asym
+ * @param offset
  */
 void triangle(double *buffer, size_t length, int period, float phase, float asym, double offset)
 {
-    phase = (phase > 2*M_PI) ? 0.99*2*M_PI : phase;
-    phase = (phase < 0)      ?        0.01 : phase;
+    phase = (phase >= 2*M_PI) ? 0.99*2*M_PI : phase;
+    phase = (phase <= 0)      ?        0.01 : phase;
 
     asym = (asym > M_PI)  ?  M_PI : asym;
     asym = (asym < -M_PI) ? -M_PI : asym;
-
-
 
     double n = period*(phase/(4*M_PI)); // i-> buffer index, n -> sample within triangle period?
 //    size_t n = d_n;
