@@ -2,6 +2,10 @@ var wippfilter_8h =
 [
     [ "wipp_fir_filter_t", "de/d6a/wippfilter_8h.html#aa95f54eca311a9d2313a31edfb2de020", null ],
     [ "wipp_iir_filter_t", "de/d6a/wippfilter_8h.html#ac7fbbdd809d6b4941780fcda1438fc5f", null ],
+    [ "wipp_freq_shape_t", "de/d6a/wippfilter_8h.html#ab0c76d21d58fa396307830b5760a598d", [
+      [ "wippfRECTANGULAR", "de/d6a/wippfilter_8h.html#ab0c76d21d58fa396307830b5760a598da50522a84e41e47e736841036515a34eb", null ],
+      [ "wippfTRIANGULAR", "de/d6a/wippfilter_8h.html#ab0c76d21d58fa396307830b5760a598dae710cd32e768a03b3c14eed35f737c25", null ]
+    ] ],
     [ "wipp_window_t", "de/d6a/wippfilter_8h.html#a562c8e5a5eda219b80120f618f7964a7", [
       [ "wippRECTANGULAR", "de/d6a/wippfilter_8h.html#a562c8e5a5eda219b80120f618f7964a7ad51a8e8089cb69d09b1398f7ab4716b1", null ],
       [ "wippHAMMING", "de/d6a/wippfilter_8h.html#a562c8e5a5eda219b80120f618f7964a7afe76fa3fde8f40c4b3b6cf669f775a76", null ],
@@ -9,6 +13,7 @@ var wippfilter_8h =
     ] ],
     [ "delete_fir", "de/d6a/wippfilter_8h.html#aef2ce14d9517fcb971645f9b4ef10a04", null ],
     [ "delete_iir", "de/d6a/wippfilter_8h.html#a52762e1eeb171195a0ebc5ab1ab061e6", null ],
+    [ "fir_coefs", "de/d6a/wippfilter_8h.html#ac8cdf845872b20fab077a23b90040dc1", null ],
     [ "fir_coefs", "de/d6a/wippfilter_8h.html#a7f7a6b69570b9f7166a437da358ab3dd", null ],
     [ "fir_filter", "de/d6a/wippfilter_8h.html#a1035bb9461de525b019e62b599b23dba", null ],
     [ "fir_filter", "de/d6a/wippfilter_8h.html#a927b7b5bcf6550f883bdacda7b173877", null ],

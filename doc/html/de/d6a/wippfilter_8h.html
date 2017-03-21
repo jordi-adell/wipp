@@ -30,7 +30,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">WIPP
-   &#160;<span id="projectnumber">v2.4.0</span>
+   &#160;<span id="projectnumber">v2.5.3</span>
    </div>
    <div id="projectbrief">Signal processing of multichannel unidimensional data.</div>
   </td>
@@ -143,6 +143,10 @@ Enumerations</h2></td></tr>
 <a class="el" href="../../d8/d78/namespacewipp.html#a562c8e5a5eda219b80120f618f7964a7a203663b4bedf8978ef06096b7248550d">wipp::wippHANN</a>
  }</td></tr>
 <tr class="separator:a562c8e5a5eda219b80120f618f7964a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0c76d21d58fa396307830b5760a598d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d78/namespacewipp.html#ab0c76d21d58fa396307830b5760a598d">wipp::wipp_freq_shape_t</a> { <a class="el" href="../../d8/d78/namespacewipp.html#ab0c76d21d58fa396307830b5760a598da50522a84e41e47e736841036515a34eb">wipp::wippfRECTANGULAR</a> = 0, 
+<a class="el" href="../../d8/d78/namespacewipp.html#ab0c76d21d58fa396307830b5760a598dae710cd32e768a03b3c14eed35f737c25">wipp::wippfTRIANGULAR</a>
+ }</td></tr>
+<tr class="separator:ab0c76d21d58fa396307830b5760a598d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -158,6 +162,8 @@ Functions</h2></td></tr>
 <tr class="separator:a26dab426c9fb801a7184c7e36b396c87"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1fb6ebf4a1a84840962c1c38c688bfd9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d78/namespacewipp.html#a1fb6ebf4a1a84840962c1c38c688bfd9">wipp::window</a> (uint32_t *frame, size_t length, wipp_window_t window_type)</td></tr>
 <tr class="separator:a1fb6ebf4a1a84840962c1c38c688bfd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8cdf845872b20fab077a23b90040dc1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d78/namespacewipp.html#ac8cdf845872b20fab077a23b90040dc1">wipp::fir_coefs</a> (double fmin, double fmax, double *coefs, size_t length, wipp_window_t window_type, wipp_freq_shape_t freq_shape)</td></tr>
+<tr class="separator:ac8cdf845872b20fab077a23b90040dc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f7a6b69570b9f7166a437da358ab3dd"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d78/namespacewipp.html#a7f7a6b69570b9f7166a437da358ab3dd">wipp::fir_coefs</a> (double fmax, double fmin, double *coefs, size_t length, wipp_window_t window_type)</td></tr>
 <tr class="separator:a7f7a6b69570b9f7166a437da358ab3dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67c7ce11a4c8d337e40bce29ca23008c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d78/namespacewipp.html#a67c7ce11a4c8d337e40bce29ca23008c">wipp::init_fir</a> (wipp_fir_filter_t **fir, const double *coefs, size_t length)</td></tr>
