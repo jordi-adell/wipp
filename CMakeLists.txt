@@ -26,7 +26,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 find_package(IPP)
 find_package(FFTW)
-find_package(Boost REQUIRED COMPONENTS system filesystem)
 
 if(IPP_FOUND)
     message(STATUS "IPP found")
@@ -46,7 +45,6 @@ include_directories(
   include
   ${IPP_INCLUDE_DIRS}
   ${FFTW_INCLUDE_DIRS}
-  ${Boost_INCLUDE_DIRS}
   )
 
 ###################################
@@ -73,7 +71,6 @@ SOVERSION ${PROJECT_VERSION_MAJOR}
 target_link_libraries(wipp
   ${IPP_LIBRARIES}
   ${FFTW_LIBRARIES}
-  ${Boost_LIBRARIES}
 )
 
 #############
@@ -152,14 +149,17 @@ INCLUDE(CPack)
 
 if (test)
     enable_testing()
+    set(Boost_USE_STATIC_LIBS   ON)
 
     find_package(GTest REQUIRED COMPONENTS system)
     find_package(Threads REQUIRED COMPONENTS system)
+    find_package(Boost REQUIRED COMPONENTS system filesystem)
 
     add_executable(${PROJECT_NAME}-test test/test_wipp.cpp)
     target_link_libraries(${PROJECT_NAME}-test wipp)
     target_link_libraries(${PROJECT_NAME}-test ${GTEST_BOTH_LIBRARIES})
     target_link_libraries(${PROJECT_NAME}-test ${CMAKE_THREAD_LIBS_INIT})
+    target_link_libraries(${PROJECT_NAME}-test ${Boost_LIBRARIES})
 
     add_custom_target(tests DEPENDS ${PROJECT_NAME}-test)
 

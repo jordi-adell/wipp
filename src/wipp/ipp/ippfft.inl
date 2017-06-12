@@ -20,15 +20,14 @@
 * along with WIPP.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include <wipp/wippfft.h>
-
-#include <boost/shared_array.hpp>
+#include <memory>
 
 namespace wipp
 {
 
 struct wipp_fft_t_
 {
-    boost::shared_array<Ipp8u> fftInternalBuffer;
+    std::shared_ptr<Ipp8u> fftInternalBuffer;
     IppsFFTSpec_R_64f *fftspec;
     int length;
     int order;
