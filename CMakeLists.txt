@@ -23,8 +23,7 @@ endif(DEBUG)
 #############################################
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
-
-find_package(IPP)
+find_package(IPP COMPONENTS core s)
 find_package(FFTW)
 
 if(IPP_FOUND)
