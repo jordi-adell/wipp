@@ -27,27 +27,16 @@
 #ifndef __WIPP_EXCEPTION_H_
 #define __WIPP_EXCEPTION_H_
 
-#include <exception>
+#include <stdexcept>
 
-namespace wipp
-{
+namespace wipp {
 
-  // Declarations
-  /** Prints a warning/error depending on the status, with the corresponding IPP message **/
-  void printStatus(long status);
-
-  // Implementations
-  class WIppException : public std::exception
-  {
-  public:
-    WIppException(long status);
-  private:
-    long _status;
-  };
-
-  void printStatus(long status);
-  bool checkStatus(int istatus, bool throwException);
-
+    class WIppException : public std::runtime_error {
+    public:
+        WIppException(const std::string &message);
+    private:
+        static void logMessage(const std::string &message);
+    };
 }
 
-#endif // __WIPP_EXCEPTION_H_
+#endif

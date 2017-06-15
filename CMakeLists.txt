@@ -59,7 +59,15 @@ add_library(wipp SHARED
   src/${PROJECT_NAME}/wippstats.cpp
   src/${PROJECT_NAME}/wippdefs.cpp
   src/${PROJECT_NAME}/wipplogger.cpp
-  )
+  src/${PROJECT_NAME}/wippcircularbuffer.cpp
+        )
+
+if(IPP_FOUND)
+target_sources(wipp
+        PRIVATE
+        src/wipp/ipp/IPPException.cpp
+        )
+endif()
 
 set_target_properties(wipp
 PROPERTIES
