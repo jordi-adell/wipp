@@ -20,66 +20,106 @@
 * along with WIPP.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include <wipp/wippfft.h>
+
+#include "IPPException.h"
+
+#include <ipps.h>
+#include <ippcore.h>
+
 #include <memory>
+#include <math.h>
 
-namespace wipp
-{
+#define CCS_FORMAT_EXTRA_LENGTH 2
 
-struct wipp_fft_t_
-{
-    std::shared_ptr<Ipp8u> fftInternalBuffer;
-    IppsFFTSpec_R_64f *fftspec;
-    int length;
-    int order;
-};
+namespace wipp {
+
+    struct wipp_fft_t_ {
+        int length;
+        int order;
+
+        int internalBufferSize;
+        int specificaionStructureBufferSize;
+        int specificationStructureSize;
+        int spectrumLength;
+
+        double *spectrum;
+        Ipp8u *internalBuffer;
+        Ipp8u *specificationStructureBuffer;
+        IppsFFTSpec_R_64f *specificationStructure;
+
+        void init_variables(size_t length) {
+            order = (int) log2(length - 1) + 1;
+            length = 1 << order;
+            spectrumLength = length + CCS_FORMAT_EXTRA_LENGTH;
+            spectrum = new double[spectrumLength];
+            ippsFFTGetSize_R_64f(order, IPP_FFT_DIV_INV_BY_N, ippAlgHintNone,
+                                 &specificationStructureSize, &specificaionStructureBufferSize, &internalBufferSize);
+        }
+
+        void allocateBuffers() {
+
+            specificationStructure = (IppsFFTSpec_R_64f *) ippMalloc(specificationStructureSize);
+            specificationStructureBuffer = reinterpret_cast<Ipp8u*>(
+                    (specificaionStructureBufferSize > 0) ? ippMalloc(specificaionStructureBufferSize) : nullptr);
+            internalBuffer = reinterpret_cast<Ipp8u*>(
+                    (internalBufferSize > 0) ? ippMalloc(internalBufferSize) : nullptr);
+            spectrum = new double[spectrumLength];
+        }
+
+        void initSpecifications() {
+            ippsFFTInit_R_64f(&specificationStructure, order, IPP_FFT_DIV_INV_BY_N, ippAlgHintFast,
+                              specificationStructureBuffer, internalBuffer);
+            if (specificaionStructureBufferSize > 0) ippFree(specificationStructureBuffer);
+        }
 
 
-wipp_fft_t_* wipp_init_fft(size_t length)
-{
-  if (length <= 0)
-    return nullptr;
+        wipp_fft_t_(size_t length) {
+            init_variables(length);
+            initSpecifications();
+        }
 
-  int order = (int) log2(length-1) + 1;
-  length = 1 << _order;
-
-  _specLength = _length + 2; // This is beacuse the CCs compact form in IPP nees 2 more samples to store the whole spectrum.
-  _spectrum.reset(new BaseType[_specLength]);
-
-  wipp_fft_t_ *wipp_fft = new wipp_fft_t_();
-  wipp_fft->order = order;
-  wipp_fft->length = length;
-
-  ippsFFTInitAlloc_R_64f(&wipp_fft->fftspec, wipp_fft->order, IPP_DIV_FWD_BY_N, ippAlgHintFast);
-  int internalBuferSize=0;
-  ippsFFTGetBufSize_R_64f(_fftspec, &internalBuferSize);
-  wipp_fft->fftInternalBuffer.reset(new Ipp8u[internalBuferSize]);
-
-}
+        ~wipp_fft_t_() {
+            if (internalBufferSize > 0) ippFree(internalBuffer);
+            if (specificaionStructureBufferSize > 0) ippFree(specificationStructureBuffer);
+            if (specificationStructureSize > 0) ippFree(specificationStructure);
+            delete[] spectrum;
+        }
 
 
-void wipp_destroy_fft(wipp_fft_t *wipp_fft)
-{
-    free spec
-	    free smart pointer
-	    free struct
-}
+        void delete_fft(wipp_fft_t **fft) {
+            delete *fft;
+            fft = nullptr;
+        }
 
-wipp_fft_t* wipp_fft(const double *signal, int signallength,
-		double *spectrum, int speclength,
-		wipp_fft_t *internal_buffer)
-{
-  if (speclength != _specLength ||  signallength != _length)
-    throw DspException("Either the signal or the spectrum buffer lengths are wrong");
-  ippsFFTFwd_RToCCS_64f(signal, spectrum, _fftspec, _fftInternalBuffer.get());
-}
 
-wipp_fft_t wipp_ifft(const double *spectrum, int speclength,
-		 double *signal, int signallength,
-		 wipp_fft_t *internal_buffer)
-{
-  if (speclength != _specLength ||  signallength != _length)
-    throw DspException("Either the signal or the spectrum buffer lengths are wrong");
-  ippsFFTInv_CCSToR_64f(spectrum, signal, _fftspec, _fftInternalBuffer.get());
-}
+    };
+
+
+    void check_lengths(wipp_fft_t *fft, int signalLength, int spectrumLength) {
+        if (spectrumLength != fft->spectrumLength || signalLength != fft->length)
+            throw IPPException("Either the signal or the spectrum buffer lengths are wrong");
+    }
+
+    wipp_fft_t *fft(const double *signal, int signalLength, double *spectrum, int spectrumLength,
+                    wipp_fft_t *fft) {
+        check_lengths(fft, signalLength, spectrumLength);
+        ippsFFTFwd_RToCCS_64f(signal, spectrum, fft->specificationStructure, fft->internalBuffer);
+    }
+
+    wipp_fft_t *ifft(const double *spectrum, int spectrumLength, double *signal, int signalLength,
+                     wipp_fft_t *fft) {
+        check_lengths(fft, signalLength, spectrumLength);
+        ippsFFTInv_CCSToR_64f(spectrum, signal, fft->specificationStructure, fft->internalBuffer);
+    }
+
+    void init_fft(wipp_fft_t **fft, size_t length) {
+        *fft =  (length <= 0) ? nullptr : new wipp_fft_t_(length);
+    }
+
+
+    void delete_fft(wipp_fft_t **fft) {
+        delete *fft;
+        *fft = nullptr;
+    }
 
 }
