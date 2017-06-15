@@ -84,7 +84,7 @@ void ramp(uint16_t *buffer, size_t length, double offset, double slope) {ramp_co
  * @param asym
  * @param offset
  */
-void triangle(double *buffer, size_t length, int period, float phase, float asym, double offset)
+void triangle(double *buffer, size_t length, int period, double phase, double asym, double offset)
 {
     phase = (phase >= 2*M_PI) ? 0.99*2*M_PI : phase;
     phase = (phase <= 0)      ?        0.01 : phase;

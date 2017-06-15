@@ -44,7 +44,7 @@ void ramp(float *buffer, size_t length, double offset, double slope);
 void ramp(int *buffer, size_t length, double offset, double slope);
 void ramp(uint16_t *buffer, size_t length, double offset, double slope);
 
-void triangle(double *buffer, size_t length, int period, float phase, float asym=0, double offset = 0);
+void triangle(double *buffer, size_t length, int period, double phase, double asym=0, double offset = 0);
 void triangle(double *buffer, size_t length);
 
 void tone(double *buffer, size_t length, double magnitude, double frequency, double phase);
