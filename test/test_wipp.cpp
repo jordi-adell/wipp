@@ -12,6 +12,7 @@
 #include <wipp/wippfft.h>
 #include <wipp/wippstats.h>
 #include <wipp/wipplogger.h>
+#include <wipp/wippcircularbuffer.h>
 
 #ifndef DEBUG_STREAM
 #define DEBUG_STREAM(x)

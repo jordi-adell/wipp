@@ -441,11 +441,6 @@ namespace wipp {
     {threshold_let_get_core(buffer_in, buffer_out, length, threshold_let, value_let, threshold_get, value_get);}
 
 
-    struct wipp_circular_buffer_t_ {
-
-    };
-
-
 
 }
 
