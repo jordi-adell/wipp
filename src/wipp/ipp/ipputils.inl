@@ -46,6 +46,11 @@ namespace wipp{
     ippsCopy_32f(inbuffer, outbuffer, length);
   }
 
+    void copyBuffer(const uint16_t *inbuffer, uint16_t *outbuffer, size_t length)
+    {
+        memccpy(outbuffer, inbuffer, length, sizeof(uint16_t));
+    }
+
   void copyBuffer(const float *inbuffer, double *outbuffer, size_t length)
   {
     ippsConvert_32f64f(inbuffer, outbuffer, length);
@@ -76,6 +81,18 @@ namespace wipp{
     ippsConvert_16s64f_Sfs(inbuffer, outbuffer, length, 0);
   }
 
+    void copyBuffer(const uint16_t *inbuffer, float *outbuffer, size_t length)
+    {
+        ippsConvert_16u32f(inbuffer, outbuffer, length);
+    }
+
+    void copyBuffer(const uint16_t *inbuffer, double *outbuffer, size_t length)
+    {
+        Ipp32f intermediateBuffer[length];
+        ippsConvert_16u32f(inbuffer, intermediateBuffer, length);
+        ippsConvert_32f64f(intermediateBuffer, outbuffer, length);
+    }
+
   void copyBuffer(const int32_t *inbuffer, float *outbuffer, size_t length)
   {
     ippsConvert_32s32f_Sfs(inbuffer, outbuffer, length, 0);
@@ -103,7 +120,7 @@ namespace wipp{
     ippsConvert_32f16s_Sfs(inbuffer, outbuffer, length, ippRndFinancial, 0);
   }
 
-  void copyBuffer(const float *inbuffer, int16_t uint32_t *outbuffer, size_t length)
+  void copyBuffer(const float *inbuffer, uint16_t *outbuffer, size_t length)
   {
     ippsConvert_32f16u_Sfs(inbuffer, outbuffer, length, ippRndFinancial, 0);
   }
