@@ -494,6 +494,57 @@ namespace wipp {
         mel2linear(mel, linear, length, &default_mel_mult32, &default_mel_div32);
     }
 
+    Ipp8u *cross_corr_allocate_internal_buffer(size_t length, size_t length2, size_t corr_length, int lowLag) {
+        int buffer_size;
+        ippsCrossCorrNormGetBufferSize(length, length2, corr_length, lowLag, ipp64f, ippAlgAuto | ippiNormNone, &buffer_size);
+        return ippsMalloc_8u(buffer_size);
+    }
+
+    void cross_corr_free_internal_buffer(Ipp8u *internalBuffer) {
+        ippsFree(internalBuffer);
+    }
+
+    void cross_corr(const double *buffer1, size_t length, double *buffer2, size_t length2, double *corr, size_t corr_length, int lowLag) {
+        auto *internalBuffer = cross_corr_allocate_internal_buffer(length, length2, corr_length, lowLag);
+        ippsCrossCorrNorm_64f(buffer1, length, buffer2, length2, corr, corr_length, lowLag, ippAlgAuto, NULL);
+        cross_corr_free_internal_buffer(internalBuffer);
+    }
+
+    void cross_corr(const float *buffer1, size_t length, float *buffer2, size_t length2, float *corr, size_t corr_length, int lowLag) {
+        auto *internalBuffer = cross_corr_allocate_internal_buffer(length, length2, corr_length, lowLag);
+        ippsCrossCorrNorm_32f(buffer1, length, buffer2, length2, corr, corr_length, lowLag, ippAlgAuto, NULL);
+        cross_corr_free_internal_buffer(internalBuffer);
+    }
+
+    void cross_corr(const int32_t *buffer1, size_t length, int32_t *buffer2, size_t length2, int32_t *corr, size_t corr_length, int lowLag) {
+        Ipp64f intermediateBuffer1[length];
+        Ipp64f intermediateBuffer2[length2];
+        Ipp64f highResolutionCorrelation[corr_length];
+        ippsConvert_32s64f(buffer1, intermediateBuffer1, length);
+        ippsConvert_32s64f(buffer2, intermediateBuffer2, length2);
+        cross_corr(intermediateBuffer1, length, intermediateBuffer2, length2, highResolutionCorrelation, corr_length, lowLag);
+        ippsConvert_64f32s_Sfs(highResolutionCorrelation, corr, corr_length, ippRndFinancial, 0);
+    }
+
+    void cross_corr(const int16_t *buffer1, size_t length, int16_t *buffer2, size_t length2, int16_t *corr, size_t corr_length, int lowLag) {
+        Ipp64f intermediateBuffer1[length];
+        Ipp64f intermediateBuffer2[length2];
+        Ipp64f highResolutionCorrelation[corr_length];
+        ippsConvert_16s64f_Sfs(buffer1, intermediateBuffer1, length, 0);
+        ippsConvert_16s64f_Sfs(buffer2, intermediateBuffer2, length2, 0);
+        cross_corr(intermediateBuffer1, length, intermediateBuffer2, length2, highResolutionCorrelation, corr_length, lowLag);
+        ippsConvert_64f16s_Sfs(highResolutionCorrelation, corr, corr_length, ippRndFinancial, 0);
+    }
+    void cross_corr(const uint16_t *buffer1, size_t length, uint16_t *buffer2, size_t length2, uint16_t *corr, size_t corr_length, int lowLag) {
+        Ipp32f intermediateBuffer1[length];
+        Ipp32f intermediateBuffer2[length2];
+        Ipp32f highResolutionCorrelation[corr_length];
+        ippsConvert_16u32f(buffer1, intermediateBuffer1, length);
+        ippsConvert_16u32f(buffer2, intermediateBuffer2, length2);
+        cross_corr(intermediateBuffer1, length, intermediateBuffer2, length2, highResolutionCorrelation, corr_length, lowLag);
+        ippsConvert_32f16u_Sfs(highResolutionCorrelation, corr, corr_length, ippRndFinancial, 0);
+    }
+
 
 }
 
