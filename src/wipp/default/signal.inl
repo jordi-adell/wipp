@@ -21,6 +21,7 @@
 */
 #include <wipp/wippsignal.h>
 #include <wipp/wippstats.h>
+#include <wipp/wippmeldefs.h>
 
 namespace wipp
 {
@@ -371,20 +372,7 @@ void threshold_let_get(const uint16_t *buffer_in, uint16_t *buffer_out, size_t l
 void threshold_let_get(const uint32_t *buffer_in, uint32_t *buffer_out, size_t length, uint32_t threshold_let, uint32_t value_let, uint32_t threshold_get, uint32_t value_get)
 { threshold_let_get_core(buffer_in, buffer_out, length, threshold_let, value_let, threshold_get, value_get); }
 
-// Mel-scale frequency mapping
-//
-// Parameters are taken from the HTK book.
-// note that in the web they use log10 and IPP used Ln.
-// http://www.ee.columbia.edu/ln/rosa/doc/HTKBook21/node54.html
-//
-//                                 linear_freq
-//  mel_freq = mult * log_10( 1 + ------------- )
-//                                     div
-//
-static const double default_mult64 = 2559;
-static const double default_div64  = 700;
-static const float default_mult32 = 2559;
-static const float  default_div32  = 700;
+
 
 template <typename T>
 void linear2mel_core(const T *linear, T *mel, size_t length, const T* mult, const T*div)
