@@ -21,6 +21,7 @@
 */
 #include <wipp/wippsignal.h>
 #include <wipp/wipputils.h>
+#include <wipp/wippmeldefs.h>
 
 #include <ipps.h>
 
@@ -440,6 +441,58 @@ namespace wipp {
                            uint32_t threshold_let, uint32_t value_let, uint32_t threshold_get, uint32_t value_get)
     {threshold_let_get_core(buffer_in, buffer_out, length, threshold_let, value_let, threshold_get, value_get);}
 
+
+    void linear2mel(const double *linear, double *mel, size_t length, const double* mult, const double*div) {
+        ippsDivC_64f(linear, *div, mel, length);
+        ippsAddC_64f_I(1, mel, length);
+        ippsLn_64f_I(mel, length);
+        ippsDivC_64f_I(log(10), mel, length);
+        ippsMulC_64f_I(*mult, mel, length);
+    }
+
+    void linear2mel(const double *linear, double *mel, size_t length) {
+        linear2mel(linear, mel, length, &default_mel_mult64, &default_mel_div64);
+    }
+
+    void linear2mel(const float *linear, float *mel, size_t length, const float* mult, const float*div) {
+        ippsDivC_32f(linear, *div, mel, length);
+        ippsAddC_32f_I(1, mel, length);
+        ippsLn_32f_I(mel, length);
+        ippsDivC_32f_I(log(10), mel, length);
+        ippsMulC_32f_I(*mult, mel, length);
+    }
+    void linear2mel(const float *linear, float *mel, size_t length) {
+        linear2mel(linear, mel, length, &default_mel_mult32, &default_mel_div32);
+    }
+
+    template <typename T>
+    void mel2linear_core(const T *mel, T *linear, size_t length, const T* mult, const T*div)
+    {
+        for (size_t i = 0; i < length; ++i)
+            linear[i] = ( exp( mel[i] * log(10) / (*mult) ) - 1 )*(*div);
+    }
+
+    void mel2linear(const double *mel, double *linear, size_t length, const double* mult, const double*div) {
+        ippsMulC_64f(mel,  log(10), linear, length);
+        ippsDivC_64f_I(*mult, linear, length);
+        ippsExp_64f_I(linear, length);
+        ippsSubC_64f_I(1, linear, length);
+        ippsMulC_64f_I(*div, linear, length);
+    }
+    void mel2linear(const double *mel, double *linear, size_t length) {
+        mel2linear(mel, linear, length, &default_mel_mult64, &default_mel_div64);
+    }
+    void mel2linear(const float *mel, float *linear, size_t length, const float* mult, const float*div) {
+        ippsMulC_32f(mel,  log(10), linear, length);
+        ippsDivC_32f_I(*mult, linear, length);
+        ippsExp_32f_I(linear, length);
+        ippsSubC_32f_I(1, linear, length);
+        ippsMulC_32f_I(*div, linear, length);
+    }
+
+    void mel2linear(const float *mel, float *linear, size_t length) {
+        mel2linear(mel, linear, length, &default_mel_mult32, &default_mel_div32);
+    }
 
 
 }
