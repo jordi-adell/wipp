@@ -546,5 +546,99 @@ namespace wipp {
     }
 
 
+
+    void median_filter(const double *inbuffer, double *outbuffer, size_t length, int maskSize) {
+        int internalBufferSize;
+        ippsFilterMedianGetBufferSize(maskSize, ipp64f, &internalBufferSize);
+        Ipp8u *internalBuffer = ippsMalloc_8u(internalBufferSize);
+        ippsFilterMedian_64f(inbuffer, outbuffer, length, maskSize, NULL, NULL, internalBuffer);
+    }
+
+    void median_filter(const float *inbuffer, float *outbuffer, size_t length, int maskSize) {
+        int internalBufferSize;
+        ippsFilterMedianGetBufferSize(maskSize, ipp32f, &internalBufferSize);
+        Ipp8u *internalBuffer = ippsMalloc_8u(internalBufferSize);
+        ippsFilterMedian_32f(inbuffer, outbuffer, length, maskSize, NULL, NULL, internalBuffer);
+    }
+
+    void median_filter(const int16_t *inbuffer, int16_t *outbuffer, size_t length, int maskSize) {
+        int internalBufferSize;
+        ippsFilterMedianGetBufferSize(maskSize, ipp16s, &internalBufferSize);
+        Ipp8u *internalBuffer = ippsMalloc_8u(internalBufferSize);
+        ippsFilterMedian_16s(inbuffer, outbuffer, length, maskSize, NULL, NULL, internalBuffer);
+    }
+
+    void median_filter(const int32_t *inbuffer, int32_t *outbuffer, size_t length, int maskSize) {
+        int internalBufferSize;
+        ippsFilterMedianGetBufferSize(maskSize, ipp32s, &internalBufferSize);
+        Ipp8u *internalBuffer = ippsMalloc_8u(internalBufferSize);
+        ippsFilterMedian_32s(inbuffer, outbuffer, length, maskSize, NULL, NULL, internalBuffer);
+    }
+
+    void median_filter(const uint16_t *inbuffer, uint16_t *outbuffer, size_t length, int maskSize) {
+        Ipp32f intermediateBuffer[length];
+        ippsConvert_16u32f(inbuffer, intermediateBuffer, length);
+        median_filter(intermediateBuffer, length, maskSize);
+        ippsConvert_32f16u_Sfs(intermediateBuffer, outbuffer, length, ippRndFinancial, 0);
+    }
+
+    void median_filter(const uint32_t *inbuffer, uint32_t *outbuffer, size_t length, int maskSize) {
+        Ipp32f intermediateBuffer[length];
+        for (size_t i = 0; i < length; ++i)
+            intermediateBuffer[i] = inbuffer[i];
+        median_filter(intermediateBuffer, length, maskSize);
+        for (size_t i = 0; i < length; ++i)
+            outbuffer[i] = intermediateBuffer[i];
+    }
+
+
+    void median_filter(double *buffer, size_t length, int maskSize) {
+        int internalBufferSize;
+        ippsFilterMedianGetBufferSize(maskSize, ipp64f, &internalBufferSize);
+        Ipp8u *internalBuffer = ippsMalloc_8u(internalBufferSize);
+        ippsFilterMedian_64f_I(buffer, length, maskSize, NULL, NULL, internalBuffer);
+    }
+
+    void median_filter(float *buffer, size_t length, int maskSize){
+        int internalBufferSize;
+        ippsFilterMedianGetBufferSize(maskSize, ipp32f, &internalBufferSize);
+        Ipp8u *internalBuffer = ippsMalloc_8u(internalBufferSize);
+        ippsFilterMedian_32f_I(buffer, length, maskSize, NULL, NULL, internalBuffer);
+    }
+
+    void median_filter(int16_t *buffer, size_t length, int maskSize) {
+        int internalBufferSize;
+        ippsFilterMedianGetBufferSize(maskSize, ipp16s, &internalBufferSize);
+        Ipp8u *internalBuffer = ippsMalloc_8u(internalBufferSize);
+        ippsFilterMedian_16s_I(buffer, length, maskSize, NULL, NULL, internalBuffer);
+    }
+
+    void median_filter(int32_t *buffer, size_t length, int maskSize) {
+        int internalBufferSize;
+        ippsFilterMedianGetBufferSize(maskSize, ipp32s, &internalBufferSize);
+        Ipp8u *internalBuffer = ippsMalloc_8u(internalBufferSize);
+        ippsFilterMedian_32s_I(buffer, length, maskSize, NULL, NULL, internalBuffer);
+    }
+
+    void median_filter(uint16_t *buffer, size_t length, int maskSize) {
+        Ipp32f intermediateBuffer[length];
+        ippsConvert_16u32f(buffer, intermediateBuffer, length);
+        median_filter(intermediateBuffer, length, maskSize);
+        ippsConvert_32f16u_Sfs(intermediateBuffer, buffer, length, ippRndFinancial, 0);
+    }
+
+    void median_filter(uint32_t *buffer, size_t length, int maskSize) {
+        Ipp32f intermediateBuffer[length];
+        for (size_t i = 0; i < length; ++i)
+            intermediateBuffer[i] = buffer[i];
+        median_filter(intermediateBuffer, length, maskSize);
+        for (size_t i = 0; i < length; ++i)
+            buffer[i] = intermediateBuffer[i];
+    }
+
+
+
+
+
 }
 
