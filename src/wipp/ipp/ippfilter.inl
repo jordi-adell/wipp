@@ -21,45 +21,250 @@
 */
 #include <wipp/wippfilter.h>
 #include <wipp/wippexception.h>
+#include <wipp/wipputils.h>
 
+#include <ippvm.h>
 #include <ipps.h>
 
 #include <string.h>
 #include <math.h>
+#include <algorithm>
 
 namespace wipp {
 
-    int wipp_fir_coefs(double fmax, double fmin, double *coefs, size_t length, wipp_window_t window_type) {
-        IppStatus status;
+    void window_hann(double *frame, size_t length) {
+        ippsWinHann_64f_I(frame, length);
+    }
 
+    void window_hann(float *frame, size_t length) {
+        ippsWinHann_32f_I(frame, length);
+    }
+
+    void window_hann(int16_t *frame, size_t length) {
+        ippsWinHann_16s_I(frame, length);
+    }
+
+    template <typename T>
+    void window_hann_noIPP(const T* frame_in, T* frame_out, size_t length) {
+        Ipp64f intermediate_buffer[length];
+        copyBuffer(frame_in, intermediate_buffer, length);
+        window_hann(intermediate_buffer, length);
+        copyBuffer(intermediate_buffer, frame_out, length);
+    }
+
+    void window_hann(uint16_t *frame, size_t length) {
+        window_hann_noIPP(frame, frame, length);
+    }
+
+    void window_hann(int32_t *frame, size_t length){
+        window_hann_noIPP(frame, frame, length);
+    }
+
+    void window_hann(uint32_t *frame, size_t length) {
+        window_hann_noIPP(frame, frame, length);
+    }
+
+    void window_hamming(double *frame, size_t length) {
+        ippsWinHamming_64f_I(frame, length);
+    }
+
+    void window_hamming(float *frame, size_t length) {
+        ippsWinHamming_32f_I(frame, length);
+    }
+
+    void window_hamming(int16_t *frame, size_t length) {
+        ippsWinHamming_16s_I(frame, length);
+    }
+
+    template <typename T>
+    void window_hamming_noIPP(const T* frame_in, T* frame_out, size_t length) {
+        Ipp64f intermediate_buffer[length];
+        copyBuffer(frame_in, intermediate_buffer, length);
+        window_hamming(intermediate_buffer, length);
+        copyBuffer(intermediate_buffer, frame_out, length);
+    }
+
+    void window_hamming(uint16_t *frame, size_t length) {
+        window_hamming_noIPP(frame, frame, length);
+    }
+
+    void window_hamming(int32_t *frame, size_t length){
+        window_hamming_noIPP(frame, frame, length);
+    }
+
+    void window_hamming(uint32_t *frame, size_t length) {
+        window_hamming_noIPP(frame, frame, length);
+    }
+
+
+
+    template <typename T>
+    void window_core(T *frame, size_t length, wipp_window_t window_type) {
+        if (window_type == wippHANN) window_hann(frame, length);
+        if (window_type == wippHAMMING) window_hamming(frame, length);
+        if (window_type == wippRECTANGULAR) return;
+    }
+
+    void window(double *frame, size_t length, wipp_window_t window_type) {
+        window_core(frame, length, window_type);
+    }
+
+    void window(float *frame, size_t length, wipp_window_t window_type) {
+        window_core(frame, length, window_type);
+    }
+
+    void window(int16_t *frame, size_t length, wipp_window_t window_type) {
+        window_core(frame, length, window_type);
+    }
+    
+    void window(int32_t *frame, size_t length, wipp_window_t window_type) {
+        window_core(frame, length, window_type);
+    }
+
+    void window(uint16_t *frame, size_t length, wipp_window_t window_type) {
+        window_core(frame, length, window_type);
+    }
+
+    void window(uint32_t *frame, size_t length, wipp_window_t window_type) {
+        window_core(frame, length, window_type);
+    }
+
+
+    Ipp8u *fir_coefs_init_buffer(size_t length) {
         int bufferSize;
         ippsFIRGenGetBufferSize(length, &bufferSize);
-        Ipp8u buffer[bufferSize];
+        return new Ipp8u[bufferSize];
+    }
 
+    void fir_coefs_free_buffer(Ipp8u *buffer) {
+        delete[] buffer;
+    }
+
+
+    void fir_coefs_rectangular(double fmin, double fmax, double *coefs, size_t length,
+                                                 IppWinType window_type) {
+        Ipp8u *buffer = fir_coefs_init_buffer(length);
+        ippsFIRGenBandpass_64f(fmin, fmax, coefs, log(length * 1.0F) / log(2.0F) + 0.5, window_type, ippTrue, buffer);
+        fir_coefs_free_buffer(buffer);
+    }
+
+
+    void fir_coefs_rectangular(double fmin, double fmax, double *coefs, size_t length, wipp_window_t window_type) {
         switch (window_type) {
-            case wippHAMMING:
-                status = ippsFIRGenBandpass_64f(fmin, fmax, coefs, log(length * 1.0F) / log(2.0F) + 0.5, ippWinHamming,
-                                                ippTrue, buffer);
-                break;
-            case wippHANN:
-                status = ippsFIRGenBandpass_64f(fmin, fmax, coefs, log(length * 1.0F) / log(2.0F) + 0.5, ippWinHann,
-                                                ippTrue, buffer);
-                break;
-            case wippRECTANGULAR:
-                status = ippsFIRGenBandpass_64f(fmin, fmax, coefs, log(length * 1.0F) / log(2.0F) + 0.5, ippWinRect,
-                                                ippTrue, buffer);
-                break;
+            case wippHANN: fir_coefs_rectangular(fmin, fmax, coefs, length, ippWinHann); break;
+            case wippHAMMING: fir_coefs_rectangular(fmin, fmax, coefs, length, ippWinHamming); break;
+            case wippRECTANGULAR: fir_coefs_rectangular(fmin, fmax, coefs, length, ippWinRect); break;
             default:
-                status = ippStsFIRGenOrderErr;
+                throw(WIppException("Unknown window type"));
+        }
+    }
+
+
+    void fir_coefs_triangular(double fmin, double fmax, double *coefs, size_t length, wipp_window_t window_type) {
+        Ipp64f time[length];
+        Ipp64f sinus[length];
+        Ipp64f sinc[length];
+        for (size_t i = 0; i < length; ++i)
+            time[i] = i - length/2 + 0.5;
+        ippsSin_64f_A26(time, sinus, length);
+        ippsDiv_64f(time, sinus, sinc, length);
+        ippsSqr_64f_I(sinc, length);
+        copyBuffer(sinc, coefs, length);
+        window(coefs, length, window_type);
+    }
+
+//    void fir_coefs_triangular(double fmin, double fmax, double *coefs, size_t length, wipp_window_t window_type) {
+//        switch(window_type) {
+//            case wippHANN: fir_coefs_triangular(fmin, fmax, coefs, length, ippWinHann); break;
+//            case wippHAMMING: fir_coefs_triangular(fmin, fmax, coefs, length, ippWinHamming); break;
+//            case wippRECTANGULAR: fir_coefs_triangular(fmin, fmax, coefs, length, window_type); break;
+//            default:
+//                throw(WIppException("Unknown window type"));
+//        }
+//    }
+
+
+    void fir_coefs(double fmin, double fmax, double *coefs, size_t length,
+                   wipp_window_t window_type, wipp_freq_shape_t freq_shape) {
+
+        switch (freq_shape) {
+            case wippfRECTANGULAR:
+                fir_coefs_rectangular(fmin, fmax, coefs, length, window_type);
+                break;
+            case wippfTRIANGULAR:
+                fir_coefs_triangular(fmin, fmax, coefs, length, window_type);
+                break;
+        }
+    }
+
+    void fir_coefs(double fmax, double fmin, double *coefs, size_t length, wipp_window_t window_type) {
+        fir_coefs(fmin, fmax, coefs, length, window_type, wippfRECTANGULAR);
+    }
+
+
+    struct  wipp_fir_filter_t_ {
+
+        int specification_size;
+        int buffer_size;
+        int taps_length;
+
+        IppsFIRSpec_64f *spec;
+        Ipp8u *buffer;
+        Ipp64f *delay_line;
+        Ipp64f *taps;
+
+        void allocate_memory() {
+            buffer = ippsMalloc_8u(buffer_size);
+            delay_line = ippsMalloc_64f(taps_length-1);
+            taps = ippsMalloc_64f(taps_length);
+            ippsZero_8u(buffer, buffer_size);
+            spec =  reinterpret_cast<IppsFIRSpec_64f*>(ippsMalloc_8u(specification_size));
         }
 
-        if (status) return 1; else return 0;
+        void init() {
+            ippsFIRSRInit_64f(taps, taps_length, ippAlgAuto, spec);
+        }
+
+        void free () {
+            ippsFree(spec);
+            ippsFree(buffer);
+            delete[] taps;
+        }
+    };
+
+    void init_fir(wipp_fir_filter_t **fir, const double *coefs, size_t length) {
+        (*fir)->taps_length = length;
+        ippsFIRSRGetSize(length, ipp64f, &((*fir)->specification_size), &((*fir)->buffer_size));
+        (*fir)->allocate_memory();
+        ippsCopy_64f(coefs, (*fir)->taps, length);
+        (*fir)->init();
     }
 
 
-    void wipp_window(double *frame, size_t length, wipp_window_t window_type) {
 
-
+    void init_fir(wipp_fir_filter_t **fir, const double *coefs, size_t length, const double *pastValues) {
+        init_fir(fir, coefs, length);
     }
+
+    void delete_fir(wipp_fir_filter_t **fir) {
+        (*fir)->free();
+        delete (*fir);
+        (*fir) = nullptr;
+    }
+
+    void fir_filter(wipp_fir_filter_t *fir, double *signal, size_t length) {
+        ippsFIRSR_64f(signal, signal, length, fir->spec, NULL, NULL, fir->buffer);
+    }
+
+    void fir_filter(wipp_fir_filter_t *fir, const double *signal_in, double *signal_out, size_t length) {
+        ippsFIRSR_64f(signal_in, signal_out, length, fir->spec, NULL, NULL, fir->buffer);
+    }
+
+
+    void fir_get_coefs(wipp_fir_filter_t *fir, double *coefs, size_t length) {
+        copyBuffer(fir->taps, coefs, std::min(length, static_cast<size_t>(fir->taps_length)));
+    }
+
+
 
 }

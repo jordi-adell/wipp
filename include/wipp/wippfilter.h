@@ -33,8 +33,6 @@ namespace wipp
 {
 
 
-// Definitions
-
 struct wipp_fir_filter_t_;
 typedef wipp_fir_filter_t_ wipp_fir_filter_t;
 
@@ -56,7 +54,7 @@ typedef enum
     wippfTRIANGULAR
 } wipp_freq_shape_t;
 
-// WINDOWING
+
 void window(double *frame, size_t length, wipp_window_t window_type);
 void window(float *frame, size_t length, wipp_window_t window_type);
 void window(int16_t *frame, size_t length, wipp_window_t window_type);
@@ -65,10 +63,9 @@ void window(uint16_t *frame, size_t length, wipp_window_t window_type);
 void window(uint32_t *frame, size_t length, wipp_window_t window_type);
 
 
-
-// FIR filters
-int fir_coefs(double fmin, double fmax, double *coefs, size_t length, wipp_window_t window_type, wipp_freq_shape_t freq_shape);
-int fir_coefs(double fmax, double fmin, double *coefs, size_t length, wipp_window_t window_type);
+void fir_coefs(double fmin, double fmax, double *coefs, size_t length,
+              wipp_window_t window_type, wipp_freq_shape_t freq_shape);
+void fir_coefs(double fmax, double fmin, double *coefs, size_t length, wipp_window_t window_type);
 void init_fir(wipp_fir_filter_t **fir, const double *coefs, size_t length);
 void init_fir(wipp_fir_filter_t **fir, const double *coefs, size_t length, const double *pastValues);
 void delete_fir(wipp_fir_filter_t **fir);
@@ -76,7 +73,7 @@ void fir_filter(wipp_fir_filter_t *fir, double *signal, size_t length);
 void fir_filter(wipp_fir_filter_t *fir, const double *signal_in, double *signal_out, size_t length);
 void fir_get_coefs(wipp_fir_filter_t *fir, double *coefs, size_t length);
 
-// IIR filter
+
 void init_iir(wipp_iir_filter_t **iir, const double *a_coefs, size_t a_length, const double *b_coefs, size_t b_length);
 void init_iir(wipp_iir_filter_t **iir,
 	      const double *a_coefs, size_t a_length, const double *b_coefs, size_t b_length,
@@ -89,4 +86,4 @@ void iir_filter(wipp_iir_filter_t *iir, const double *signal_in, double *signal_
 
 }
 
-#endif // FILTER_H
+#endif
