@@ -122,4 +122,16 @@ namespace wipp {
         *fft = nullptr;
     }
 
+    wipp_fft_t* fft(const double *signal, double *spectrum, wipp_fft_t* wipp_fft) {
+        ippsFFTFwd_RToCCS_64f(signal, spectrum, wipp_fft->specificationStructure, wipp_fft->internalBuffer);
+    }
+
+    wipp_fft_t* ifft(const double *spectrum, double *signal, wipp_fft_t* wipp_fft) {
+        ippsFFTInv_CCSToR_64f(spectrum, signal, wipp_fft->specificationStructure, wipp_fft->internalBuffer);
+    }
+
+    int get_fft_length(wipp_fft_t* wipp_fft) {
+        return wipp_fft->length;
+    }
+
 }
