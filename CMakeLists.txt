@@ -6,7 +6,7 @@ project(wipp VERSION 2.5.4)
 ## Configure compilation ##
 ###########################
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")
 
 if(DEBUG)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -g")
@@ -155,12 +155,19 @@ INCLUDE(CPack)
 #############
 
 if (test)
-    enable_testing()
     set(Boost_USE_STATIC_LIBS   ON)
 
     find_package(GTest REQUIRED COMPONENTS system)
     find_package(Threads REQUIRED COMPONENTS system)
     find_package(Boost REQUIRED COMPONENTS system filesystem)
+
+    if (GTEST_FOUND)
+        message(STATUS "Enabling testing")
+        enable_testing()
+    endif(GTEST_FOUND)
+
+        include_directories(${GTEST_INLCUDE_DIR})
+
 
     add_executable(${PROJECT_NAME}-test test/test_wipp.cpp)
     target_link_libraries(${PROJECT_NAME}-test wipp)
