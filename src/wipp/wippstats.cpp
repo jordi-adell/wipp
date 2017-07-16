@@ -22,7 +22,7 @@
 #include <wipp/wippstats.h>
 
 
-#ifdef FOUND_IPP
+#ifdef IPP_FOUND
 #include "ipp/ippstats.inl"
 #else
 #include "default/stats.inl"
