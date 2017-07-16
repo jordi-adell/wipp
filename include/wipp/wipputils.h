@@ -51,9 +51,11 @@ namespace wipp{
   void copyBuffer(const int32_t *inbuffer, double *outbuffer, size_t length);
   void copyBuffer(const uint16_t *inbuffer, float *outbuffer, size_t length);
   void copyBuffer(const uint16_t *inbuffer, double *outbuffer, size_t length);
+    void copyBuffer(const uint32_t *inbuffer, double *outbuffer, size_t length);
   void copyBuffer(const double *inbuffer, int16_t *outbuffer, size_t length);
   void copyBuffer(const double *inbuffer, int32_t *outbuffer, size_t length);
   void copyBuffer(const double *inbuffer, uint16_t *outbuffer, size_t length);
+    void copyBuffer(const double *inbuffer, uint32_t *outbuffer, size_t length);
   void copyBuffer(const float *inbuffer, int16_t *outbuffer, size_t length);
   void copyBuffer(const float *inbuffer, uint16_t *outbuffer, size_t length);
   void copyBuffer(const wipp_complex_t *inbuffer, wipp_complex_t *outbuffer, size_t length);
@@ -97,12 +99,6 @@ namespace wipp{
    * thus the second buffer is used as input as well as outpuf buffer: outbuffer = outbuffer - inbuffer
    **/
 
-  // --> subBuffer_I is deprecated, used wipp::sub instead
-  void subBuffer_I(const int16_t *inbuffer, int16_t *outbuffer, size_t length);
-  void subBuffer_I(const float *inbuffer, float *outbuffer, size_t length);
-  void subBuffer_I(const double *inbuffer, double *outbuffer, size_t length);
-  // <--
-
   void sub(const double *buffer_a, double* buffer_b, size_t length);
   void sub(const float *buffer_a, float* buffer_b, size_t length);
   void sub(const int16_t *buffer_a, int16_t* buffer_b, size_t length);
@@ -123,7 +119,7 @@ namespace wipp{
   void mult(const float *buffer_a, const float *buffer_b, float *buffer, size_t length);
   void mult(const int16_t *buffer_a, const int16_t *buffer_b, int16_t *buffer, size_t length);
   void mult(const int32_t *buffer_a, const int32_t *buffer_b, int32_t *buffer, size_t length);
-  void mult(const uint16_t *buffer_a, const int16_t *buffer_b, int16_t *buffer, size_t length);
+  void mult(const uint16_t *buffer_a, const uint16_t *buffer_b, uint16_t *buffer, size_t length);
   void mult(const uint32_t *buffer_a, const uint32_t *buffer_b, uint32_t *buffer, size_t length);
   void mult(const double *buffer_a, double *buffer_b, size_t length);
   void mult(const float *buffer_a, float *buffer_b, size_t length);
@@ -197,6 +193,7 @@ namespace wipp{
   void multC(uint16_t C, uint16_t *buffer, size_t length);
   void multC(uint32_t C, uint32_t *buffer, size_t length);
 
+
   void divC(double C, const double *buffer_in, double *buffer_out, size_t length);
   void divC(float C, const float *buffer_in, float *buffer_out, size_t length);
   void divC(int16_t C, const int16_t *buffer_in, int16_t *buffer_out, size_t length);
@@ -242,19 +239,16 @@ namespace wipp{
   void addProductC(uint16_t C, const uint16_t *buffer_in, uint16_t *buffer_out, size_t length);
   void addProductC(uint32_t C, const uint32_t *buffer_in, uint32_t *buffer_out, size_t length);
 
+
   void abs(double *buffer,size_t length);
   void abs(float *buffer, size_t length);
   void abs(int16_t *buffer,size_t length);
   void abs(int32_t *buffer, size_t length);
-  void abs(uint32_t *buffer, size_t length);
-  void abs(uint16_t *buffer, size_t length);
 
   void abs(const double *buffer_in, double *buffer_out, size_t length);
   void abs(const float *buffer_in, float *buffer_out, size_t length);
   void abs(const int16_t *buffer_in, int16_t *buffer_out, size_t length);
   void abs(const int32_t *buffer_in, int32_t *buffer_out, size_t length);
-  void abs(const uint16_t *buffer_in, uint16_t *buffer_out, size_t length);
-  void abs(const uint32_t *buffer_in, uint32_t *buffer_out, size_t length);
 
 
   void sqrt(double *buffer,size_t length);
@@ -311,13 +305,13 @@ namespace wipp{
 
   void polar2cart(const double *module, const double *phase, wipp_complex_t *cart, size_t length);
 
-
-  /** Check if status indicates an error or not and the generates and exception if
-   * throwException is true in case of error. Also handle spectia errror such as
-   * Waterfall
-   * Return true if an error has occured.
-   **/
-  bool checkStatus(int istatus, bool throwException=false);
+//
+//  /** Check if status indicates an error or not and the generates and exception if
+//   * throwException is true in case of error. Also handle expected errors such as
+//   * Waterfall
+//   * Return true if an error has occured.
+//   **/
+//  bool checkStatus(int istatus, bool throwException=false);
 
 }
 
