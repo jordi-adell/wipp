@@ -267,4 +267,68 @@ namespace wipp {
 
 
 
+
+
+    struct  wipp_iir_filter_t_ {
+
+        int state_size;
+        int order;
+        int buffer_size;
+        int taps_length;
+
+        IppsIIRState_64f *state;
+        Ipp8u *buffer;
+        Ipp64f *taps;
+
+        void allocate_memory() {
+            ippsIIRGenGetBufferSize(order, &buffer_size);
+            buffer = ippsMalloc_8u(buffer_size);
+            ippsIIRGetStateSize_64f(order, &state_size);
+            state = reinterpret_cast<IppsIIRState_64f*>(ippsMalloc_8u(state_size));
+        }
+
+        void init() {
+            ippsIIRInit_64f(&state, taps, order, NULL, buffer);
+        }
+
+        void free() {
+            ippsFree(state);
+            ippsFree(taps);
+            ippsFree(buffer);
+        }
+
+    };
+
+
+    void init_iir(wipp_iir_filter_t **iir,
+                  const double *a_coefs, size_t a_length,
+                  const double *b_coefs, size_t b_length) {
+
+        (*iir)->order = (std::max(b_length, a_length)-0.5)/2;
+        (*iir)->taps_length = 2*((*iir)->order + 1);
+        (*iir)->taps = ippsMalloc_64f((*iir)->taps_length);
+        ippsZero_64f((*iir)->taps, (*iir)->taps_length);
+        ippsCopy_64f(b_coefs, (*iir)->taps, b_length);
+        ippsCopy_64f(a_coefs, &(*iir)->taps[(*iir)->order + 1], a_length);
+    }
+
+    void init_iir(wipp_iir_filter_t **iir,
+                  const double *a_coefs, size_t a_length, const double *b_coefs, size_t b_length,
+                  const double *x_pastValues, const double *y_pastValues) {
+        init_iir(iir, a_coefs, a_length, b_coefs, b_length);
+    }
+
+    void delete_iir(wipp_iir_filter_t **iir) {
+        (*iir)->free();
+        *iir = NULL;
+    }
+
+    void iir_filter(wipp_iir_filter_t *iir, double *signal, size_t length) {
+        ippsIIR_64f_I(signal, length, iir->state);
+    }
+
+    void iir_filter(wipp_iir_filter_t *iir, const double *signal_in, double *signal_out, size_t length) {
+        ippsIIR_64f(signal_in, signal_out,length,iir->state);
+    }
+
 }
