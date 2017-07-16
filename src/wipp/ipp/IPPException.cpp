@@ -46,9 +46,9 @@ namespace wipp {
         {
             if (status == ippStsWaterfall)
                 reportWaterfallWarning(status);
-            else if (status > 0)
+            else if (status > 0) {
                 WARN_STREAM("IPP: " << ippGetStatusString(status));
-            else
+            } else
                 throw(IPPException(status));
         }
         return (status == ippStsOk);
