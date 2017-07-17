@@ -149,6 +149,10 @@ namespace wipp{
             outbuffer[i] = inbuffer[i];
     }
 
+    void copyBuffer(const wipp_complex_t *inbuffer, wipp_complex_t *outbuffer, size_t length) {
+        ippsCopy_64fc(cIPP64fc(inbuffer), IPP64fc(outbuffer), length);
+    }
+
     void set(double val, double *buffer, size_t length) {
         ippsSet_64f(val, buffer, length);
     }
