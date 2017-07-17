@@ -160,28 +160,26 @@ namespace wipp {
     }
 
 
-    void fir_coefs_triangular(double fmin, double fmax, double *coefs, size_t length, wipp_window_t window_type) {
-        Ipp64f time[length];
-        Ipp64f sinus[length];
-        Ipp64f sinc[length];
+    void wipp_sinc(double fmin, double fmax, double *sinc, size_t length) {
+        Ipp64f time[length], sinus[length];
         for (size_t i = 0; i < length; ++i)
             time[i] = i - length/2 + 0.5;
         ippsSin_64f_A26(time, sinus, length);
         ippsDiv_64f(time, sinus, sinc, length);
-        ippsSqr_64f_I(sinc, length);
-        copyBuffer(sinc, coefs, length);
+    }
+
+    void wipp_sinc2(double fmin, double fmax, double *sinc2, size_t length) {
+        wipp_sinc(fmin, fmax, sinc2, length);
+        ippsSqr_64f_I(sinc2, length);
+    }
+
+    void fir_coefs_triangular(double fmin, double fmax, double *coefs, size_t length, wipp_window_t window_type) {
+        Ipp64f sinc2[length];
+        wipp_sinc2(fmin, fmax, sinc2, length);
+        copyBuffer(sinc2, coefs, length);
         window(coefs, length, window_type);
     }
 
-//    void fir_coefs_triangular(double fmin, double fmax, double *coefs, size_t length, wipp_window_t window_type) {
-//        switch(window_type) {
-//            case wippHANN: fir_coefs_triangular(fmin, fmax, coefs, length, ippWinHann); break;
-//            case wippHAMMING: fir_coefs_triangular(fmin, fmax, coefs, length, ippWinHamming); break;
-//            case wippRECTANGULAR: fir_coefs_triangular(fmin, fmax, coefs, length, window_type); break;
-//            default:
-//                throw(WIppException("Unknown window type"));
-//        }
-//    }
 
 
     void fir_coefs(double fmin, double fmax, double *coefs, size_t length,
