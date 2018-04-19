@@ -65,7 +65,7 @@ void window(uint32_t *frame, size_t length, wipp_window_t window_type);
 
 void fir_coefs(double fmin, double fmax, double *coefs, size_t length,
               wipp_window_t window_type, wipp_freq_shape_t freq_shape);
-void fir_coefs(double fmax, double fmin, double *coefs, size_t length, wipp_window_t window_type);
+void fir_coefs(double fmin, double fmax, double *coefs, size_t length, wipp_window_t window_type);
 void init_fir(wipp_fir_filter_t **fir, const double *coefs, size_t length);
 void init_fir(wipp_fir_filter_t **fir, const double *coefs, size_t length, const double *pastValues);
 void delete_fir(wipp_fir_filter_t **fir);

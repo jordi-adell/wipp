@@ -83,7 +83,7 @@ void wipp_sinc(double fmin, double fmax, double *sinc, size_t length)
 
     for (size_t i = 1; i < length; ++i)
     {
-	sinc[i] = low_pass_max[i]/sum_max - low_pass_min[i]/sum_min;
+	    sinc[i] = low_pass_max[i]/sum_max - low_pass_min[i]/sum_min;
     }
 }
 

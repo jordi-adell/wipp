@@ -23,12 +23,15 @@
 #include <wipp/wippexception.h>
 #include <wipp/wipputils.h>
 
+#include <ippcore.h>
 #include <ippvm.h>
 #include <ipps.h>
 
 #include <string.h>
 #include <math.h>
 #include <algorithm>
+#include <iostream>
+
 
 namespace wipp {
 
@@ -130,21 +133,24 @@ namespace wipp {
     }
 
 
-    Ipp8u *fir_coefs_init_buffer(size_t length) {
+    inline Ipp8u *fir_coefs_init_buffer(size_t length) {
         int bufferSize;
         ippsFIRGenGetBufferSize(length, &bufferSize);
         return new Ipp8u[bufferSize];
     }
 
-    void fir_coefs_free_buffer(Ipp8u *buffer) {
+    inline void fir_coefs_free_buffer(Ipp8u *buffer) {
         delete[] buffer;
     }
 
 
     void fir_coefs_rectangular(double fmin, double fmax, double *coefs, size_t length,
                                                  IppWinType window_type) {
-        Ipp8u *buffer = fir_coefs_init_buffer(length);
-        ippsFIRGenBandpass_64f(fmin, fmax, coefs, log(length * 1.0F) / log(2.0F) + 0.5, window_type, ippTrue, buffer);
+        auto *buffer = fir_coefs_init_buffer(length);
+        //auto status = ippsFIRGenBandpass_64f(fmin, fmax, coefs, log(length * 1.0F) / log(2.0F) + 0.5, window_type, ippTrue, buffer);
+        auto status = ippsFIRGenBandpass_64f(fmin, fmax, coefs, length, window_type, ippTrue, buffer);
+        if (status != ippStsNoErr)
+            throw(WIppException(ippGetStatusString(status)));
         fir_coefs_free_buffer(buffer);
     }
 
@@ -159,28 +165,62 @@ namespace wipp {
         }
     }
 
-
-    void wipp_sinc(double fmin, double fmax, double *sinc, size_t length) {
-        Ipp64f time[length], sinus[length];
+    void wipp_sinc_time(double lowPassFreq, double *time, size_t length) {
         for (size_t i = 0; i < length; ++i)
-            time[i] = i - length/2 + 0.5;
+            time[i] = (static_cast<double>(i) - length/2)*2*M_PI*lowPassFreq;
+    }
+
+    void wipp_sinc(double lowPassFreq, double *sinc, size_t length) {
+        Ipp64f time[length], sinus[length];
+        Ipp64f sum;
+
+        wipp_sinc_time(lowPassFreq, time, length);
+
         ippsSin_64f_A26(time, sinus, length);
         ippsDiv_64f(time, sinus, sinc, length);
+        sinc[length/2] = 1;
+        ippsDivC_64f_I(M_PI, sinc, length);
+        ippsSum_64f(sinc, length, &sum);
+        ippsDivC_64f_I(sum, sinc, length);
+    }
+
+    void wipp_sinc(double fmin, double fmax, double *sinc, size_t length) {
+        Ipp64f lowPassMin[length], lowPassMax[length];
+        Ipp64f sumMax, sumMin;
+        wipp_sinc(fmin, lowPassMin, length);
+        wipp_sinc(fmax, lowPassMax, length);
+        ippsSub_64f(lowPassMin, lowPassMax, sinc, length);
+    }
+
+    void wipp_sinc2(double lowPassFreq, double *sinc2, size_t length) {
+        Ipp64f sum;
+        wipp_sinc(lowPassFreq, sinc2, length);
+        ippsSqr_64f_I(sinc2, length);
+        ippsSum_64f(sinc2, length, &sum);
+        ippsDivC_64f_I(sum, sinc2, length);
     }
 
     void wipp_sinc2(double fmin, double fmax, double *sinc2, size_t length) {
-        wipp_sinc(fmin, fmax, sinc2, length);
-        ippsSqr_64f_I(sinc2, length);
+        Ipp64f cosineDelay[length];
+        Ipp64f time[length];
+        Ipp64f cosineTime[length];
+
+        wipp_sinc_time((fmax+fmin)/2, cosineTime, length);
+        wipp_sinc_time(fmax - fmin, time, length);
+        ippsCos_64f_A26(cosineTime, cosineDelay, length);
+        wipp_sinc2((fmax-fmin)/2, sinc2, length);
+        ippsMul_64f_I(cosineDelay, sinc2, length);
+        ippsMulC_64f_I(2, sinc2, length);
     }
 
     void fir_coefs_triangular(double fmin, double fmax, double *coefs, size_t length, wipp_window_t window_type) {
-        Ipp64f sinc2[length];
-        wipp_sinc2(fmin, fmax, sinc2, length);
-        copyBuffer(sinc2, coefs, length);
+//        double bw = fmax - fmin;
+//        fmin += (fmax - fmin)/3;
+//        fmax -= (fmax - fmin)/3;
+//        bw = fmax - fmin;
+        wipp_sinc2(fmin, fmax, coefs, length);
         window(coefs, length, window_type);
     }
-
-
 
     void fir_coefs(double fmin, double fmax, double *coefs, size_t length,
                    wipp_window_t window_type, wipp_freq_shape_t freq_shape) {
@@ -195,7 +235,7 @@ namespace wipp {
         }
     }
 
-    void fir_coefs(double fmax, double fmin, double *coefs, size_t length, wipp_window_t window_type) {
+    void fir_coefs(double fmin, double fmax, double *coefs, size_t length, wipp_window_t window_type) {
         fir_coefs(fmin, fmax, coefs, length, window_type, wippfRECTANGULAR);
     }
 
@@ -211,30 +251,39 @@ namespace wipp {
         Ipp64f *delay_line;
         Ipp64f *taps;
 
+        wipp_fir_filter_t_() {
+        }
+
         void allocate_memory() {
-            buffer = ippsMalloc_8u(buffer_size);
             delay_line = ippsMalloc_64f(taps_length-1);
-            taps = ippsMalloc_64f(taps_length);
+            ippsFIRSRGetSize(taps_length, ipp64f, &specification_size, &buffer_size);
+            buffer = ippsMalloc_8u(buffer_size);
             ippsZero_8u(buffer, buffer_size);
             spec =  reinterpret_cast<IppsFIRSpec_64f*>(ippsMalloc_8u(specification_size));
         }
 
         void init() {
+            allocate_memory();
             ippsFIRSRInit_64f(taps, taps_length, ippAlgAuto, spec);
+        }
+
+        void setCoefs(const double *coefs, size_t length) {
+            taps_length = length;
+            taps = ippsMalloc_64f(taps_length);
+            ippsCopy_64f(coefs, taps, length);
         }
 
         void free () {
             ippsFree(spec);
             ippsFree(buffer);
-            delete[] taps;
+            ippsFree(delay_line);
+            ippsFree(taps);
         }
     };
 
     void init_fir(wipp_fir_filter_t **fir, const double *coefs, size_t length) {
-        (*fir)->taps_length = length;
-        ippsFIRSRGetSize(length, ipp64f, &((*fir)->specification_size), &((*fir)->buffer_size));
-        (*fir)->allocate_memory();
-        ippsCopy_64f(coefs, (*fir)->taps, length);
+        *fir = new wipp_fir_filter_t();
+        (*fir)->setCoefs(coefs, length);
         (*fir)->init();
     }
 
@@ -245,9 +294,11 @@ namespace wipp {
     }
 
     void delete_fir(wipp_fir_filter_t **fir) {
-        (*fir)->free();
-        delete (*fir);
-        (*fir) = nullptr;
+        if (*fir != nullptr) {
+            (*fir)->free();
+            delete (*fir);
+            (*fir) = nullptr;
+        }
     }
 
     void fir_filter(wipp_fir_filter_t *fir, double *signal, size_t length) {
@@ -277,22 +328,54 @@ namespace wipp {
         IppsIIRState_64f *state;
         Ipp8u *buffer;
         Ipp64f *taps;
+        Ipp64f *coefs_a;
+        Ipp64f *coefs_b;
+        int length_a;
+        int length_b;
+
+        wipp_iir_filter_t_() {
+            coefs_a = nullptr;
+            coefs_b = nullptr;
+        }
 
         void allocate_memory() {
             ippsIIRGenGetBufferSize(order, &buffer_size);
             buffer = ippsMalloc_8u(buffer_size);
             ippsIIRGetStateSize_64f(order, &state_size);
             state = reinterpret_cast<IppsIIRState_64f*>(ippsMalloc_8u(state_size));
+            taps_length = 2*(order+1);
+            taps = new double[taps_length];
         }
 
+        void setACoefs(const double *a_coefs, int a_length) {
+            length_a = a_length;
+            coefs_a = new double[a_length];
+            ippsCopy_64f(a_coefs, coefs_a, length_a);
+        }
+
+        void setBCoefs(const double *b_coefs, int b_length) {
+            length_b = b_length;
+            coefs_b = new double[b_length];
+            ippsCopy_64f(b_coefs, coefs_b, length_b);
+        }
+
+
         void init() {
+            order = std::max(length_a, length_b)-1;
+            allocate_memory();
+            ippsZero_64f(taps, taps_length);
+            ippsCopy_64f(coefs_b, taps, length_b);
+            ippsCopy_64f(coefs_a, &taps[order + 1], length_a);
             ippsIIRInit_64f(&state, taps, order, NULL, buffer);
         }
 
+
         void free() {
+            delete[] taps;
+            delete[] coefs_a;
+            delete[] coefs_b;
+//            ippsFree(buffer);
             ippsFree(state);
-            ippsFree(taps);
-            ippsFree(buffer);
         }
 
     };
@@ -301,13 +384,11 @@ namespace wipp {
     void init_iir(wipp_iir_filter_t **iir,
                   const double *a_coefs, size_t a_length,
                   const double *b_coefs, size_t b_length) {
+        *iir = new wipp_iir_filter_t();
+        (*iir)->setACoefs(a_coefs, a_length);
+        (*iir)->setBCoefs(b_coefs, b_length);
+        (*iir)->init();
 
-        (*iir)->order = (std::max(b_length, a_length)-0.5)/2;
-        (*iir)->taps_length = 2*((*iir)->order + 1);
-        (*iir)->taps = ippsMalloc_64f((*iir)->taps_length);
-        ippsZero_64f((*iir)->taps, (*iir)->taps_length);
-        ippsCopy_64f(b_coefs, (*iir)->taps, b_length);
-        ippsCopy_64f(a_coefs, &(*iir)->taps[(*iir)->order + 1], a_length);
     }
 
     void init_iir(wipp_iir_filter_t **iir,
@@ -317,8 +398,10 @@ namespace wipp {
     }
 
     void delete_iir(wipp_iir_filter_t **iir) {
-        (*iir)->free();
-        *iir = NULL;
+        if ((*iir) != NULL) {
+            (*iir)->free();
+            *iir = NULL;
+        }
     }
 
     void iir_filter(wipp_iir_filter_t *iir, double *signal, size_t length) {
