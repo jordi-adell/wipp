@@ -163,7 +163,8 @@ INCLUDE(CPack)
 if (test)
     set(Boost_USE_STATIC_LIBS   ON)
 
-    find_package(GTest REQUIRED COMPONENTS system)
+        set(GTEST_ROOT ${CMAKE_INSTALL_PREFIX})
+    find_package(GTest REQUIRED)
     find_package(Threads REQUIRED COMPONENTS system)
     find_package(Boost REQUIRED COMPONENTS system filesystem)
 
