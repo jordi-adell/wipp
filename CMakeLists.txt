@@ -22,14 +22,20 @@ endif(DEBUG)
 ## Find modules and configure dependencies ##
 #############################################
 
+
+if (NOT DEFINED USE_IPP)
+    set(USE_IPP true)
+endif()
+
+
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 find_package(IPP COMPONENTS core s vm)
 find_package(FFTW)
 
-if(IPP_FOUND)
+if(IPP_FOUND AND USE_IPP)
     message(STATUS "IPP found")
     add_definitions(-DIPP_FOUND)
-endif(IPP_FOUND)
+endif()
 
 if(FFTW_FOUND)
     message(STATUS "FFTW found")
