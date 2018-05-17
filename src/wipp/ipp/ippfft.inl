@@ -38,38 +38,37 @@ namespace wipp {
         int order;
 
         int internalBufferSize;
-        int specificaionStructureBufferSize;
+        int specificationStructureBufferSize;
         int specificationStructureSize;
         int spectrumLength;
 
         double *spectrum;
         Ipp8u *internalBuffer;
         Ipp8u *specificationStructureBuffer;
+        Ipp8u *charSpecificationStructure;
         IppsFFTSpec_R_64f *specificationStructure;
 
-        void init_variables(size_t length) {
-            order = (int) log2(length - 1) + 1;
-            length = 1 << order;
+        void init_variables(size_t length_) {
+            order = (int) log2(length_ - 1) + 1;
+            length = (1 << order);
             spectrumLength = length + CCS_FORMAT_EXTRA_LENGTH;
             spectrum = new double[spectrumLength];
             ippsFFTGetSize_R_64f(order, IPP_FFT_DIV_INV_BY_N, ippAlgHintNone,
-                                 &specificationStructureSize, &specificaionStructureBufferSize, &internalBufferSize);
+                                 &specificationStructureSize, &specificationStructureBufferSize, &internalBufferSize);
         }
 
         void allocateBuffers() {
-
-            specificationStructure = (IppsFFTSpec_R_64f *) ippMalloc(specificationStructureSize);
-            specificationStructureBuffer = reinterpret_cast<Ipp8u*>(
-                    (specificaionStructureBufferSize > 0) ? ippMalloc(specificaionStructureBufferSize) : nullptr);
-            internalBuffer = reinterpret_cast<Ipp8u*>(
-                    (internalBufferSize > 0) ? ippMalloc(internalBufferSize) : nullptr);
+            charSpecificationStructure = (Ipp8u*) ippMalloc(specificationStructureSize);
+            specificationStructure = (IppsFFTSpec_R_64f *) specificationStructure;
+            specificationStructureBuffer = reinterpret_cast<Ipp8u*>((specificationStructureBufferSize > 0) ? ippMalloc(specificationStructureBufferSize) : nullptr);
+            internalBuffer = reinterpret_cast<Ipp8u*>((internalBufferSize > 0) ? ippMalloc(internalBufferSize) : nullptr);
             spectrum = new double[spectrumLength];
         }
 
         void initSpecifications() {
+            allocateBuffers();
             ippsFFTInit_R_64f(&specificationStructure, order, IPP_FFT_DIV_INV_BY_N, ippAlgHintFast,
-                              specificationStructureBuffer, internalBuffer);
-            if (specificaionStructureBufferSize > 0) ippFree(specificationStructureBuffer);
+                              charSpecificationStructure, specificationStructureBuffer);
         }
 
 
@@ -80,7 +79,7 @@ namespace wipp {
 
         ~wipp_fft_t_() {
             if (internalBufferSize > 0) ippFree(internalBuffer);
-            if (specificaionStructureBufferSize > 0) ippFree(specificationStructureBuffer);
+            if (specificationStructureBufferSize > 0) ippFree(specificationStructureBuffer);
             if (specificationStructureSize > 0) ippFree(specificationStructure);
             delete[] spectrum;
         }
