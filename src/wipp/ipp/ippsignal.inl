@@ -278,14 +278,14 @@ namespace wipp {
 
     template<typename T>
     void threshold_get_core(T *buffer, size_t length, T threshold, T value) {
-        threshold_lt(buffer, length, threshold, value);
+        threshold_gt(buffer, length, threshold, value);
         for (size_t i = 0; i < length && threshold != value; ++i)
             buffer[i] = (buffer[i] == threshold) ? value : buffer[i];
     }
 
     template<typename T>
     void threshold_get_core(const T *buffer_in, T *buffer_out, size_t length, T threshold, T value) {
-        threshold_lt(buffer_in, buffer_out, length, threshold, value);
+        threshold_gt(buffer_in, buffer_out, length, threshold, value);
         for (size_t i = 0; i < length && threshold != value; ++i)
             buffer_out[i] = (buffer_out[i] == threshold) ? value : buffer_out[i];
     }
