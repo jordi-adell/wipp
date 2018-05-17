@@ -4,26 +4,20 @@
 
 namespace  wipp {
 
-	Logger::Logger(LogLevel level, bool enable, std::ostream &os) : _level(level), _os(os), _enabled(enable)
-	{
-	  //	  \x1b[32m
+	Logger::Logger(LogLevel level, bool enable, std::ostream &os) : _level(level), _os(os), _enabled(enable) {
 	    _levelNames = {"FATAL", "ERROR", "WARN ", "INFO ", "DEBUG", "TRACE"};
 	}
 
-	std::ostream &Logger::log(LogLevel level, const char *file, int line)
-	{
-	    std::string fname = boost::filesystem::basename(file);
-	    if (_enabled && level <= _level)
-	    {
-		_os << "[" << _levelNames.at(level) << "] " <<  "[" << fname << ":" << line <<  "] ";
-		return _os;
-	    }
+	std::ostream &Logger::log(LogLevel level, const char *file, int line)  {
+        std::string path(file);
+        size_t extension_begin = path.find_last_of(".");
+        size_t basename_begin = path.find_last_of("/\\");
+        return _os;
 	}
 
 	bool Logger::isEnabled(LogLevel level) { return (_enabled && level <= _level); }
-	void Logger::enable() { _enabled = true;}
+	void Logger::enable() { _enabled = true; }
 	void Logger::disable() { _enabled = false; }
-
 	void Logger::setLogLevel(LogLevel level) { _level = level; }
 }
 
