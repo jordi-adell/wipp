@@ -69,7 +69,7 @@ namespace wipp {
     }
 
     void triangle(double *buffer, size_t length) {
-        triangle(buffer, length, length/2, 0);
+        triangle(buffer, length, length, 3*M_PI_2, 0, 0);
     }
 
 
