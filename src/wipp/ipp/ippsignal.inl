@@ -33,11 +33,11 @@ namespace wipp {
         ippsPowerSpectr_64fc(reinterpret_cast<const Ipp64fc*>(buffer), power, length);
     }
     void power(const double *buffer, double *power, size_t length) {
-        ippsPowerSpectr_64f(buffer, NULL, power, length);
+        ippsSqr_64f(buffer, power, length);
     }
 
     void power(double *buffer, size_t length) {
-        ippsPowerSpectr_64f(buffer, NULL, buffer, length);
+        ippsSqr_64f_I(buffer, length);
     }
 
     void magnitude(const wipp_complex_t* buffer, double *magnitude, size_t length) {
