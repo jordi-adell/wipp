@@ -58,7 +58,7 @@ namespace wipp{
 
     void copyBuffer(const uint16_t *inbuffer, uint16_t *outbuffer, size_t length)
     {
-        memccpy(outbuffer, inbuffer, length, sizeof(uint16_t));
+        memcpy(outbuffer, inbuffer, length*sizeof(uint16_t));
     }
 
   void copyBuffer(const float *inbuffer, double *outbuffer, size_t length)
