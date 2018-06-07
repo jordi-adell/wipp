@@ -382,9 +382,9 @@ void linear2mel_core(const T *linear, T *mel, size_t length, const T* mult, cons
 }
 
 void linear2mel(const double *linear, double *mel, size_t length, const double* mult, const double*div) { linear2mel_core(linear, mel, length, mult, div);}
-void linear2mel(const double *linear, double *mel, size_t length) { linear2mel(linear, mel, length, &default_mult64, &default_div64);}
+void linear2mel(const double *linear, double *mel, size_t length) { linear2mel(linear, mel, length, &default_mel_mult64, &default_mel_div64);}
 void linear2mel(const float *linear, float *mel, size_t length, const float* mult, const float*div) { linear2mel_core(linear, mel, length, mult, div);}
-void linear2mel(const float *linear, float *mel, size_t length) { linear2mel(linear, mel, length, &default_mult32, &default_div32);}
+void linear2mel(const float *linear, float *mel, size_t length) { linear2mel(linear, mel, length, &default_mel_mult32, &default_mel_div32);}
 
 template <typename T>
 void mel2linear_core(const T *mel, T *linear, size_t length, const T* mult, const T*div)
@@ -394,9 +394,9 @@ void mel2linear_core(const T *mel, T *linear, size_t length, const T* mult, cons
 }
 
 void mel2linear(const double *mel, double *linear, size_t length, const double* mult, const double*div) { mel2linear_core(mel, linear, length, mult, div);}
-void mel2linear(const double *mel, double *linear, size_t length) { mel2linear(mel, linear, length, &default_mult64, &default_div64);}
+void mel2linear(const double *mel, double *linear, size_t length) { mel2linear(mel, linear, length, &default_mel_mult64, &default_mel_div64);}
 void mel2linear(const float *mel, float *linear, size_t length, const float* mult, const float*div) { mel2linear_core(mel, linear, length, mult, div);}
-void mel2linear(const float *mel, float *linear, size_t length) { mel2linear(mel, linear, length, &default_mult32, &default_div32);}
+void mel2linear(const float *mel, float *linear, size_t length) { mel2linear(mel, linear, length, &default_mel_mult32, &default_mel_div32);}
 
 
 template <typename T>
