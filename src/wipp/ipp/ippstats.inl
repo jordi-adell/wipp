@@ -26,7 +26,9 @@
 
 #include <wipp/wippstats.h>
 #include <wipp/wipputils.h>
+#include <wipp/wippexception.h>
 
+#include <ippcore.h>
 #include <ipps.h>
 #include <ippi.h>
 
@@ -472,7 +474,8 @@ namespace wipp {
         state_size(0),
         state64f(nullptr)
         {
-
+            ippsRandGaussGetSize_64f(&state_size);
+            state64f = reinterpret_cast<IppsRandGaussState_64f*>(ippsMalloc_8u(state_size));
         }
         int state_size;
         IppsRandGaussState_64f *state64f;
@@ -480,11 +483,11 @@ namespace wipp {
 
     void init_rand_gaussian(wipp_rand_t **rand, double mean, double stddev) {
         *rand = new wipp_rand_t();
-        ippsRandGaussGetSize_64f(&(*rand)->state_size);
-        (*rand)->state64f = reinterpret_cast<IppsRandGaussState_64f*>(ippsMalloc_8u((*rand)->state_size));
+        ippsRandGaussInit_64f((*rand)->state64f, mean, stddev, 7119);
     }
 
     void init_rand_gaussian(wipp_rand_t **rand, float mean, float stddev) {
+        *rand = new wipp_rand_t();;
         ippsRandGaussInit_64f((*rand)->state64f, mean, stddev, 7119);
     }
 
@@ -493,13 +496,17 @@ namespace wipp {
     }
 
     void delete_rand(wipp_rand_t **rand) {
-        ippsFree((*rand)->state64f);
-        delete *rand;
+        if (rand != nullptr && *rand != nullptr) {
+            ippsFree((*rand)->state64f);
+            delete *rand;
+        }
         *rand = nullptr;
     }
 
     void rand(wipp_rand_t *rand, double *buffer, size_t length) {
-        ippsRandGauss_64f(buffer, length, rand->state64f);
+        auto errorValue = ippsRandGauss_64f(buffer, length, rand->state64f);
+        if (errorValue != ippStsNoErr)
+            throw(WIppException(ippGetStatusString(errorValue)));
     }
 
     void rand(wipp_rand_t *rand, float *buffer, size_t length) {
