@@ -340,33 +340,33 @@ void delete_iir(wipp_iir_filter_t **iir)
 void iir_filter(wipp_iir_filter_t *iir, const double *signal_in, double *signal_out, size_t length)
 {
     //
-    //   y(n) = gain * (sum_i a_i*x(n-i) - sum_j b_j*y(n-j) )
+    //   y(n) = gain * (sum_i b_i*x(n-i) - sum_j a_j*y(n-j) )
     //
 
     for (size_t i = 0; i < length; ++i)
     {
-	iir->x_position = (iir->x_position + 1) % iir->b_order;
+	iir->x_position = (iir->x_position + 1) % iir->a_order;
 	iir->x_buffer[iir->x_position] = signal_in[i];
 
 	signal_out[i] = 0;
 
-	for (size_t b = 1,k = iir->y_position; b < iir->b_order; ++b, --k)
+	for (size_t a = 1,k = iir->y_position; a < iir->a_order; ++a, --k)
 	{
-	    signal_out[i] -= iir->b_coefs[b] * iir->y_buffer[k];
-	    if (k <= 0) k = iir->b_order;
-	}
-	for (size_t a = 0,k = iir->x_position; a < iir->a_order; ++a, --k)
-	{
-	    signal_out[i] += iir->a_coefs[a] * iir->x_buffer[k];
+	    signal_out[i] -= iir->a_coefs[a] * iir->y_buffer[k];
 	    if (k <= 0) k = iir->a_order;
 	}
-
-	if (iir->b_order > 0)
+	for (size_t b = 0,k = iir->x_position; b < iir->b_order; ++b, --k)
 	{
-	    signal_out[i] /= iir->b_coefs[0];
+	    signal_out[i] += iir->b_coefs[b] * iir->x_buffer[k];
+	    if (k <= 0) k = iir->b_order;
 	}
 
-	iir->y_position = (iir->y_position + 1) % iir->a_order;
+	if (iir->a_order > 0)
+	{
+	    signal_out[i] /= iir->a_coefs[0];
+	}
+
+	iir->y_position = (iir->y_position + 1) % iir->b_order;
 	iir->y_buffer[iir->y_position] = signal_out[i];
 
     }
