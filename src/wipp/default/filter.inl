@@ -19,14 +19,26 @@
 * You should have received a copy of the GNU General Public License
 * along with WIPP.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+
 #include <wipp/wippfilter.h>
+#include <wipp/wippexception.h>
 
 #include <cstring>
 #include <math.h>
 #include <memory>
 
+
 namespace wipp
 {
+
+
+    class UnknownFilterShape : public WIppException {
+	public:
+    	UnknownFilterShape();
+        virtual ~UnknownFilterShape();
+    };
+
 
 template <typename T>
 void wipp_hamming(T *frame, size_t length)
@@ -386,6 +398,14 @@ void iir_filter(wipp_iir_filter_t *iir, double *signal, size_t length)
 	iir->x_position = (iir->x_position + 1) % iir->b_order;
 	iir->y_position = (iir->y_position + 1) % iir->a_order;
     }
+}
+
+UnknownFilterShape::UnknownFilterShape() : WIppException("Unknown filter shape.") {
+
+}
+
+UnknownFilterShape::~UnknownFilterShape() {
+
 }
 
 }
