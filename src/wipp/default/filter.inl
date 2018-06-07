@@ -173,7 +173,8 @@ void window(uint16_t *frame, size_t length, wipp_window_t window_type) { window_
 void window(uint32_t *frame, size_t length, wipp_window_t window_type) { window_core(frame, length, window_type); }
 
 
-int fir_coefs(double fmin, double fmax, double *coefs, size_t length, wipp_window_t window_type, wipp_freq_shape_t freq_shape)
+void fir_coefs(double fmin, double fmax, double *coefs, size_t length,
+              wipp_window_t window_type, wipp_freq_shape_t freq_shape)
 {
     int ret = 0;
     switch (freq_shape) {
@@ -186,17 +187,14 @@ int fir_coefs(double fmin, double fmax, double *coefs, size_t length, wipp_windo
 	    window(coefs, length, window_type);
 	break;
 	default:
-	    ret = -1;
-	break;
+		throw(UnknownFilterShape());
     }
-    return ret;
 }
 
-int fir_coefs(double fmin, double fmax, double *coefs, size_t length, wipp_window_t window_type)
+void fir_coefs(double fmin, double fmax, double *coefs, size_t length, wipp_window_t window_type)
 {
     wipp_sinc(fmin, fmax, coefs, length);
     window(coefs, length, window_type);
-    return 0;
 }
 
 
