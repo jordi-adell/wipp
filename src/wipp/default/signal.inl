@@ -433,34 +433,23 @@ void cross_corr(const uint16_t *buffer1, size_t length1, uint16_t *buffer2, size
 
 
 template <typename T>
-void median_filter_core(const T* inbuffer, T* outbuffer, size_t length, int maskSize)
-{
+void median_filter_core(const T* inbuffer, T* outbuffer, size_t length, int maskSize) {
     maskSize = 2* (maskSize/2) + 1; // make it next odd number.
-
     size_t start = maskSize/2; // get center of the mask.
     size_t end = length - start;
-    T tmp_buff[maskSize];
+    T tmp_buff[2*start + length];
 
-    size_t i = 0;
-    for (i = start; i < end; ++i)
-    {
-	median(&inbuffer[i - start], maskSize, &outbuffer[i]);
+    memcpy(&tmp_buff[start], inbuffer, length*sizeof(T));
+
+    for (int i = 0; i < start; ++i) {
+        outbuffer[i] = tmp_buff[i] = inbuffer[0];
+        tmp_buff[length + start + i] = inbuffer[length - 1];
     }
 
-    memcpy(reinterpret_cast<void*>(tmp_buff), reinterpret_cast<const void*>(inbuffer), sizeof(T)*maskSize);
-    for (i = 0; i < start; ++i)
-    {
-	tmp_buff[maskSize - i - 1] = inbuffer[0];
-	median(tmp_buff, maskSize, &outbuffer[start - i - 1]);
-    }
-
-    memcpy(reinterpret_cast<void*>(tmp_buff), reinterpret_cast<const void*>(&inbuffer[length - maskSize]), sizeof(T)*maskSize);
-    for (i = 0; i < start; ++i)
-    {
-	tmp_buff[i] = inbuffer[length - 1];
-	median(tmp_buff, maskSize, &outbuffer[length - start + i]);
-    }
+    for (int i = 0; i < length - start; ++i)
+        median(&tmp_buff[i], maskSize, &outbuffer[i + start]);
 }
+
 
 template <typename T>
 void median_filter_core(T* buffer, size_t length, int maskSize)
