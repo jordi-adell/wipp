@@ -7,16 +7,9 @@ project(wipp VERSION 2.5.4)
 ###########################
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")
+set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -DWIPP_DEBUG")
+set(CMAKE_CXX_FALGS_RELEASE "-O3 -msse4")
 
-if(DEBUG)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -g")
-    add_definitions("-DWIPP_DEBUG")
-    message(STATUS "DEBUG mode")
-else(DEBUG)
-  set(OPT_FLAGS, "-O3 -msse4")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OPT_FLAGS}")
-  message(STATUS "RELEASE mode. Optimisation flags: ${OPT_FLAGS}")
-endif(DEBUG)
 
 #############################################
 ## Find modules and configure dependencies ##
