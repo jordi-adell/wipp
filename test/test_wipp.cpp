@@ -1237,21 +1237,20 @@ namespace test {
 
     void test_evalTriangleSamples(const double sample, int zone, double slope, double offset) {
         static int prevZone = zone;
-//            std::cout << sample  << ": " << zone << " " << slope << std::endl;
 
         bool isSampleCloseToOne = fabs(1-sample) <= 0.05 || fabs(1-sample) >= -0.05;
 
         if (prevZone == zone) {
             switch (zone) {
                 case 4:
-                    EXPECT_THAT(slope, AllOf(Ge(0), Lt(10)));
+                    EXPECT_THAT(slope, AllOf(Ge(-0.1), Lt(10)));
                     break;
                 case 1:
                     if (!isSampleCloseToOne)
                         EXPECT_LE(slope, 0);
                     break;
                 case 2:
-                    EXPECT_LE(slope, 0);
+                    EXPECT_LE(slope, 0.1);
                     break;
                 case 3:
                     if (!isSampleCloseToOne)
@@ -1320,9 +1319,9 @@ namespace test {
 
         for (bufferLength = 100; bufferLength < 1000; bufferLength += 100)
             for (trianglePeriodInPercentage = 50;
-                 trianglePeriodInPercentage < 100; trianglePeriodInPercentage += 20)
+                 trianglePeriodInPercentage <= 50; trianglePeriodInPercentage += 20)
                 for (trianglePhaseInRadians = 0;
-                     trianglePhaseInRadians < 2 * M_PI; trianglePhaseInRadians += 2*M_PI_4) {
+                     trianglePhaseInRadians <= 0 * M_PI; trianglePhaseInRadians += 2*M_PI_4) {
                     TRACE_STREAM("BufferLength: " << bufferLength
                                                   << ", trianglePeriod: " << trianglePeriodInPercentage
                                                   << "%, " << trianglePhaseInRadians << "rad.");
