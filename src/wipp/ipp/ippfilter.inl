@@ -214,10 +214,6 @@ namespace wipp {
     }
 
     void fir_coefs_triangular(double fmin, double fmax, double *coefs, size_t length, wipp_window_t window_type) {
-//        double bw = fmax - fmin;
-//        fmin += (fmax - fmin)/3;
-//        fmax -= (fmax - fmin)/3;
-//        bw = fmax - fmin;
         wipp_sinc2(fmin, fmax, coefs, length);
         window(coefs, length, window_type);
     }
