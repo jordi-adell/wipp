@@ -66,6 +66,7 @@ namespace wipp {
 
     void triangle(double *buffer, size_t length, int period, double phase, double asym, double offset) {
         ippsTriangle_64f(buffer, length, 1.0, 1.0/period, asym, &phase);
+        ippsAddC_64f_I(offset, buffer, length);
     }
 
     void triangle(double *buffer, size_t length) {
