@@ -517,17 +517,10 @@ namespace test {
         wipp::fft(frame, spectrum, fft);
         wipp::magnitude(reinterpret_cast<wipp_complex_t *>(spectrum), magnitude, length / 2);
         wipp::power(magnitude, length / 2);
-        std::ofstream ofs("datat.txt");
 
         double magn, sumup;
         wipp::sum(magnitude, length / 2, &magn);
         wipp::sum(frame, length, &sumup);
-        std::cout << sumup << " " << magn << std::endl;
-
-
-        for (int i = 0; i < length; ++i)
-            ofs << frame[i] << std::endl;
-//        ofs << i*1.0f/length << " " << magnitude[i] << std::endl;
 
         for (int i = 0; i < length / 2; ++i) {
             double f = i * 1.0F / length;
@@ -590,9 +583,6 @@ namespace test {
         double phase = 0;
         size_t fir_length = 1024;
         double coefs[fir_length];
-//  double fmin, fmax;
-//  fmin = 0.1;
-//  fmax = 0.35;
 
         double delta = 0.01;
         double delta_bw = 0.07;
@@ -603,7 +593,6 @@ namespace test {
         for (double fmin = 0.2; fmin < 0.5; fmin = fmin + delta_bw) {
             for (double fmax = fmin + delta; fmax < 0.5; fmax = fmax + delta_bw) {
                 wipp::wipp_fir_filter_t *fir;
-//      wipp::wipp_sinc2(fmin, fmax, coefs, fir_length);
                 wipp::fir_coefs(fmin, fmax, coefs, fir_length, wipp::wippHAMMING, wipp::wippfTRIANGULAR);
                 wipp::init_fir(&fir, coefs, fir_length);
 
@@ -1235,10 +1224,6 @@ namespace test {
         double assymetryInPercentage = assymetry / (M_PI);
 
         size_t baseSample = (samplePosition + phaseDelayInSamples) % periodInSamples;
-
-//            std::cout << baseSample << std::endl;
-
-//            if (baseSample == 0) return 4;
 
         double zoneOneEnd = (1.0f/4 + assymetryInPercentage*1/2) * periodInSamples;
         double zoneTwoEnd = (1.0f/2 + assymetryInPercentage*1/2) * periodInSamples;
