@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.2.2)
-project(wipp VERSION 2.5.4)
-#set(PROJECT_VERSION_STATUS "-beta")
+project(wipp VERSION 3.0.0)
+set(PROJECT_VERSION_STATUS "-beta")
 
 ###########################
 ## Configure compilation ##
