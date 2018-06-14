@@ -101,8 +101,8 @@ void triangle(double *buffer, size_t length, int period, double phase, double as
 //    std::cout << period << " " << asym << " " << center << std::endl;
 //    std::cout << "slopes: " << slope_to_center << " " << slope_from_center << std::endl;
 
-    const double b = offset + slope_to_center*n;
-    const double c = 1 + offset - slope_from_center*(n-center-1);
+    const double b = offset + slope_to_center*n - 0.5;
+    const double c = 0.5 + offset - slope_from_center*(n-center-1);
 
 //    std::cout << "b: " << b << ", c: " << c << ", n: " << n << std::endl;
 
@@ -126,7 +126,7 @@ void triangle(double *buffer, size_t length, int period, double phase, double as
 
 	if (i < length)
 	{
-	    buffer[i] = 1 + offset - slope_from_center*(n-center);
+	    buffer[i] = 0.5 + offset - slope_from_center*(n-center);
 	    ++i; ++n;
 
 	    //y = -ax + c
@@ -139,7 +139,7 @@ void triangle(double *buffer, size_t length, int period, double phase, double as
 	    if (i < length)
 	    {
 		n = n - period;
-		buffer[i] = offset + n*slope_to_center;
+		buffer[i] = offset + n*slope_to_center - 0.5;
 	    }
 	    ++i; ++n;
 	}
@@ -157,14 +157,11 @@ void triangle(double *buffer, size_t length)
 
 
 template <typename T>
-void tone_core(T *buffer, size_t length, double magnitud, double frequency, double phase)
-{
+void tone_core(T *buffer, size_t length, double magnitud, double frequency, double phase) {
     while(phase < -M_PI) phase += 2*M_PI;
     while(phase > M_PI) phase -= 2*M_PI;
     for (size_t i = 0; i < length; ++i)
-    {
-	buffer[i] = static_cast<T>(magnitud*sin(2*M_PI*frequency*static_cast<double>(i) + phase));
-    }
+    	buffer[i] = static_cast<T>(magnitud*cos(2*M_PI*frequency*static_cast<double>(i) + phase));
 }
 
 void tone(double *buffer, size_t length, double magnitude, double frequency, double phase){ tone_core(buffer, length, magnitude, frequency, phase); }
