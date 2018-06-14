@@ -59,7 +59,7 @@ namespace wipp {
 
         void allocateBuffers() {
             charSpecificationStructure = (Ipp8u*) ippMalloc(specificationStructureSize);
-            specificationStructure = (IppsFFTSpec_R_64f *) specificationStructure;
+            specificationStructure = (IppsFFTSpec_R_64f *) charSpecificationStructure;
             specificationStructureBuffer = reinterpret_cast<Ipp8u*>((specificationStructureBufferSize > 0) ? ippMalloc(specificationStructureBufferSize) : nullptr);
             internalBuffer = reinterpret_cast<Ipp8u*>((internalBufferSize > 0) ? ippMalloc(internalBufferSize) : nullptr);
             spectrum = new double[spectrumLength];
