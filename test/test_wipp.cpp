@@ -584,7 +584,7 @@ namespace test {
         size_t fir_length = 1024;
         double coefs[fir_length];
 
-        double delta = 0.01;
+        double delta = 0.1;
         double delta_bw = 0.07;
         double sinusoidalAmplitud = 5;
         double sinusoidalPower = pow(sinusoidalAmplitud, 2) / 2;
