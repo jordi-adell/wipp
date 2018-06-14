@@ -1274,17 +1274,18 @@ namespace test {
         double previousSample = (bufferLength > 0) ? buffer[1] : 0;
         size_t delayInSamples = convertPhaseInRadiansToDelaySamples(phaseInRadians, periodInSamples);
 
-        double mean = 0;
-
+        double cumsum = 0;
         for (size_t i = 1; i < bufferLength; ++i) {
-            TRACE_STREAM("Sample " << i << " " << buffer[i] << " " << getSampleZone(i, periodInSamples, delayInSamples, assymetry) << ", " << mean);
+            TRACE_STREAM("Sample " << i << " " << buffer[i] << " " << getSampleZone(i, periodInSamples, delayInSamples, assymetry) << ", " << cumsum);
             test_evalTriangleSamples(buffer[i], getSampleZone(i, periodInSamples, delayInSamples, assymetry),
                                      buffer[i] - previousSample, offset);
             previousSample = buffer[i];
-            mean += buffer[i] / bufferLength;
+            cumsum += buffer[i];
+
             if (i % periodInSamples == 0)
-                EXPECT_NEAR(0, mean, 0.004);
+                EXPECT_NEAR(offset, cumsum / i, 0.004);
         }
+        exit;
     }
 
     void test_symetricNoOffsetTriangle(size_t bufferLength, double trianglePeriodInPercentage,
