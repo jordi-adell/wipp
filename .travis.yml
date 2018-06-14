@@ -32,6 +32,7 @@ branches:
   - v2.4.0
   - v2.5.0
   - v2.5.3
+  - ipp-2017-u3
 
 before_script:
  - mkdir build
