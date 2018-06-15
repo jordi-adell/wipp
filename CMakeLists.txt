@@ -155,29 +155,22 @@ INCLUDE(CPack)
 #############
 
 if (test)
+    enable_testing()
+  
+    include(cmake/GoogleTest.cmake)
+
+    message(STATUS "GTEST: ${GTEST_LIBRARIES}")
+
     set(Boost_USE_STATIC_LIBS   ON)
-
-    set(GTEST_ROOT ${CMAKE_INSTALL_PREFIX})
-    find_package(GTest REQUIRED)
-    message(STATUS Gtest)
-    message(STATUS "  GTEST_ROOT: " ${GTEST_ROOT})
-    message(STATUS "  " ${GTEST_BOTH_LIBRARIES})
-    message(STATUS "  " ${GTEST_INLCUDE_DIR})
-
     find_package(Threads REQUIRED COMPONENTS system)
     find_package(Boost REQUIRED COMPONENTS system filesystem)
 
-    if (GTEST_FOUND)
-        message(STATUS "Enabling testing")
-        enable_testing()
-    endif(GTEST_FOUND)
-
-        include_directories(${GTEST_INLCUDE_DIR})
-
+    include_directories(${GTEST_INLCUDE_DIR})
 
     add_executable(${PROJECT_NAME}-test test/test_wipp.cpp)
+    add_dependencies(${PROJECT_NAME}-test gtest libgtest libgtest_main libgmock)
     target_link_libraries(${PROJECT_NAME}-test wipp)
-    target_link_libraries(${PROJECT_NAME}-test ${GTEST_BOTH_LIBRARIES})
+    target_link_libraries(${PROJECT_NAME}-test ${GTEST_LIBRARIES})
     target_link_libraries(${PROJECT_NAME}-test ${CMAKE_THREAD_LIBS_INIT})
     target_link_libraries(${PROJECT_NAME}-test ${Boost_LIBRARIES})
 
