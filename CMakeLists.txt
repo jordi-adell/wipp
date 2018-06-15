@@ -21,23 +21,23 @@ if (NOT DEFINED USE_IPP)
 endif()
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+
 if (USE_IPP)
     find_package(IPP COMPONENTS core s vm)
+    if(IPP_FOUND)
+        message(STATUS "IPP found")
+        add_definitions(-DIPP_FOUND)
+        endif(IPP_FOUND)
+else(USE_IPP)
+    find_package(FFTW)
+    if(FFTW_FOUND)
+        message(STATUS "FFTW found")
+        add_definitions(-DFFTW_FOUND)
+    endif(FFTW_FOUND)
 endif(USE_IPP)
-find_package(FFTW)
-
-if(IPP_FOUND AND USE_IPP)
-    message(STATUS "IPP found")
-    add_definitions(-DIPP_FOUND)
-endif()
-
-if(FFTW_FOUND)
-    message(STATUS "FFTW found")
-    add_definitions(-DFFTW_FOUND)
-endif(FFTW_FOUND)
 
 if (NOT IPP_FOUND AND NOT FFTW_FOUND)
-    message(ERROR "Either IPP or FFTW must be available")
+    message(ERROR "Either IPP or FFTW must be available.")
 endif()
 
 include_directories(
