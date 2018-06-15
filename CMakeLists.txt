@@ -17,7 +17,7 @@ set(CMAKE_CXX_FALGS_RELEASE "-O3 -msse4")
 
 
 if (NOT DEFINED USE_IPP)
-    set(USE_IPP true)
+    set(USE_IPP false)
 endif()
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
