@@ -15,18 +15,6 @@ addons:
    - libgtest-dev
    - libboost1.55-all-dev
 
-before_install:
- - sudo wget https://github.com/google/googletest/archive/release-1.8.0.tar.gz
- - sudo tar xf release-1.8.0.tar.gz
- - cd googletest-release-1.8.0
- - sudo cmake -DBUILD_SHARED_LIBS=ON .
- - sudo make install
- - sudo cp -a googletest/include/gtest /usr/include
- - sudo cp -a googletest/include/gmock /usr/include
- - sudo cp -a ./googlemock/gtest/libgtest_main.so ./googlemock/gtest/libgtest.so /usr/lib/
- - sudo cp -a ./googlemock/gmock/libgmock.so /usr/lib
- - cd "${TRAVIS_BUILD_DIR}"
-
 branches:
  only:
   - master
